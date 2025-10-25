@@ -27,3 +27,16 @@ You can compile this with the command below:
 ```
 make -j
 ```
+
+## Project Structure
+
+This project is organized using Coq's logical path system, which is configured by the `Makefile` and the auto-generated `_CoqProject` file. The physical directories are mapped to logical Coq modules.
+
+* **`Lib/`** (Mapped to `Category.Lib`) \
+    This directory contains the core foundational library and utilities used throughout the project.
+
+* **`Theory/`** (Mapped to `Category.Theory`) \
+    This directory holds the formalization of category theory concepts.
+
+* **`imports/`** (Mapped to `Category`) \
+    This directory serves as the main entry point for the project.

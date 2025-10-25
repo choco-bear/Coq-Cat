@@ -5,7 +5,6 @@ Generalizable All Variables.
 
 Section Morphisms.
   Context {C : Category}.
-  Open Scope type_scope.
 
   (** A morphism is an epimorphism if it is right-cancellable. *)
   Class Epic {x y} (f : x ~> y) := 

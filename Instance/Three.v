@@ -71,3 +71,5 @@ Next Obligation. three_solver. Qed.
 Next Obligation. three_solver. Qed.
 Next Obligation. three_solver. Qed.
 Next Obligation. three_solver. Qed.
+
+Notation "3" := _3 : category_scope.

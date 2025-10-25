@@ -118,17 +118,17 @@ Definition Build_Category'
            {obj} hom {homset} id compose
            {compose_respects}
            {id_left id_right comp_assoc} :=
-  {| obj              := obj;
-     hom              := hom;
-     homset           := homset;
-     id               := id;
-     compose          := compose;
-     compose_respects := compose_respects;
-     id_left          := id_left;
-     id_right         := id_right;
-     comp_assoc       := comp_assoc;
-     comp_assoc_sym   :=
-       fun _ _ _ _ _ _ _ => symmetry (@comp_assoc _ _ _ _ _ _ _);
+  {|  obj := obj;
+      hom := hom;
+      homset := homset;
+      id := id;
+      compose := compose;
+      compose_respects := compose_respects;
+      id_left := id_left;
+      id_right := id_right;
+      comp_assoc := comp_assoc;
+      comp_assoc_sym :=
+        fun _ _ _ _ _ _ _ => symmetry (@comp_assoc _ _ _ _ _ _ _);
   |}.
 
 Example Build_Category'_Coq : Category.
@@ -165,12 +165,12 @@ Proof. auto. Qed.
 Corollary cod_id {x : C} : cod (@id C x) = x.
 Proof. auto. Qed.
 
-Corollary dom_comp {x y z : C} (g : y ~> z) (f : x ~> y) :
-  dom g = cod f ↔ dom (g ∘ f) = dom f.
+Corollary dom_comp {x y z : C} (g : y ~> z) (f : x ~> y)
+  : dom g = cod f ↔ dom (g ∘ f) = dom f.
 Proof. split; auto. Qed.
 
-Corollary cod_comp {x y z : C} (g : y ~> z) (f : x ~> y) :
-  dom g = cod f ↔ cod (g ∘ f) = cod g.
+Corollary cod_comp {x y z : C} (g : y ~> z) (f : x ~> y)
+  : dom g = cod f ↔ cod (g ∘ f) = cod g.
 Proof. split; auto. Qed.
 
 End Category.

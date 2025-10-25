@@ -108,7 +108,7 @@ Local Set Warnings "-intuition-auto-with-star".
 #[global]
 Program Instance prod_setoid {A B} `{Setoid A} `{Setoid B}
   : Setoid (A * B) :=
-    { equiv := fun x y => (fst x ≈ fst y) * (snd x ≈ snd y) }.
+    { equiv := fun x y => (fst x ≡ fst y) * (snd x ≡ snd y) }.
 
 #[global]
 Program Instance pair_respects {A B} `{Setoid A} `{Setoid B}
@@ -169,7 +169,7 @@ Program Instance inr_respects {A B} `{Setoid A} `{Setoid B}
 #[global]
 Program Instance option_setoid `{Setoid A} : Setoid (option A) :=
   { equiv := fun x y => match x, y with
-                        | Some x, Some y => x ≈ y
+                        | Some x, Some y => x ≡ y
                         | None, None => True
                         | _, _ => False
                         end
@@ -192,7 +192,7 @@ Program Instance Some_respects {A} `{Setoid A} : Proper (equiv ==> equiv) (@Some
 Fixpoint list_equiv `{Setoid A} (xs ys : list A) : Type :=
   match xs, ys with
   | nil, nil => True
-  | x :: xs, y :: ys => x ≈ y ∧ list_equiv xs ys
+  | x :: xs, y :: ys => x ≡ y ∧ list_equiv xs ys
   | _, _ => False
   end.
 
@@ -298,7 +298,7 @@ Program Instance nat_setoid : Setoid nat.
 
 #[global]
 Program Instance fun_setoid {A : Type} `{Setoid B} : Setoid (A → B) :=
-  { equiv := fun f g => ∀ x, f x ≈ g x }.
+  { equiv := fun f g => ∀ x, f x ≡ g x }.
 Next Obligation.
   equivalence.
   now rewrite X, X0.

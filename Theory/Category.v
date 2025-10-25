@@ -41,13 +41,13 @@ Class Category@{o h p | h <= p} : Type@{max(o+1,h+1,p+1)} := {
   dom {x y} (f : x ~> y) := x;
   cod {x y} (f : x ~> y) := y;
 
-  id_left  {x y} (f : x ~> y) : id ∘ f ≈ f;
-  id_right {x y} (f : x ~> y) : f ∘ id ≈ f;
+  id_left  {x y} (f : x ~> y) : id ∘ f ≡ f;
+  id_right {x y} (f : x ~> y) : f ∘ id ≡ f;
 
   comp_assoc {x y z w} (f : z ~> w) (g : y ~> z) (h : x ~> y) :
-    f ∘ (g ∘ h) ≈ (f ∘ g) ∘ h;
+    f ∘ (g ∘ h) ≡ (f ∘ g) ∘ h;
   comp_assoc_sym {x y z w} (f : z ~> w) (g : y ~> z) (h : x ~> y) :
-    (f ∘ g) ∘ h ≈ f ∘ (g ∘ h)
+    (f ∘ g) ∘ h ≡ f ∘ (g ∘ h)
 }.
 #[export] Existing Instance homset.
 #[export] Existing Instance compose_respects.
@@ -97,7 +97,7 @@ Notation "f ∘[ C ] g" :=
   (@compose C%category _%object _%object _%object f%morphism g%morphism)
   (at level 40, only parsing) : morphism_scope.
 
-Notation "f ≈[ C ] g" :=
+Notation "f ≡[ C ] g" :=
   (@equiv _ (@homset C%category _%object _%object) f%morphism g%morphism)
   (at level 79, only parsing) : category_theory_scope.
 
@@ -196,52 +196,52 @@ Ltac comp_right :=
   try rewrite !comp_assoc;
   apply compose_respects; [|reflexivity].
 
-#[export] Hint Extern 10 (?X ∘ ?Y ≈ ?Z ∘ ?Q) =>
+#[export] Hint Extern 10 (?X ∘ ?Y ≡ ?Z ∘ ?Q) =>
   apply compose_respects; auto : category_laws.
-#[export] Hint Extern 10 (?X ∘ (?Y ∘ ?Z) ≈ ?W) =>
+#[export] Hint Extern 10 (?X ∘ (?Y ∘ ?Z) ≡ ?W) =>
   apply comp_assoc : category_laws.
 
 Ltac rewrites :=
   repeat match goal with
-  | [ H : ?X ≈ ?Y                      |- context[?X] ] => rewrite !H; clear H
-  | [ H : ?X ≈ ?Y                      |- context[?X] ] => srewrite H; clear H
-  | [ H : ∀ _, ?X ≈ ?Y                 |- context[?X] ] => rewrite !H; clear H
-  | [ H : ∀ _, ?X ≈ ?Y                 |- context[?X] ] => srewrite H; clear H
-  | [ H : ∀ _, ?X _ ≈ ?Y _             |- context[?X] ] => rewrite !H; clear H
-  | [ H : ∀ _, ?X _ ≈ ?Y _             |- context[?X] ] => srewrite H; clear H
-  | [ H : ∀ _ _, ?X ≈ ?Y               |- context[?X] ] => rewrite !H; clear H
-  | [ H : ∀ _ _, ?X ≈ ?Y               |- context[?X] ] => srewrite H; clear H
-  | [ H : ∀ _ _, ?X _ ≈ ?Y _           |- context[?X] ] => rewrite !H; clear H
-  | [ H : ∀ _ _, ?X _ ≈ ?Y _           |- context[?X] ] => srewrite H; clear H
-  | [ H : ∀ _ _, ?X _ _ ≈ ?Y _ _       |- context[?X] ] => rewrite !H; clear H
-  | [ H : ∀ _ _, ?X _ _ ≈ ?Y _ _       |- context[?X] ] => srewrite H; clear H
-  | [ H : ∀ _ _ _, ?X ≈ ?Y             |- context[?X] ] => rewrite !H; clear H
-  | [ H : ∀ _ _ _, ?X ≈ ?Y             |- context[?X] ] => srewrite H; clear H
-  | [ H : ∀ _ _ _, ?X _ ≈ ?Y _         |- context[?X] ] => rewrite !H; clear H
-  | [ H : ∀ _ _ _, ?X _ ≈ ?Y _         |- context[?X] ] => srewrite H; clear H
-  | [ H : ∀ _ _ _, ?X _ _ ≈ ?Y _ _     |- context[?X] ] => rewrite !H; clear H
-  | [ H : ∀ _ _ _, ?X _ _ ≈ ?Y _ _     |- context[?X] ] => srewrite H; clear H
-  | [ H : ∀ _ _ _, ?X _ _ _ ≈ ?Y _ _ _ |- context[?X] ] => rewrite !H; clear H
-  | [ H : ∀ _ _ _, ?X _ _ _ ≈ ?Y _ _ _ |- context[?X] ] => srewrite H; clear H
+  | [ H : ?X ≡ ?Y                      |- context[?X] ] => rewrite !H; clear H
+  | [ H : ?X ≡ ?Y                      |- context[?X] ] => srewrite H; clear H
+  | [ H : ∀ _, ?X ≡ ?Y                 |- context[?X] ] => rewrite !H; clear H
+  | [ H : ∀ _, ?X ≡ ?Y                 |- context[?X] ] => srewrite H; clear H
+  | [ H : ∀ _, ?X _ ≡ ?Y _             |- context[?X] ] => rewrite !H; clear H
+  | [ H : ∀ _, ?X _ ≡ ?Y _             |- context[?X] ] => srewrite H; clear H
+  | [ H : ∀ _ _, ?X ≡ ?Y               |- context[?X] ] => rewrite !H; clear H
+  | [ H : ∀ _ _, ?X ≡ ?Y               |- context[?X] ] => srewrite H; clear H
+  | [ H : ∀ _ _, ?X _ ≡ ?Y _           |- context[?X] ] => rewrite !H; clear H
+  | [ H : ∀ _ _, ?X _ ≡ ?Y _           |- context[?X] ] => srewrite H; clear H
+  | [ H : ∀ _ _, ?X _ _ ≡ ?Y _ _       |- context[?X] ] => rewrite !H; clear H
+  | [ H : ∀ _ _, ?X _ _ ≡ ?Y _ _       |- context[?X] ] => srewrite H; clear H
+  | [ H : ∀ _ _ _, ?X ≡ ?Y             |- context[?X] ] => rewrite !H; clear H
+  | [ H : ∀ _ _ _, ?X ≡ ?Y             |- context[?X] ] => srewrite H; clear H
+  | [ H : ∀ _ _ _, ?X _ ≡ ?Y _         |- context[?X] ] => rewrite !H; clear H
+  | [ H : ∀ _ _ _, ?X _ ≡ ?Y _         |- context[?X] ] => srewrite H; clear H
+  | [ H : ∀ _ _ _, ?X _ _ ≡ ?Y _ _     |- context[?X] ] => rewrite !H; clear H
+  | [ H : ∀ _ _ _, ?X _ _ ≡ ?Y _ _     |- context[?X] ] => srewrite H; clear H
+  | [ H : ∀ _ _ _, ?X _ _ _ ≡ ?Y _ _ _ |- context[?X] ] => rewrite !H; clear H
+  | [ H : ∀ _ _ _, ?X _ _ _ ≡ ?Y _ _ _ |- context[?X] ] => srewrite H; clear H
 
-  | [ H : ?X ≈ ?Y                      |- context[?Y] ] => rewrite <- !H; clear H
-  | [ H : ?X ≈ ?Y                      |- context[?Y] ] => srewrite_r H; clear H
-  | [ H : ∀ _, ?X ≈ ?Y                 |- context[?Y] ] => rewrite <- !H; clear H
-  | [ H : ∀ _, ?X ≈ ?Y                 |- context[?Y] ] => srewrite_r H; clear H
-  | [ H : ∀ _, ?X _ ≈ ?Y _             |- context[?Y] ] => rewrite <- !H; clear H
-  | [ H : ∀ _, ?X _ ≈ ?Y _             |- context[?Y] ] => srewrite_r H; clear H
-  | [ H : ∀ _ _, ?X ≈ ?Y               |- context[?Y] ] => rewrite <- !H; clear H
-  | [ H : ∀ _ _, ?X ≈ ?Y               |- context[?Y] ] => srewrite_r H; clear H
-  | [ H : ∀ _ _, ?X _ ≈ ?Y _           |- context[?Y] ] => rewrite <- !H; clear H
-  | [ H : ∀ _ _, ?X _ ≈ ?Y _           |- context[?Y] ] => srewrite_r H; clear H
-  | [ H : ∀ _ _, ?X _ _ ≈ ?Y _ _       |- context[?Y] ] => rewrite <- !H; clear H
-  | [ H : ∀ _ _, ?X _ _ ≈ ?Y _ _       |- context[?Y] ] => srewrite_r H; clear H
-  | [ H : ∀ _ _ _, ?X ≈ ?Y             |- context[?Y] ] => rewrite <- !H; clear H
-  | [ H : ∀ _ _ _, ?X ≈ ?Y             |- context[?Y] ] => srewrite_r H; clear H
-  | [ H : ∀ _ _ _, ?X _ ≈ ?Y _         |- context[?Y] ] => rewrite <- !H; clear H
-  | [ H : ∀ _ _ _, ?X _ ≈ ?Y _         |- context[?Y] ] => srewrite_r H; clear H
-  | [ H : ∀ _ _ _, ?X _ _ ≈ ?Y _ _     |- context[?Y] ] => rewrite <- !H; clear H
-  | [ H : ∀ _ _ _, ?X _ _ ≈ ?Y _ _     |- context[?Y] ] => srewrite_r H; clear H
-  | [ H : ∀ _ _ _, ?X _ _ _ ≈ ?Y _ _ _ |- context[?Y] ] => rewrite <- !H; clear H
-  | [ H : ∀ _ _ _, ?X _ _ _ ≈ ?Y _ _ _ |- context[?Y] ] => srewrite_r H; clear H
+  | [ H : ?X ≡ ?Y                      |- context[?Y] ] => rewrite <- !H; clear H
+  | [ H : ?X ≡ ?Y                      |- context[?Y] ] => srewrite_r H; clear H
+  | [ H : ∀ _, ?X ≡ ?Y                 |- context[?Y] ] => rewrite <- !H; clear H
+  | [ H : ∀ _, ?X ≡ ?Y                 |- context[?Y] ] => srewrite_r H; clear H
+  | [ H : ∀ _, ?X _ ≡ ?Y _             |- context[?Y] ] => rewrite <- !H; clear H
+  | [ H : ∀ _, ?X _ ≡ ?Y _             |- context[?Y] ] => srewrite_r H; clear H
+  | [ H : ∀ _ _, ?X ≡ ?Y               |- context[?Y] ] => rewrite <- !H; clear H
+  | [ H : ∀ _ _, ?X ≡ ?Y               |- context[?Y] ] => srewrite_r H; clear H
+  | [ H : ∀ _ _, ?X _ ≡ ?Y _           |- context[?Y] ] => rewrite <- !H; clear H
+  | [ H : ∀ _ _, ?X _ ≡ ?Y _           |- context[?Y] ] => srewrite_r H; clear H
+  | [ H : ∀ _ _, ?X _ _ ≡ ?Y _ _       |- context[?Y] ] => rewrite <- !H; clear H
+  | [ H : ∀ _ _, ?X _ _ ≡ ?Y _ _       |- context[?Y] ] => srewrite_r H; clear H
+  | [ H : ∀ _ _ _, ?X ≡ ?Y             |- context[?Y] ] => rewrite <- !H; clear H
+  | [ H : ∀ _ _ _, ?X ≡ ?Y             |- context[?Y] ] => srewrite_r H; clear H
+  | [ H : ∀ _ _ _, ?X _ ≡ ?Y _         |- context[?Y] ] => rewrite <- !H; clear H
+  | [ H : ∀ _ _ _, ?X _ ≡ ?Y _         |- context[?Y] ] => srewrite_r H; clear H
+  | [ H : ∀ _ _ _, ?X _ _ ≡ ?Y _ _     |- context[?Y] ] => rewrite <- !H; clear H
+  | [ H : ∀ _ _ _, ?X _ _ ≡ ?Y _ _     |- context[?Y] ] => srewrite_r H; clear H
+  | [ H : ∀ _ _ _, ?X _ _ _ ≡ ?Y _ _ _ |- context[?Y] ] => rewrite <- !H; clear H
+  | [ H : ∀ _ _ _, ?X _ _ _ ≡ ?Y _ _ _ |- context[?Y] ] => srewrite_r H; clear H
   end.

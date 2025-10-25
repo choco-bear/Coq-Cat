@@ -16,7 +16,7 @@ Class Setoid A :=
 
 Coercion setoid_equiv : Setoid >-> Equivalence.
 
-Notation "f ≈ g" := (equiv f g) (at level 79) : category_theory_scope.
+Notation "f ≡ g" := (equiv f g) (at level 79) : category_theory_scope.
 
 Definition eq_equivalence@{t u} {A : Type@{t}} : @Equivalence@{t u} A (@eq A) :=
   @Build_Equivalence@{t u} A
@@ -35,7 +35,7 @@ Definition eq_Setoid@{u} (A : Type@{u}) : Setoid@{u u} A :=
 #[export]
 Program Instance funext_Setoid {T : Type} (t : T → Type) (a b : T) `{Setoid (t b)}
   : Setoid (t a → t b) | 9 :=
-    {| equiv := λ f g, ∀ x, f x ≈ g x |}.
+    {| equiv := λ f g, ∀ x, f x ≡ g x |}.
 Next Obligation.
   constructor; repeat intro.
   - reflexivity.
@@ -51,7 +51,7 @@ Program Instance Fin_Setoid {n} : Setoid (Fin.t n) :=
 Class Unique `{S : Setoid A} (P : A → Type) :=
   { unique_obj : A
   ; unique_property : P unique_obj
-  ; uniqueness      : ∀ v : A, P v → unique_obj ≈ v
+  ; uniqueness      : ∀ v : A, P v → unique_obj ≡ v
   }.
 
 Arguments unique_obj {_ _ _} _.
@@ -64,9 +64,9 @@ Notation "∃! x .. y , P" := (Unique (fun x => .. (Unique (fun y => P)) ..))
 Local Set Warnings "-not-a-class".
 
 Class injective {A : Type} `{Setoid A} {B : Type} `{Setoid B} (f : A -> B) :=
-  { inj {x y} : f x ≈ f y -> x ≈ y }.
+  { inj {x y} : f x ≡ f y -> x ≡ y }.
 
 Class surjective {A : Type} {B : Type} `{Setoid B} (f : A -> B) :=
-  { surj {y} : { x & f x ≈ y} }.
+  { surj {y} : { x & f x ≡ y} }.
 
 Local Set Warnings "not-a-class".

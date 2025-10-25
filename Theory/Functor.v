@@ -20,9 +20,9 @@ Class Functor@{o1 h1 p1 o2 h2 p2}
       Proper@{h2 p2} (respectful@{h1 p1 h2 p2 h2 p2}
                         equiv@{h1 p1} equiv@{h2 p2}) (@fmap x y)
 
-  ; fmap_id {x : C} : fmap (@id C x) ≈ id
+  ; fmap_id {x : C} : fmap (@id C x) ≡ id
   ; fmap_comp {x y z : C} (f : y ~> z) (g : x ~> y) :
-      fmap (f ∘ g) ≈ fmap f ∘ fmap g
+      fmap (f ∘ g) ≡ fmap f ∘ fmap g
   }.
 #[export] Existing Instance fmap_respects.
 
@@ -71,9 +71,9 @@ Section AFunctor.
 
     ; a_fmap_respects {x y : C} : Proper (equiv ==> equiv) (@a_fmap x y)
 
-    ; a_fmap_id {x : C} : a_fmap (@id C x) ≈ id
+    ; a_fmap_id {x : C} : a_fmap (@id C x) ≡ id
     ; a_fmap_comp {x y z : C} (f : y ~> z) (g : x ~> y) :
-        a_fmap (f ∘ g) ≈ a_fmap f ∘ a_fmap g
+        a_fmap (f ∘ g) ≡ a_fmap f ∘ a_fmap g
     }.
   #[export] Existing Instance a_fmap_respects.
 

@@ -38,5 +38,8 @@ This project is organized using Coq's logical path system, which is configured b
 * **`Theory/`** (Mapped to `Category.Theory`) \
     This directory holds the formalization of category theory concepts.
 
+* **`Instance/`** (Mapped to `Category.Instance`) \
+    This directory holds the instances of `Category` typeclass.
+
 * **`imports/`** (Mapped to `Category`) \
     This directory serves as the main entry point for the project.

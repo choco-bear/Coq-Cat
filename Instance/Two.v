@@ -20,26 +20,21 @@ Definition TwoHom_inv_t : ∀ x y, TwoHom x y → Prop.
   - exact (f = TwoIdB).
 Defined.
 
-Corollary TwoHom_inv x y f : TwoHom_inv_t x y f.
+Corollary TwoHom_inv {x y} f : TwoHom_inv_t x y f.
 Proof. now destruct f. Qed.
 
 Lemma TwoHom_B_A_absurd : ∀ CONTRA : TwoHom TwoB TwoA, False.
-Proof. exact (TwoHom_inv _ _). Qed.
+Proof. exact TwoHom_inv. Qed.
 
 #[export] Hint Extern 4 => contradiction TwoHom_B_A_absurd : two_laws.
 
-Local Ltac obligation_solver :=
+Local Ltac two_solver :=
   intros; repeat match goal with
+                 | [ f : TwoHom _ _ |- _ ] => srewrite (TwoHom_inv f)
                  | [ x : TwoObj |- _ ] => destruct x
-                 end; simplify; auto with two_laws;
-  try match goal with
-      | [ H : TwoB = TwoA |- _ ] => inversion H
-      | [ H : TwoA = TwoB |- _ ] => inversion H
-      end;
-  try match goal with
-      | [ f : TwoHom ?X ?Y |- _ ] => spose (TwoHom_inv _ _ f) as INV
-      end; try now subst.
-
+                 | [ H : TwoB = TwoA |- _ ] => inversion H
+                 | [ H : TwoA = TwoB |- _ ] => inversion H
+                 end; auto with two_laws.
 (** The category 2 has two objects, their identity morphisms, and one morphism from
   * the first object to the second object.
   *)
@@ -52,10 +47,10 @@ Program Definition _2 : Category :=
                 | TwoB => TwoIdB
                 end
   |}.
-Next Obligation. obligation_solver. Defined.
-Next Obligation. obligation_solver. Qed.
-Next Obligation. obligation_solver. Qed.
-Next Obligation. obligation_solver. Qed.
-Next Obligation. obligation_solver. Qed.
+Next Obligation. two_solver. Defined.
+Next Obligation. two_solver. Qed.
+Next Obligation. two_solver. Qed.
+Next Obligation. two_solver. Qed.
+Next Obligation. two_solver. Qed.
 
 Notation "2" := _2 : category_scope.

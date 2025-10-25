@@ -23,6 +23,7 @@ Makefile.coq: Makefile $(COQTHEORIES)
 	 echo "-arg -w -arg -cannot-define-projection"; \
 	 echo "-arg -w -arg -stdlib-vector"; \
 	 echo "-arg -w -arg -parsing"; \
+	 echo "-arg -w -arg -intuition-auto-with-star"; \
 	 echo "-R imports Category"; \
 	 echo "-R Lib Category.Lib"; \
 	 echo "-R Theory Category.Theory"; \

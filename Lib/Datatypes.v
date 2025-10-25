@@ -106,9 +106,9 @@ Qed.
 
 Local Set Warnings "-intuition-auto-with-star".
 
-(* The only inductive types from the standard library used in this development
-   are products and sums, so we must show how they interact with constructive
-   setoids. *)
+(** The only inductive types from the standard library used in this development are
+  * products and sums, so we must show how they interact with constructive setoids.
+  *)
 
 #[global]
 Program Instance prod_setoid {A B} `{Setoid A} `{Setoid B} :

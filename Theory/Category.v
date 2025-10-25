@@ -5,23 +5,22 @@ Generalizable All Variables.
 Reserved Infix "~>" (at level 90, right associativity).
 Reserved Infix "∘" (at level 40, left associativity).
 
-(* The objects of a category are all of some `Type`.
-
-  Morphisms, or arrows, are also of type `Type`, but always in a universe
-  above objects. All of the library has `Universe Polymorphism` enabled,
-  allowing categories whose objects are categories, etc.
-
-  The morphisms identified by `A ~> B` form a hom-set, except that in this
-  library it is a hom-setoid, requiring the meaning of (computationally
-  relevant) equivalence between morphisms to be given. This makes it a
-  quotient category C/R over the equivalence relation R, but since this is
-  almost always needed (since equality is very restrictive in Coq's type
-  theory), we call it a [Category] here, and assume the existence of some
-  other category using only equality, with a functor from that category to
-  this.
-
-  Categories (as distinct from Category/~) are identified by [homset :=
-  Morphism_equality]. *)
+(** The objects of a category are all of some `Type`.
+  *
+  * Morphisms, or arrows, are also of type `Type`, but always in a universe above
+  * objects. All of the library has `Universe Polymorphism` enabled, allowing
+  * categories whose objects are categories, etc.
+  *
+  * The morphisms identified by `A ~> B` form a hom-set, except that in this library
+  * it is a hom-setoid, requiring the meaning of (computationally relevant)
+  * equivalence between morphisms to be given. This makes it a quotient category C/R
+  * over the equivalence relation R, but since this is almost always needed (since
+  * equality is very restrictive in Coq's type theory), we call it a [Category] here,
+  * and assume the existence of some other category using only equality, with a
+  * functor from that category to this.
+  *
+  * Categories are identified by [homset := Morphism_equality]
+  *)
 
 Class Category@{o h p | h <= p} : Type@{max(o+1,h+1,p+1)} := {
   obj : Type@{o};
@@ -112,8 +111,9 @@ Coercion obj : Category >-> Sortclass.
 #[export] Hint Rewrite @id_right : categories.
 
 (** [Build_Category'] is a custom constructor that automatically provides the
-    definition of [comp_assoc_sym]. It is intended to be used with the
-    [refine] tactic, such as in the example below. *)
+  * definition of [comp_assoc_sym]. It is intended to be used with the [refine]
+  * tactic, such as in the example below.
+  *)
 Definition Build_Category'
            {obj} hom {homset} id compose
            {compose_respects}

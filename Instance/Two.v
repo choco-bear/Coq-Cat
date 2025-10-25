@@ -23,7 +23,7 @@ Defined.
 Corollary TwoHom_inv {x y} f : TwoHom_inv_t x y f.
 Proof. now destruct f. Qed.
 
-Lemma TwoHom_B_A_absurd : ∀ CONTRA : TwoHom TwoB TwoA, False.
+Lemma TwoHom_B_A_absurd : ¬ TwoHom TwoB TwoA.
 Proof. exact TwoHom_inv. Qed.
 
 #[export] Hint Extern 4 => contradiction TwoHom_B_A_absurd : two_laws.

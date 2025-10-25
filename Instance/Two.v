@@ -31,7 +31,7 @@ Proof. exact (TwoHom_inv _ _). Qed.
 Local Ltac obligation_solver :=
   intros; repeat match goal with
                  | [ x : TwoObj |- _ ] => destruct x
-                 end; intuition;
+                 end; simplify; auto with two_laws;
   try match goal with
       | [ H : TwoB = TwoA |- _ ] => inversion H
       | [ H : TwoA = TwoB |- _ ] => inversion H

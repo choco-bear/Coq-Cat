@@ -29,11 +29,11 @@ Section Definitions.
   Definition Zero Z := Initial Z * Terminal Z.
 End Definitions.
 
-Arguments terminal_morphism {_%_object_scope _} _%_object_scope.
-Arguments terminal_unique {_%_object_scope _ _%_object_scope}
+Arguments terminal_morphism {_%_category_scope _%_object_scope _} _%_object_scope.
+Arguments terminal_unique {_%_category_scope _%_object_scope _ _%_object_scope}
   _%_morphism_scope _%_morphism_scope.
-Arguments initial_morphism {_%_object_scope _} _%_object_scope.
-Arguments initial_unique {_%_object_scope _ _%_object_scope}
+Arguments initial_morphism {_%_category_scope _%_object_scope _} _%_object_scope.
+Arguments initial_unique {_%_category_scope _%_object_scope _ _%_object_scope}
   _%_morphism_scope _%_morphism_scope.
 
 Section Lemmas.

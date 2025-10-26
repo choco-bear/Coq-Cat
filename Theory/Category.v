@@ -150,9 +150,8 @@ Open Scope morphism_scope.
 
 Program Definition Morphism_equality@{o h p}
   {ob : Type@{o}} {hom : ob → ob → Type@{h}}
-  (x y : ob) : Setoid@{h p} (hom x y) := {|
-  equiv := eq
-|}.
+  (x y : ob) : Setoid@{h p} (hom x y) :=
+    {| equiv := eq |}.
 Arguments Morphism_equality {_ _} _ _ /.
 
 Section Category.

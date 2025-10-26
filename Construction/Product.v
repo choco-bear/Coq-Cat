@@ -11,6 +11,24 @@ Program Definition Product (C D : Category) : Category :=
    ; homset := λ x y, prod_setoid
    ; id := λ x, (id[fst x], id[snd x])
    ; compose := λ x y z f g, (fst f ∘ fst g, snd f ∘ snd g)
+
+   ; compose_respects := λ x y z f g fg h i hi,
+        ( compose_respects (fst f) (fst g) (fst fg) (fst h) (fst i) (fst hi)
+        , compose_respects (snd f) (snd g) (snd fg) (snd h) (snd i) (snd hi) )
+
+   ; id_left := λ x y f,
+        ( id_left (fst f)
+        , id_left (snd f) )
+   ; id_right := λ x y f,
+        ( id_right (fst f)
+        , id_right (snd f) )
+
+   ; comp_assoc := λ x y z w f g h,
+        ( comp_assoc (fst f) (fst g) (fst h)
+        , comp_assoc (snd f) (snd g) (snd h) )
+   ; comp_assoc_sym := λ x y z w f g h,
+        ( comp_assoc_sym (fst f) (fst g) (fst h)
+        , comp_assoc_sym (snd f) (snd g) (snd h) )
   |}.
 
 Notation "C × D" := (Product C D) (at level 40, left associativity) : category_scope.

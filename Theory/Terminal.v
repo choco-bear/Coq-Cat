@@ -22,11 +22,6 @@ Section Definitions.
     { initial_morphism X : I ~> X
     ; initial_unique X (f g : I ~> X) : f ≡ g
     }.
-
-  (** An object [Z] is said to be a zero object in [C] if it is both terminal and
-    * initial.
-    *)
-  Definition Zero Z := Initial Z * Terminal Z.
 End Definitions.
 
 Arguments terminal_morphism {_%_category_scope _%_object_scope _} _%_object_scope.
@@ -57,3 +52,25 @@ Section Lemmas.
     all: now apply initial_morphism.
   Qed.
 End Lemmas.
+
+(** An object [Z] is said to be a zero object in [C] if it is both terminal and
+  * initial.
+  *)
+Section ZeroObject.
+  Class HasZeroObjects (C : Category) :=
+    { zero : C
+    ; zero_terminal : Terminal zero
+    ; zero_initial : Initial zero
+    }.
+
+  Definition zero_morphism
+    {C : Category} {ZERO : HasZeroObjects C} {X Y : C} : X ~> Y :=
+      @initial_morphism C zero zero_initial Y
+    ∘ @terminal_morphism C zero zero_terminal X.
+End ZeroObject.
+
+Notation "'0'" := zero : object_scope.
+Notation "'0[' C ']'" := (@zero C%category _)
+  (at level 0, format "0[ C ]") : object_scope.
+
+Notation "'0'" := zero_morphism : morphism_scope.

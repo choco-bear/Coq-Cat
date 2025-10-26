@@ -57,7 +57,7 @@ Module Defs.
       (@SetoidMorphism_compose@{o h p} x y z).
   Proof. proper. now rewrites. Qed.
 End Defs.
-Import Defs.
+Export Defs.
 
 (** The category of setoids and setoid morphisms. *)
 Program Definition Sets@{o so} : Category@{so o o} :=

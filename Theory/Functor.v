@@ -102,3 +102,24 @@ Section AFunctor.
     : ToAFunctor (FromAFunctor H) = H.
   Proof. reflexivity. Qed.
 End AFunctor.
+
+Section Definitions.
+  Program Definition Functor_Composition {C D E : Category} (F : D ⟶ E) (G : C ⟶ D)
+    : C ⟶ E :=
+      {| fobj := λ x, fobj[F] (fobj[G] x)
+       ; fmap := λ x y f, fmap[F] (fmap[G] f)
+      |}.
+  Next Obligation. proper. now rewrites. Qed.
+  Next Obligation. now rewrite <-!fmap_comp. Qed.
+
+  Program Definition Functor_Identity {C : Category} : C ⟶ C :=
+    {| fobj := Datatypes.id
+     ; fmap := λ _ _, Datatypes.id
+    |}.
+End Definitions.
+
+Notation "F '○' G" := (Functor_Composition F G)
+  (at level 40, left associativity) : functor_scope.
+
+Notation "'Id'" := Functor_Identity : functor_scope.
+Notation "'Id[' C ']'" := (@Functor_Identity C) : functor_scope.

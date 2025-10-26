@@ -83,10 +83,9 @@ Notation "x <~ y" := (@hom _%category y%object x%object)
   (at level 90, right associativity, only parsing) : homset_scope.
 Notation "x <~{ C }~ y" := (@hom C%category y%object x%object)
   (at level 90, only parsing) : homset_scope.
-
+  
 Notation "'id[' x ']'" := (@id _%category x%object)
-  (at level 9, format "id[ x ]", only parsing) : morphism_scope.
-
+  (at level 9, format "id[ x ]") : morphism_scope.
 Notation "'id{' C '}'" := (@id C%category _%object)
   (at level 9, format "id{ C }", only parsing) : morphism_scope.
 

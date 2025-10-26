@@ -72,3 +72,4 @@ time-of-build-pretty.log
 
 ### For my local files
 .local/
+.github/

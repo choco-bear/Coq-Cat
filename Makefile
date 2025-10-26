@@ -28,6 +28,7 @@ Makefile.coq: Makefile $(COQTHEORIES)
 	 echo "-R Lib Category.Lib"; \
 	 echo "-R Theory Category.Theory"; \
 	 echo "-R Instance Category.Instance"; \
+	 echo "-R Construction Category.Construction"; \
 	 echo $(COQTHEORIES)) > _CoqProject
 	$(COQBIN)coq_makefile -f _CoqProject -o Makefile.coq
 .PHONY: Makefile.coq

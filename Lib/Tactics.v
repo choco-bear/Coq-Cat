@@ -98,6 +98,20 @@ Tactic Notation "srewrite" "->" uconstr(F) :=
 Tactic Notation "srewrite" "<-" uconstr(F) :=
   let H := fresh "H" in pose proof F as H; cbn in H; rewrite <- H; clear H.
 
+Tactic Notation "srewrite" uconstr(F) "in" hyp(H) :=
+  let H' := fresh "H" in pose proof F as H'; cbn in H'; rewrite H' in H; clear H'.
+Tactic Notation "srewrite" "->" uconstr(F) "in" hyp(H) :=
+  let H' := fresh "H" in pose proof F as H'; cbn in H'; rewrite -> H' in H; clear H'.
+Tactic Notation "srewrite" "<-" uconstr(F) "in" hyp(H) :=
+  let H' := fresh "H" in pose proof F as H'; cbn in H'; rewrite <- H' in H; clear H'.
+
+Tactic Notation "srewrite" uconstr(F) "in" "*" :=
+  let H := fresh "H" in pose proof F as H; cbn in H; rewrite H in *; clear H.
+Tactic Notation "srewrite" "->" uconstr(F) "in" "*" :=
+  let H := fresh "H" in pose proof F as H; cbn in H; rewrite -> H in *; clear H.
+Tactic Notation "srewrite" "<-" uconstr(F) "in" "*" :=
+  let H := fresh "H" in pose proof F as H; cbn in H; rewrite <- H in *; clear H.
+
 (** Apply a term, simplifying it first. *)
 Ltac sapply F :=
   let H := fresh "H" in pose proof F as H; cbn in H; apply H; clear H.

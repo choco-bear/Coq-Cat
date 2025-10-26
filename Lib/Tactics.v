@@ -145,3 +145,103 @@ Tactic Notation "clear" "dependent" hyp(h) :=
   *)
 Tactic Notation "revert" "dependent" hyp(h) :=
   generalize dependent h.
+
+(** Applying a tactic to a term with increasingly many arguments *)
+Tactic Notation "do_with_holes" tactic3(x) uconstr(p) :=
+  x uconstr:(p) ||
+  x uconstr:(p _) ||
+  x uconstr:(p _ _) ||
+  x uconstr:(p _ _ _) ||
+  x uconstr:(p _ _ _ _) ||
+  x uconstr:(p _ _ _ _ _) ||
+  x uconstr:(p _ _ _ _ _ _) ||
+  x uconstr:(p _ _ _ _ _ _ _) ||
+  x uconstr:(p _ _ _ _ _ _ _ _) ||
+  x uconstr:(p _ _ _ _ _ _ _ _ _) ||
+  x uconstr:(p _ _ _ _ _ _ _ _ _ _) ||
+  x uconstr:(p _ _ _ _ _ _ _ _ _ _ _) ||
+  x uconstr:(p _ _ _ _ _ _ _ _ _ _ _ _) ||
+  x uconstr:(p _ _ _ _ _ _ _ _ _ _ _ _ _) ||
+  x uconstr:(p _ _ _ _ _ _ _ _ _ _ _ _ _ _) ||
+  x uconstr:(p _ _ _ _ _ _ _ _ _ _ _ _ _ _ _) ||
+  x uconstr:(p _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _) ||
+  x uconstr:(p _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _) ||
+  x uconstr:(p _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _) ||
+  x uconstr:(p _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _) ||
+  x uconstr:(p _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _) ||
+  x uconstr:(p _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _) ||
+  x uconstr:(p _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _) ||
+  x uconstr:(p _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _) ||
+  x uconstr:(p _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _) ||
+  x uconstr:(p _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _) ||
+  x uconstr:(p _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _) ||
+  x uconstr:(p _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _) ||
+  x uconstr:(p _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _) ||
+  x uconstr:(p _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _) ||
+  x uconstr:(p _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _).
+
+(** Same thing but starting with many holes first *)
+Tactic Notation "do_with_holes'" tactic3(x) uconstr(p) :=
+  x uconstr:(p _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _) ||
+  x uconstr:(p _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _) ||
+  x uconstr:(p _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _) ||
+  x uconstr:(p _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _) ||
+  x uconstr:(p _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _) ||
+  x uconstr:(p _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _) ||
+  x uconstr:(p _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _) ||
+  x uconstr:(p _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _) ||
+  x uconstr:(p _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _) ||
+  x uconstr:(p _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _) ||
+  x uconstr:(p _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _) ||
+  x uconstr:(p _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _) ||
+  x uconstr:(p _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _) ||
+  x uconstr:(p _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _) ||
+  x uconstr:(p _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _) ||
+  x uconstr:(p _ _ _ _ _ _ _ _ _ _ _ _ _ _ _) ||
+  x uconstr:(p _ _ _ _ _ _ _ _ _ _ _ _ _ _) ||
+  x uconstr:(p _ _ _ _ _ _ _ _ _ _ _ _ _) ||
+  x uconstr:(p _ _ _ _ _ _ _ _ _ _ _ _) ||
+  x uconstr:(p _ _ _ _ _ _ _ _ _ _ _) ||
+  x uconstr:(p _ _ _ _ _ _ _ _ _ _) ||
+  x uconstr:(p _ _ _ _ _ _ _ _ _) ||
+  x uconstr:(p _ _ _ _ _ _ _ _) ||
+  x uconstr:(p _ _ _ _ _ _ _) ||
+  x uconstr:(p _ _ _ _ _ _) ||
+  x uconstr:(p _ _ _ _ _) ||
+  x uconstr:(p _ _ _ _) ||
+  x uconstr:(p _ _ _) ||
+  x uconstr:(p _ _) ||
+  x uconstr:(p _) ||
+  x uconstr:(p).
+
+(** A shorter name for [simple refine]. *)
+Tactic Notation "srefine" uconstr(term) := simple refine term.
+(** A shorter name for [notypeclasses refine];. *)
+Tactic Notation "nrefine" uconstr(term) := notypeclasses refine term.
+(** A shorter name for [simple notypeclasses refine]. *)
+Tactic Notation "snrefine" uconstr(term) := simple notypeclasses refine term.
+
+(** Note that the Coq standard library has a [rapply], but it is like our [rapply']
+  * with many-holes first. We prefer fewer-holes first, for instance so that a
+  * theorem producing an equivalence will by preference be used to produce an
+  * equivalence rather than to apply the coercion of that equivalence to a function.
+  *)
+Tactic Notation "rapply" uconstr(term)
+  := do_with_holes ltac:(fun x => refine x) term.
+Tactic Notation "rapply'" uconstr(term)
+  := do_with_holes' ltac:(fun x => refine x) term.
+
+Tactic Notation "srapply" uconstr(term)
+  := do_with_holes ltac:(fun x => srefine x) term.
+Tactic Notation "srapply'" uconstr(term)
+  := do_with_holes' ltac:(fun x => srefine x) term.
+
+Tactic Notation "nrapply" uconstr(term)
+  := do_with_holes ltac:(fun x => nrefine x) term.
+Tactic Notation "nrapply'" uconstr(term)
+  := do_with_holes' ltac:(fun x => nrefine x) term.
+
+Tactic Notation "snrapply" uconstr(term)
+  := do_with_holes ltac:(fun x => snrefine x) term.
+Tactic Notation "snrapply'" uconstr(term)
+  := do_with_holes' ltac:(fun x => snrefine x) term.

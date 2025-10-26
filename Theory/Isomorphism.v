@@ -1,5 +1,6 @@
 Require Import Category.Lib.
 Require Import Category.Theory.Category.
+Require Import Category.Theory.Morphisms.
 
 Generalizable All Variables.
 
@@ -131,3 +132,19 @@ Notation "f '⁻¹'" := (from f) (at level 9, format "f '⁻¹'") : morphism_sco
 
 Ltac isomorphism :=
   unshelve (refine {| to := _; from := _ |}; simpl; intros).
+
+Section Morphisms.
+  Context {C : Category}.
+
+  Program Instance iso_epi {x y : C} (f : x ≅ y) : Epic f.
+  Next Obligation.
+    rewrite <- id_right, <- (iso_to_from f), comp_assoc.
+    rewrite X, <- comp_assoc, iso_to_from. cat.
+  Qed.
+
+  Program Instance iso_monic {x y : C} (f : x ≅ y) : Monic f.
+  Next Obligation.
+    rewrite <- id_left, <- (iso_from_to f), <- comp_assoc.
+    rewrite X, comp_assoc, iso_from_to. cat.
+  Qed.
+End Morphisms.

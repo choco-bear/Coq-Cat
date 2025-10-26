@@ -20,6 +20,7 @@ Section Morphisms.
   (** A morphism is a bimorphism if it is both an epimorphism and a monomorphism. *)
   Definition BiMorphic {x y} (f : x ~> y) := Epic f * Monic f.
 
+  (** Lemmas about identity morphisms *)
   Section Id.
     Corollary id_epic {x : C} : Epic id[x].
     Proof. construct. now rewrite !id_right in X. Qed.
@@ -31,7 +32,8 @@ Section Morphisms.
     Proof. split; [apply id_epic|apply id_monic]. Qed.
   End Id.
 
-  Section Lemmas.
+  (** Lemmas about inverse morphisms *)
+  Section Inverse.
     Context {x y : C} {f : x ~> y}.
 
     Lemma has_right_inverse_epic
@@ -49,8 +51,9 @@ Section Morphisms.
       rewrite <- id_left, <- (id_left g2).
       rewrite <- EQ. reassociate_right.
     Qed.
-  End Lemmas.
+  End Inverse.
 
+  (** Lemmas about composition of morphisms *)
   Section Composition.
     Context {x y z : C} {f : y ~> z} {g : x ~> y}.
 

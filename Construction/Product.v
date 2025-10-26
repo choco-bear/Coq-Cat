@@ -62,3 +62,13 @@ Section Projection.
   Proof. reflexivity. Qed.
 End Projection.
 #[export] Hint Rewrite @fst_comp @snd_comp : categories.
+
+Require Import Category.Construction.Opposite.
+
+(** The opposite category of [C × D] is [C^op × D^op]. *)
+Lemma Product_Opposite (C D : Category)
+  : (C × D)^op = C^op × D^op.
+Proof.
+  unfold Opposite, Product; simpl.
+  destruct C, D; simpl. f_equal.
+(* SLOW *) Qed.

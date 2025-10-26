@@ -126,3 +126,22 @@ Ltac inv H := inversion H; subst; try clear H.
 (** Pose proof and simplify it. *)
 Tactic Notation "spose" uconstr(H) "as" ident(X) :=
   pose proof H as X; simpl in X.
+
+(** Clear a hypothesis and also its dependencies. Taken from Coq stdlib, with the
+  * performance-enhancing change to [lazymatch] suggested at
+  * [https://github.com/coq/coq/issues/11689].
+  *)
+Tactic Notation "clear" "dependent" hyp(h) :=
+  let rec depclear h :=
+  clear h ||
+  lazymatch goal with
+   | H : context [ h ] |- _ => depclear H; depclear h
+  end ||
+  fail "hypothesis to clear is used in the conclusion (maybe indirectly)"
+ in depclear h.
+
+(** A version of [generalize dependent] that applies only to a hypothesis.
+  * Taken from Coq stdlib.
+  *)
+Tactic Notation "revert" "dependent" hyp(h) :=
+  generalize dependent h.

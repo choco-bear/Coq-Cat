@@ -3,6 +3,9 @@ Require Import Category.Theory.Category.
 
 Generalizable All Variables.
 
+Ltac reassociate_right := repeat (rewrite <- comp_assoc); cat.
+Ltac reassociate_left := repeat (rewrite comp_assoc); cat.
+
 Section Morphisms.
   Context {C : Category}.
 
@@ -16,4 +19,54 @@ Section Morphisms.
 
   (** A morphism is a bimorphism if it is both an epimorphism and a monomorphism. *)
   Definition BiMorphic {x y} (f : x ~> y) := Epic f * Monic f.
+
+  Section Id.
+    Corollary id_epic {x : C} : Epic id[x].
+    Proof. construct. now rewrite !id_right in X. Qed.
+
+    Corollary id_monic {x : C} : Monic id[x].
+    Proof. construct. now rewrite !id_left in X. Qed.
+
+    Corollary id_bimorphic {x : C} : BiMorphic id[x].
+    Proof. split; [apply id_epic|apply id_monic]. Qed.
+  End Id.
+
+  Section Lemmas.
+    Context {x y : C} {f : x ~> y}.
+
+    Lemma has_right_inverse_epic
+      : (∃ g, f ∘ g ≡ id[y]) → Epic f.
+    Proof.
+      intros [g EQ]. construct.
+      rewrite <- id_right, <- (id_right g2).
+      rewrite <- EQ. reassociate_left.
+    Qed.
+
+    Lemma has_left_inverse_monic
+      : (∃ g, g ∘ f ≡ id[x]) → Monic f.
+    Proof.
+      intros [g EQ]. construct.
+      rewrite <- id_left, <- (id_left g2).
+      rewrite <- EQ. reassociate_right.
+    Qed.
+  End Lemmas.
+
+  Section Composition.
+    Context {x y z : C} {f : y ~> z} {g : x ~> y}.
+
+    Definition epi_compose  :
+      Epic f → Epic g → Epic (f ∘ g).
+    Proof.
+      construct. do 2 apply epic.
+      reassociate_right.
+    Qed.
+
+    Definition monic_compose :
+      Monic f → Monic g → Monic (f ∘ g).
+    Proof.
+      construct. do 2 apply monic.
+      reassociate_left.
+    Qed.
+  End Composition.
 End Morphisms.
+#[export] Hint Unfold BiMorphic : core.

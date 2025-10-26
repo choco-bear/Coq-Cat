@@ -43,12 +43,14 @@ Notation "C × D" := (Product C D) (at level 40, left associativity) : category_
 Section Projection.
   Context {C D : Category}.
 
-  Program Definition Fst : C × D ⟶ C :=
+  #[export]
+  Program Instance Fst : C × D ⟶ C :=
     {| fobj := λ x, fst x
      ; fmap := λ _ _ f, fst f
     |}.
 
-  Program Definition Snd : C × D ⟶ D :=
+  #[export]
+  Program Instance Snd : C × D ⟶ D :=
     {| fobj := λ x, snd x
      ; fmap := λ _ _ f, snd f
     |}.

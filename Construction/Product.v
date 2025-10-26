@@ -1,5 +1,7 @@
 Require Import Category.Lib.
 Require Import Category.Theory.Category.
+Require Import Category.Theory.Functor.
+Require Import Category.Construction.Opposite.
 
 (** Being given two categories [C] and [D], we can construct their product category
   * [C × D], which has objects that are pairs of objects in [C] and objects in [D],
@@ -33,8 +35,6 @@ Program Definition Product (C D : Category) : Category :=
 
 Notation "C × D" := (Product C D) (at level 40, left associativity) : category_scope.
 
-Require Import Category.Theory.Functor.
-
 (** The projection functors [Fst : C × D ⟶ C] and [Snd : C × D ⟶ D] map each object
   * [(c, d)] in [C × D] to the object [c] in [C] and to the object [d] in [D],
   * respectively, and each morphism [(f, g)] in [C × D] to the morphism [f] in [C]
@@ -62,8 +62,6 @@ Section Projection.
   Proof. reflexivity. Qed.
 End Projection.
 #[export] Hint Rewrite @fst_comp @snd_comp : categories.
-
-Require Import Category.Construction.Opposite.
 
 (** The opposite category of [C × D] is [C^op × D^op]. *)
 Lemma Product_Opposite (C D : Category)

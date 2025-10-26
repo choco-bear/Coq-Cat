@@ -68,11 +68,17 @@ Section ZeroObject.
       @initial_morphism C zero zero_initial Y
     ∘ @terminal_morphism C zero zero_terminal X.
 
+  Local Notation "'0'" := zero : object_scope.
+  Local Notation "'0[' C ']'" := (@zero C%category _)
+    (at level 0, format "0[ C ]") : object_scope.
+
+  Local Notation "'0'" := zero_morphism : morphism_scope.
+
   Section Lemmas.
     Context {C : Category} {ZERO : HasZeroObjects C}.
     
     Lemma zero_absorb_right {X Y Z : C} (f : X ~> Y)
-      : zero_morphism ∘ f << X ~~> Z >> zero_morphism.
+      : 0 ∘ f << X ~~> Z >> 0.
     Proof.
       unfold zero_morphism. comp_left.
       srapply terminal_unique.
@@ -80,7 +86,7 @@ Section ZeroObject.
     Qed.
 
     Lemma zero_absorb_left {X Y Z : C} (f : Y ~> Z)
-      : f ∘ zero_morphism << X ~~> Z >> zero_morphism.
+      : f ∘ 0 << X ~~> Z >> 0.
     Proof.
       unfold zero_morphism. comp_right.
       srapply initial_unique.

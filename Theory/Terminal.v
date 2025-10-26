@@ -67,6 +67,26 @@ Section ZeroObject.
     {C : Category} {ZERO : HasZeroObjects C} {X Y : C} : X ~> Y :=
       @initial_morphism C zero zero_initial Y
     ∘ @terminal_morphism C zero zero_terminal X.
+
+  Section Lemmas.
+    Context {C : Category} {ZERO : HasZeroObjects C}.
+    
+    Lemma zero_absorb_right {X Y Z : C} (f : X ~> Y)
+      : zero_morphism ∘ f << X ~~> Z >> zero_morphism.
+    Proof.
+      unfold zero_morphism. comp_left.
+      srapply terminal_unique.
+      apply zero_terminal.
+    Qed.
+
+    Lemma zero_absorb_left {X Y Z : C} (f : Y ~> Z)
+      : f ∘ zero_morphism << X ~~> Z >> zero_morphism.
+    Proof.
+      unfold zero_morphism. comp_right.
+      srapply initial_unique.
+      apply zero_initial.
+    Qed.
+  End Lemmas.
 End ZeroObject.
 
 Notation "'0'" := zero : object_scope.

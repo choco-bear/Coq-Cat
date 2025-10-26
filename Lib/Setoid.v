@@ -17,6 +17,8 @@ Class Setoid A :=
 Coercion setoid_equiv : Setoid >-> Equivalence.
 
 Notation "f ≡ g" := (equiv f g) (at level 79) : category_theory_scope.
+Notation "f '≡[' A ']' g" := (@equiv A _ f g)
+  (at level 79, only parsing) : category_theory_scope.
 
 Definition eq_equivalence@{t u} {A : Type@{t}} : @Equivalence@{t u} A (@eq A) :=
   @Build_Equivalence@{t u} A

@@ -115,6 +115,9 @@ Notation "x ≅ y" := (@Isomorphism _%category x%object y%object)
 Notation "x ≅[ C ] y" := (@Isomorphism C%category x%object y%object)
   (at level 91, only parsing) : isomorphism_scope.
 
+Notation "f ○ g" := (iso_compose f g)
+  (at level 40, left associativity) : isomorphism_scope.
+
 Arguments to {_%_category x%_object y%_object} _%_morphism.
 Arguments from {_%_category x%_object y%_object} _%_morphism.
 Arguments iso_to_from {_ _ _} _.

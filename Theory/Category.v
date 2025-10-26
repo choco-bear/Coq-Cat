@@ -77,31 +77,31 @@ Notation "hom[ C ]" := (@hom C%category)
 Notation "x ~> y" := (@hom _%category x%object y%object)
   (at level 90, right associativity) : homset_scope.
 Notation "x ~{ C }~> y" := (@hom C%category x%object y%object)
-  (at level 90) : homset_scope.
+  (at level 90, only parsing) : homset_scope.
 
 Notation "x <~ y" := (@hom _%category y%object x%object)
   (at level 90, right associativity, only parsing) : homset_scope.
 Notation "x <~{ C }~ y" := (@hom C%category y%object x%object)
   (at level 90, only parsing) : homset_scope.
 
-Notation "id[ x ]" := (@id _%category x%object)
-  (at level 9, format "id[ x ]") : morphism_scope.
+Notation "'id[' x ']'" := (@id _%category x%object)
+  (at level 9, format "id[ x ]", only parsing) : morphism_scope.
 
-Notation "id{ C }" := (@id C%category _%object)
-  (at level 9, format "id{ C }") : morphism_scope.
+Notation "'id{' C '}'" := (@id C%category _%object)
+  (at level 9, format "id{ C }", only parsing) : morphism_scope.
 
 Notation "f ∘ g" :=
   (@compose _%category _%object _%object _%object f%morphism g%morphism)
   : morphism_scope.
-Notation "f ∘[ C ] g" :=
+Notation "f '∘[' C ']' g" :=
   (@compose C%category _%object _%object _%object f%morphism g%morphism)
   (at level 40, only parsing) : morphism_scope.
 
-Notation "f ≡[ C ] g" :=
+Notation "f '≡[' C ']' g" :=
   (@equiv _ (@homset C%category _%object _%object) f%morphism g%morphism)
   (at level 79, only parsing) : category_theory_scope.
 
-Notation "f << A ~~> B >> g" :=
+Notation "f '<<' A '~~>' B '>>' g" :=
   (@equiv (A%object ~> B%object)%homset _ f%morphism g%morphism)
   (at level 99, A at next level, B at next level, only parsing) : category_theory_scope.
 

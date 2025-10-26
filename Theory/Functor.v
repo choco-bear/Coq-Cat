@@ -104,7 +104,7 @@ Section AFunctor.
 End AFunctor.
 
 Section Definitions.
-  Program Definition Functor_Composition {C D E : Category} (F : D ⟶ E) (G : C ⟶ D)
+  Program Definition Functor_Compose {C D E : Category} (F : D ⟶ E) (G : C ⟶ D)
     : C ⟶ E :=
       {| fobj := λ x, fobj[F] (fobj[G] x)
        ; fmap := λ x y f, fmap[F] (fmap[G] f)
@@ -118,8 +118,9 @@ Section Definitions.
     |}.
 End Definitions.
 
-Notation "F '○' G" := (Functor_Composition F G)
+Notation "F '○' G" := (Functor_Compose F G)
   (at level 40, left associativity) : functor_scope.
 
 Notation "'Id'" := Functor_Identity : functor_scope.
-Notation "'Id[' C ']'" := (@Functor_Identity C) : functor_scope.
+Notation "'Id[' C ']'" := (@Functor_Identity C)
+  (at level 0, format "Id[ C ]", only parsing) : functor_scope.

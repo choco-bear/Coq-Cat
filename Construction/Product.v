@@ -33,3 +33,32 @@ Program Definition Product (C D : Category) : Category :=
 
 Notation "C × D" := (Product C D) (at level 40, left associativity) : category_scope.
 
+Require Import Category.Theory.Functor.
+
+(** The projection functors [Fst : C × D ⟶ C] and [Snd : C × D ⟶ D] map each object
+  * [(c, d)] in [C × D] to the object [c] in [C] and to the object [d] in [D],
+  * respectively, and each morphism [(f, g)] in [C × D] to the morphism [f] in [C]
+  * and to the morphism [g] in [D], respectively.
+  *)
+Section Projection.
+  Context {C D : Category}.
+
+  Program Definition Fst : C × D ⟶ C :=
+    {| fobj := λ x, fst x
+     ; fmap := λ _ _ f, fst f
+    |}.
+
+  Program Definition Snd : C × D ⟶ D :=
+    {| fobj := λ x, snd x
+     ; fmap := λ _ _ f, snd f
+    |}.
+
+  Corollary fst_comp {x y z} (f : y ~{C × D}~> z) (g : x ~{C × D}~> y)
+    : fst (f ∘ g) ≡ fst f ∘ fst g.
+  Proof. reflexivity. Qed.
+
+  Corollary snd_comp {x y z} (f : y ~{C × D}~> z) (g : x ~{C × D}~> y)
+    : snd (f ∘ g) ≡ snd f ∘ snd g.
+  Proof. reflexivity. Qed.
+End Projection.
+#[export] Hint Rewrite @fst_comp @snd_comp : categories.

@@ -8,6 +8,11 @@ Section Isomorphism.
   Universe o h p.
   Context {C : Category@{o h p}}.
 
+  (** An isomorphism between two objects [x] and [y] in a category [C] is a
+    * pair of morphisms [to : x ~> y] and [from : y ~> x] such that
+    * [to ∘ from ≡ id[y]] and [from ∘ to ≡ id[x]].
+    * Informally, isomorphisms are "invertible" morphisms.
+    *)
   Class Isomorphism (x y : C) :=
     { to : x ~> y
     ; from : y ~> x
@@ -23,6 +28,10 @@ Section Isomorphism.
 
   Infix "≅" := Isomorphism (at level 91) : category_scope.
 
+  (** A morphism [f] between two objects [x] and [y] in a category [C] is said to be
+    * an isomorphism if there exists a morphism [g : y ~> x] such that
+    * [f ∘ g ≡ id[y]] and [g ∘ f ≡ id[x]].
+    *)
   Class IsIsomorphism {x y : C} (f : x ~> y) :=
     { two_sided_inverse : y ~> x
     ; is_right_inverse : f ∘ two_sided_inverse ≡ id[y]
@@ -71,6 +80,7 @@ Section Isomorphism.
      ; Equivalence_Transitive := λ _ _ _ f g, iso_compose g f
     |}.
 
+  (** Equivalence relation on objects *)
   Definition ob_equiv : crelation C := Isomorphism.
 
   Instance ob_setoid : Setoid C :=
@@ -133,6 +143,7 @@ Notation "f '⁻¹'" := (from f) (at level 9, format "f '⁻¹'") : morphism_sco
 Ltac isomorphism :=
   unshelve (refine {| to := _; from := _ |}; simpl; intros).
 
+(** Lemmas related to the [Category.Theory.Morphisms] module. *)
 Section Morphisms.
   Context {C : Category}.
 

@@ -35,6 +35,7 @@ Local Ltac two_solver :=
                  | [ H : TwoB = TwoA |- _ ] => inversion H
                  | [ H : TwoA = TwoB |- _ ] => inversion H
                  end; auto with two_laws.
+
 (** The category 2 has two objects, their identity morphisms, and one morphism from
   * the first object to the second object.
   *)

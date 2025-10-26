@@ -6,6 +6,7 @@ Require Import Category.Construction.Opposite.
 
 Generalizable All Variables.
 
+(** Provides the hom functor for a given object in a category. *)
 Section Hom.
   Context {C : Category}.
 

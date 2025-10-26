@@ -52,6 +52,7 @@ Local Ltac three_solver :=
                  | [ H : ThreeA = ThreeC |- _ ] => inversion H
                  | [ H : ThreeB = ThreeC |- _ ] => inversion H
                  end; auto with three_laws.
+
 (** The category 3 has three objects, their identity morphisms, and morphisms from
   * the first object to the second and third objects, and from the second object to
   * the third object.

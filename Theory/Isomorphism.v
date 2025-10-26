@@ -105,3 +105,26 @@ Section Isomorphism.
   Goal ∀ {F G K} (f : G ≅ K) (g : F ≅ G), F ≅ K.
   Proof. intros. now rewrite g. Qed.
 End Isomorphism.
+
+Declare Scope isomorphism_scope.
+Delimit Scope isomorphism_scope with isomorphism.
+Open Scope isomorphism_scope.
+
+Notation "x ≅ y" := (@Isomorphism _%category x%object y%object)
+  (at level 91) : isomorphism_scope.
+Notation "x ≅[ C ] y" := (@Isomorphism C%category x%object y%object)
+  (at level 91, only parsing) : isomorphism_scope.
+
+Arguments to {_%_category x%_object y%_object} _%_morphism.
+Arguments from {_%_category x%_object y%_object} _%_morphism.
+Arguments iso_to_from {_ _ _} _.
+Arguments iso_from_to {_ _ _} _.
+
+Coercion to : Isomorphism >-> hom.
+
+Notation "f '⁻¹'" := (from f) (at level 9, format "f '⁻¹'") : morphism_scope.
+
+#[export] Hint Unfold iso_equiv : core.
+
+Ltac isomorphism :=
+  unshelve (refine {| to := _; from := _ |}; simpl; intros).

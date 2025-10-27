@@ -1,5 +1,6 @@
 Require Import Category.Lib.
 Require Import Category.Theory.Category.
+Require Import Category.Theory.Isomorphism.
 Require Import Category.Theory.Functor.
 Require Import Category.Construction.Opposite.
 
@@ -72,3 +73,42 @@ Proof.
   unfold Opposite, Product; simpl.
   destruct C, D; simpl. f_equal.
 (* SLOW *) Qed.
+
+(** A bifunctor is any functor from product of two categories, to another category;
+  * so we do not formalize it separately. But there are some helper functions
+  * related to bifunctors. *)
+Section Bifunctor.
+  Context {C D E : Category} {F : C × D ⟶ E}.
+
+  Definition biobj (x : C) (y : D) : E := fobj[F] (x, y).
+
+  Definition bimap {x1 x2 : C} {y1 y2 : D}
+    (f : x1 ~> x2) (g : y1 ~> y2) : F (x1, y1) ~{E}~> F (x2, y2) :=
+    @fmap (C × D) E F (x1, y1) (x2, y2) (f, g).
+
+  #[export]
+  Program Instance bimap_respects {x1 x2 : C} {y1 y2 : D}
+    : Proper (equiv ==> equiv ==> equiv) (@bimap x1 x2 y1 y2) :=
+      λ f1 f2 Hf g1 g2 Hg,
+        @fmap_respects (C × D) E F (x1, y1) (x2, y2) (f1, g1) (f2, g2) (Hf, Hg).
+
+  Corollary bimap_id_id {x : C} {y : D} : bimap (id[x]) (id[y]) ≡ id.
+  Proof. unfold bimap. cat. Qed.
+    
+  Corollary bimap_comp {x1 x2 x3 : C} {y1 y2 y3 : D}
+    (f1 : x2 ~> x3) (f2 : x1 ~> x2)
+    (g1 : y2 ~> y3) (g2 : y1 ~> y2)
+    : bimap (f1 ∘ f2) (g1 ∘ g2) ≡ bimap f1 g1 ∘ bimap f2 g2.
+  Proof. unfold bimap. rewrite <- fmap_comp. simpl. cat. Qed.
+End Bifunctor.
+
+Notation "bimap[ F ]" := (@bimap _ _ _ F%functor _ _ _ _)
+  (at level 9, format "bimap[ F ]") : morphism_scope.
+
+#[export] Hint Rewrite @bimap_id_id : categories.
+
+Ltac bimap_left :=
+  apply bimap_respects; [reflexivity|].
+
+Ltac bimap_right :=
+  apply bimap_respects; [|reflexivity].

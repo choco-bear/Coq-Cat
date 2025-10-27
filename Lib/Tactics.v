@@ -11,7 +11,7 @@ Open Scope lazy_bool_scope.
 
 (** Basic tactics for category theory proofs *)
 Ltac simplify :=
-  repeat
+  simpl in *; repeat
     (match goal with
      | [ H : () |- _ ] => destruct H
      | [ |- () ] => exact tt

@@ -61,6 +61,7 @@ Notation "fmap[ F ]" := (@fmap _ _ F%functor _ _)
   (at level 0, format "fmap[ F ]") : morphism_scope.
 
 #[export] Hint Rewrite @fmap_id : categories.
+#[export] Hint Rewrite @fmap_comp : categories.
 
 (** [AFunctor] allows the object mapping to be stated explicitly. *)
 Section AFunctor.
@@ -110,7 +111,6 @@ Section Definitions.
        ; fmap := λ x y f, fmap[F] (fmap[G] f)
       |}.
   Next Obligation. proper. now rewrites. Qed.
-  Next Obligation. now rewrite <-!fmap_comp. Qed.
 
   Program Definition Functor_Identity {C : Category} : C ⟶ C :=
     {| fobj := Datatypes.id

@@ -56,7 +56,7 @@ Notation "x <&> f" := (fmap f x)
   (at level 29, left associativity, only parsing) : morphism_scope.
 
 Notation "fobj[ F ]" := (@fobj _ _ F%functor)
-  (at level 0, format "fobj[ F ]") : object_scope.
+  (at level 0, only parsing) : object_scope.
 Notation "fmap[ F ]" := (@fmap _ _ F%functor _ _)
   (at level 0, format "fmap[ F ]") : morphism_scope.
 

@@ -70,7 +70,7 @@ Arguments dom {_%_category _%_object _%_object} _%_morphism.
 Arguments cod {_%_category _%_object _%_object} _%_morphism.
 
 Notation "obj[ C ]" := (@obj C%category)
-  (at level 0, format "obj[ C ]") : type_scope.
+  (at level 0, only parsing) : type_scope.
 Notation "hom[ C ]" := (@hom C%category)
   (at level 0, format "hom[ C ]") : type_scope.
 
@@ -85,9 +85,9 @@ Notation "x <~{ C }~ y" := (@hom C%category y%object x%object)
   (at level 90, only parsing) : homset_scope.
   
 Notation "'id[' x ']'" := (@id _%category x%object)
-  (at level 9, format "id[ x ]", only parsing) : morphism_scope.
+  (at level 0, format "id[ x ]") : morphism_scope.
 Notation "'id{' C '}'" := (@id C%category _%object)
-  (at level 9, format "id{ C }", only parsing) : morphism_scope.
+  (at level 0, only parsing) : morphism_scope.
 
 Notation "f ∘ g" :=
   (@compose _%category _%object _%object _%object f%morphism g%morphism)

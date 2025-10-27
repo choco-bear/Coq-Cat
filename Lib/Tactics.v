@@ -56,6 +56,8 @@ Ltac cat :=
   auto with category_laws;
   try reflexivity.
 
+Tactic Notation "by" tactic(t) := solve [t; cat].
+
 (** Hints for dealing with equivalences *)
 #[export] Hint Constructors Equivalence : core.
 

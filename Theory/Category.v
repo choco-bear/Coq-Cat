@@ -186,13 +186,27 @@ Program Instance hom_preorder {C : Category} : PreOrder (@hom C) := {
   PreOrder_Transitive := fun _ _ _ f g => g ∘ f
 }.
 
-Ltac comp_left :=
+Tactic Notation "comp_left" :=
   try rewrite <- !comp_assoc;
   apply compose_respects; [reflexivity|].
 
-Ltac comp_right :=
+Tactic Notation "comp_left" uconstr(p) "in" hyp(H) :=
+  match type of H with
+  | ?f ≡ ?g => unshelve (eapply (compose_respects p p _ f g) in H); [reflexivity|]
+  end.
+
+Tactic Notation "comp_right" :=
   try rewrite !comp_assoc;
   apply compose_respects; [|reflexivity].
+
+Tactic Notation "comp_right" uconstr(p) "in" hyp(H) :=
+  match type of H with
+  | ?f ≡ ?g =>
+      let H' := fresh H in
+        pose proof H as H'; clear H;
+        assert (H : f ∘ p ≡ g ∘ p)
+          by (snrapply (compose_respects f g H' p p _); reflexivity)
+  end.
 
 #[export] Hint Extern 10 (?X ∘ ?Y ≡ ?Z ∘ ?Q) =>
   apply compose_respects; auto : category_laws.

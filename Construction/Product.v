@@ -93,13 +93,33 @@ Section Bifunctor.
         @fmap_respects (C × D) E F (x1, y1) (x2, y2) (f1, g1) (f2, g2) (Hf, Hg).
 
   Corollary bimap_id_id {x : C} {y : D} : bimap (id[x]) (id[y]) ≡ id.
-  Proof. unfold bimap. cat. Qed.
+  Proof. by unfold bimap. Qed.
     
   Corollary bimap_comp {x1 x2 x3 : C} {y1 y2 y3 : D}
     (f1 : x2 ~> x3) (f2 : x1 ~> x2)
     (g1 : y2 ~> y3) (g2 : y1 ~> y2)
     : bimap (f1 ∘ f2) (g1 ∘ g2) ≡ bimap f1 g1 ∘ bimap f2 g2.
-  Proof. unfold bimap. rewrite <- fmap_comp. simpl. cat. Qed.
+  Proof. by unfold bimap; rewrite <- fmap_comp. Qed.
+
+  Corollary bimap_comp_left_id {x1 x2 x3 : C} {y : D}
+    (f : x2 ~> x3) (g : x1 ~> x2)
+    : bimap (f ∘ g) (id[y]) ≡ bimap f (id[y]) ∘ bimap g (id[y]).
+  Proof. by rewrite <- bimap_comp. Qed.
+
+  Corollary bimap_comp_right_id {x : C} {y1 y2 y3 : D}
+    (f : y2 ~> y3) (g : y1 ~> y2)
+    : bimap (id[x]) (f ∘ g) ≡ bimap (id[x]) f ∘ bimap (id[x]) g.
+  Proof. by rewrite <- bimap_comp. Qed.
+
+  Corollary bimap_id_right_left {x1 x2 : C} {y1 y2 : D}
+    (f : x1 ~> x2) (g : y1 ~> y2)
+    : bimap f g ≡ bimap f id ∘ bimap id g.
+  Proof. by rewrite <- bimap_comp. Qed.
+
+  Corollary bimap_id_left_right {x1 x2 : C} {y1 y2 : D}
+    (f : x1 ~> x2) (g : y1 ~> y2)
+    : bimap f g ≡ bimap id g ∘ bimap f id.
+  Proof. by rewrite <- bimap_comp. Qed.
 End Bifunctor.
 
 #[export] Hint Rewrite @bimap_id_id : categories.

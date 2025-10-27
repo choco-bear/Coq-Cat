@@ -102,10 +102,10 @@ Section Bifunctor.
   Proof. unfold bimap. rewrite <- fmap_comp. simpl. cat. Qed.
 End Bifunctor.
 
+#[export] Hint Rewrite @bimap_id_id : categories.
+
 Notation "bimap[ F ]" := (@bimap _ _ _ F%functor _ _ _ _)
   (at level 9, format "bimap[ F ]") : morphism_scope.
-
-#[export] Hint Rewrite @bimap_id_id : categories.
 
 Ltac bimap_left :=
   apply bimap_respects; [reflexivity|].

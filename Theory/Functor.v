@@ -1,5 +1,8 @@
 Require Import Category.Lib.
 Require Import Category.Theory.Category.
+Require Import Category.Theory.Isomorphism.
+
+Reserved Infix "◯" (at level 40, left associativity).
 
 Generalizable All Variables.
 
@@ -104,7 +107,7 @@ Section AFunctor.
   Proof. reflexivity. Qed.
 End AFunctor.
 
-Section Definitions.
+Section Construction.
   Program Definition Functor_Compose {C D E : Category} (F : D ⟶ E) (G : C ⟶ D)
     : C ⟶ E :=
       {| fobj := λ x, fobj[F] (fobj[G] x)
@@ -116,7 +119,7 @@ Section Definitions.
     {| fobj := Datatypes.id
      ; fmap := λ _ _, Datatypes.id
     |}.
-End Definitions.
+End Construction.
 
 Notation "F '◯' G" := (Functor_Compose F G)
   (at level 40, left associativity) : functor_scope.

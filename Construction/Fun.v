@@ -52,3 +52,16 @@ Next Obligation.
 Qed.
 Next Obligation. by rewrite is_right_inverse. Qed.
 Next Obligation. by rewrite is_left_inverse. Qed.
+
+(** Conversely, if a natural transformation is an isomorphism in the functor
+  * category, then each of its components is an isomorphism in the target
+  * category.
+  *)
+Program Definition NatIso_Component_Iso
+  {C : Category} {D : Category} {F G : C ⟶ D}
+  (η : F ≅[Fun[C,D]] G) (x : C) : F x ≅ G x :=
+    {| to := to η x
+     ; from := from η x
+     ; iso_to_from := iso_to_from η x
+     ; iso_from_to := iso_from_to η x
+    |}.

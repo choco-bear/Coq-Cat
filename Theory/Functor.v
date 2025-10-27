@@ -121,6 +121,6 @@ End Definitions.
 Notation "F '◯' G" := (Functor_Compose F G)
   (at level 40, left associativity) : functor_scope.
 
-Notation "'Id'" := Functor_Identity : functor_scope.
+Notation "'Id'" := Functor_Identity (only parsing) : functor_scope.
 Notation "'Id[' C ']'" := (@Functor_Identity C)
-  (at level 0, format "Id[ C ]", only parsing) : functor_scope.
+  (at level 0, format "Id[ C ]") : functor_scope.

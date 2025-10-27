@@ -57,16 +57,16 @@ Ltac natural_transform := unshelve (refine {| component := _ |}; simpl; intros).
 Program Definition NaturalTransform_id `{F : C ⟶ D} : F ⟹ F :=
   {| component := λ x, id[F x] |}.
 
-(** Lemma for composing natural transformations *)
+(** Composing natural transformations *)
 Section Composition.
   Context {C : Category}.
   Context {D : Category}.
-  Context {F G H : (C ⟶ D)}.
-
-  Program Definition NaturalTransform_compose (η : G ⟹ H) (μ : F ⟹ G) : F ⟹ H :=
+  Context {F G H : C ⟶ D}.
+  Program Definition NaturalTransform_compose
+    (η : G ⟹ H) (μ : F ⟹ G) : F ⟹ H :=
     {| component := λ x, η x ∘ μ x
-     ; naturality := λ x y f, _
-     |}.
+      ; naturality := λ x y f, _
+    |}.
   Next Obligation.
     rewrite <- comp_assoc, naturality.
     by rewrite comp_assoc, naturality.

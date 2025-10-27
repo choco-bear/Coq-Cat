@@ -118,7 +118,7 @@ Section Definitions.
     |}.
 End Definitions.
 
-Notation "F '○' G" := (Functor_Compose F G)
+Notation "F '◯' G" := (Functor_Compose F G)
   (at level 40, left associativity) : functor_scope.
 
 Notation "'Id'" := Functor_Identity : functor_scope.

@@ -120,6 +120,9 @@ Section Construction.
   Program Definition Functor_Identity {C : Category} : C ⟶ C :=
     {| fobj := Datatypes.id
      ; fmap := λ _ _, Datatypes.id
+     ; fmap_respects := λ x y, subrelation_id_proper (subrelation_refl equiv)
+     ; fmap_id := λ x, @Equivalence_Reflexive _ equiv setoid_equiv _
+     ; fmap_comp := λ x y z f g, @Equivalence_Reflexive _ equiv setoid_equiv _
     |}.
 End Construction.
 

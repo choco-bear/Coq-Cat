@@ -13,20 +13,20 @@ Generalizable All Variables.
 Program Definition Fun@{o1 o2 h o p u1 u2}
   (C : Category@{o1 h h}) (D : Category@{o2 h h}) : Category@{o p p} :=
     {| obj := C ⟶ D
-    ; hom := λ F G, F ⟹ G
-    ; homset := λ F G, NaturalTransform_Setoid@{o1 h u2 o2 h h p u1}
-    ; id := @NaturalTransform_id _ _
-    ; compose := @NaturalTransform_compose _ _
+     ; hom := λ F G, F ⟹ G
+     ; homset := λ F G, NaturalTransform_Setoid@{o1 h u2 o2 h h p u1}
+     ; id := @NaturalTransform_id _ _
+     ; compose := @NaturalTransform_compose _ _
 
-    ; compose_respects := @NaturalTransform_compose_respects _ _
+     ; compose_respects := @NaturalTransform_compose_respects _ _
 
-    ; id_left := λ F G η x, id_left (η x)
-    ; id_right := λ F G η x, id_right (η x)
+     ; id_left := λ F G η x, id_left (η x)
+     ; id_right := λ F G η x, id_right (η x)
 
-    ; comp_assoc := λ F G H K η μ ν x,
-        comp_assoc (η x) (μ x) (ν x)
-    ; comp_assoc_sym := λ F G H K η μ ν x,
-        comp_assoc_sym (η x) (μ x) (ν x)
+     ; comp_assoc := λ F G H K η μ ν x,
+         comp_assoc (η x) (μ x) (ν x)
+     ; comp_assoc_sym := λ F G H K η μ ν x,
+         comp_assoc_sym (η x) (μ x) (ν x)
     |}.
 
 Notation "Fun[ C , D ]" := (Fun C%category D%category)

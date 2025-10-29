@@ -20,6 +20,9 @@ Section Isomorphism.
     ; iso_to_from : to ∘ from ≡ id[y]
     ; iso_from_to : from ∘ to ≡ id[x]
     }.
+  #[local] Hint Resolve @to @from : category_laws.
+  #[local] Hint Rewrite @iso_to_from : categories.
+  #[local] Hint Rewrite @iso_from_to : categories.
     
   Arguments to {x y} _.
   Arguments from {x y} _.
@@ -83,7 +86,7 @@ Section Isomorphism.
   (** Equivalence relation on objects *)
   Definition ob_equiv : crelation C := Isomorphism.
 
-  Instance ob_setoid : Setoid C :=
+  Definition ob_setoid : Setoid C :=
     {| equiv := ob_equiv
      ; setoid_equiv := iso_equivalence
     |}.
@@ -116,6 +119,9 @@ Section Isomorphism.
   Goal ∀ {F G K} (f : G ≅ K) (g : F ≅ G), F ≅ K.
   Proof. intros. now rewrite g. Qed.
 End Isomorphism.
+#[export] Hint Resolve @to @from : category_laws.
+#[export] Hint Rewrite @iso_to_from : categories.
+#[export] Hint Rewrite @iso_from_to : categories.
 
 Declare Scope isomorphism_scope.
 Delimit Scope isomorphism_scope with isomorphism.

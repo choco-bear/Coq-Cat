@@ -132,3 +132,38 @@ Notation "F '◯' G" := (Functor_Compose F G)
 Notation "'Id'" := Functor_Identity (only parsing) : functor_scope.
 Notation "'Id[' C ']'" := (@Functor_Identity C)
   (at level 0, format "Id[ C ]") : functor_scope.
+
+(** A functor [F] is said to be faithful if it is injective on the morphism
+  * level, i.e., for any two morphisms [f, g : x ~> y] in [C], if
+  * [fmap[F] f ≡ fmap[F] g], then [f ≡ g].
+  *)
+Section Faithful.
+  Context {C : Category}.
+  Context {D : Category}.
+
+  Class Faithful (F : C ⟶ D) :=
+    { faithful : ∀ {x y : C} (f g : x ~> y),
+        fmap[F] f ≡ fmap[F] g → f ≡ g
+    }.
+
+  Instance Faithful_Injective (F : C ⟶ D) {FAITHFUL : Faithful F} {x y : C}
+    : injective (@fmap _ _ F x y).
+  Proof. construct. now apply faithful. Defined.
+End Faithful.
+
+(** A functor [F : C ⟶ D] is said to be full if for any morphism [g : F x ~> F y] in
+  * [D], there exists a morphism [f : x ~> y] in [C] such that [fmap[F] f ≡ g].
+  *)
+Section Full.
+  Context {C : Category}.
+  Context {D : Category}.
+
+  Class Full (F : C ⟶ D) :=
+    { full : ∀ {x y : C} (g : fobj[F] x ~> fobj[F] y),
+        ∃ f : x ~> y, fmap[F] f ≡ g
+    }.
+
+  Instance Full_Surjective (F : C ⟶ D) {FULL : Full F} {x y : C}
+    : surjective (@fmap _ _ F x y).
+  Proof. construct. now apply full. Defined.
+End Full.

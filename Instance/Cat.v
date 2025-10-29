@@ -1,7 +1,9 @@
 Require Import Category.Lib.
 Require Import Category.Theory.Category.
+Require Import Category.Theory.Functor.
 Require Import Category.Theory.Functor.Setoid.
 Require Import Category.Theory.Isomorphism.
+Require Import Category.Construction.Fun.
 
 Generalizable All Variables.
 

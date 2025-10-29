@@ -1,9 +1,9 @@
 Require Import Category.Lib.
 Require Import Category.Theory.Category.
-Require Export Category.Theory.Functor.
+Require Import Category.Theory.Functor.
 Require Import Category.Theory.Natural.
 Require Import Category.Theory.Isomorphism.
-Require Export Category.Construction.Fun.
+Require Import Category.Construction.Fun.
 
 (** This file defines the setoid structure for functors, and proves respectful
   * properties of functor composition.

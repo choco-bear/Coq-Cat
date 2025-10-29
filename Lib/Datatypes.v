@@ -245,38 +245,36 @@ Proof.
 Qed.
 
 Section Symmetric_Product2.
+  Variable A : Type.
+  Variable leA : A → A → Prop.
 
-Variable A : Type.
-Variable leA : A → A → Prop.
+  Inductive symprod2 : A * A → A * A → Prop :=
+    | left_sym2 :
+        ∀ x x':A, leA x x' → ∀ y:A, symprod2 (x, y) (x', y)
+    | right_sym2 :
+        ∀ y y':A, leA y y' → ∀ x:A, symprod2 (x, y) (x, y')
+    | both_sym2 :
+        ∀ (x x':A) (y y':A),
+          leA x x' →
+          leA y y' →
+          symprod2 (x, y) (x', y').
 
-Inductive symprod2 : A * A → A * A → Prop :=
-  | left_sym2 :
-      ∀ x x':A, leA x x' → ∀ y:A, symprod2 (x, y) (x', y)
-  | right_sym2 :
-      ∀ y y':A, leA y y' → ∀ x:A, symprod2 (x, y) (x, y')
-  | both_sym2 :
-      ∀ (x x':A) (y y':A),
-        leA x x' →
-        leA y y' →
-        symprod2 (x, y) (x', y').
+  Lemma Acc_symprod2 : ∀ x:A, Acc leA x → ∀ y:A, Acc leA y → Acc symprod2 (x, y).
+  Proof.
+    induction 1 as [x _ IHAcc]; intros y H2.
+    induction H2 as [x1 H3 IHAcc1].
+    apply Acc_intro; intros y H5.
+    inversion_clear H5; auto with sets.
+    apply IHAcc; auto.
+    apply Acc_intro; trivial.
+  Defined.
 
-Lemma Acc_symprod2 : ∀ x:A, Acc leA x → ∀ y:A, Acc leA y → Acc symprod2 (x, y).
-Proof.
-  induction 1 as [x _ IHAcc]; intros y H2.
-  induction H2 as [x1 H3 IHAcc1].
-  apply Acc_intro; intros y H5.
-  inversion_clear H5; auto with sets.
-  apply IHAcc; auto.
-  apply Acc_intro; trivial.
-Defined.
-
-Lemma wf_symprod2 : well_founded leA → well_founded symprod2.
-Proof.
-  red.
-  destruct a.
-  apply Acc_symprod2; auto with sets.
-Defined.
-
+  Lemma wf_symprod2 : well_founded leA → well_founded symprod2.
+  Proof.
+    red.
+    destruct a.
+    apply Acc_symprod2; auto with sets.
+  Defined.
 End Symmetric_Product2.
 
 Lemma list_rect2

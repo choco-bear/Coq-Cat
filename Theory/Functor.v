@@ -65,6 +65,7 @@ Notation "fmap[ F ]" := (@fmap _ _ F%functor _ _)
 
 #[export] Hint Rewrite @fmap_id : categories.
 #[export] Hint Rewrite @fmap_comp : categories.
+#[export] Hint Resolve fmap : category_laws.
 
 (** [AFunctor] allows the object mapping to be stated explicitly. *)
 Section AFunctor.

@@ -109,12 +109,13 @@ Section AFunctor.
 End AFunctor.
 
 Section Construction.
+  #[local] Set Transparent Obligations.
   Program Definition Functor_Compose {C D E : Category} (F : D ⟶ E) (G : C ⟶ D)
     : C ⟶ E :=
       {| fobj := λ x, fobj[F] (fobj[G] x)
        ; fmap := λ x y f, fmap[F] (fmap[G] f)
       |}.
-  Next Obligation. proper. now rewrites. Qed.
+  Next Obligation. proper. now rewrites. Defined.
 
   Program Definition Functor_Identity {C : Category} : C ⟶ C :=
     {| fobj := Datatypes.id

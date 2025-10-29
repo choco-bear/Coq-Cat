@@ -38,21 +38,35 @@ Section Functor_Setoid.
 
   Definition Functor_Compose_Id_left
     {C : Category} {D : Category} (F : C ⟶ D) : Id[D] ◯ F ≡ F.
-  Proof. Admitted.
+  Proof.
+    srapply (Component_Is_Iso_NatIso {| component := λ x, _ |}).
+    { exact id[F x]. } { by intros. } construct; by try exact id[F x].
+  Defined.
 
   Definition Functor_Compose_Id_right
     {C : Category} {D : Category} (F : C ⟶ D) : F ◯ Id[C] ≡ F.
-  Proof. Admitted.
+  Proof.
+    srapply (Component_Is_Iso_NatIso {| component := λ x, _ |}).
+    { exact id[F x]. } { by intros. } construct; by try exact id[F x].
+  Defined.
 
   Definition Functor_Compose_Assoc
     {B : Category} {C : Category} {D : Category} {E : Category}
     (F : D ⟶ E) (G : C ⟶ D) (H : B ⟶ C)
     : F ◯ (G ◯ H) ≡ (F ◯ G) ◯ H.
-  Proof. Admitted.
+  Proof.
+    srapply (Component_Is_Iso_NatIso {| component := λ x, _ |}).
+    { exact id[F (G (H x))]. } { by intros. }
+    construct; by try exact id[F (G (H x))].
+  Defined.
 
   Definition Functor_Compose_Assoc_Sym
     {B : Category} {C : Category} {D : Category} {E : Category}
     (F : D ⟶ E) (G : C ⟶ D) (H : B ⟶ C)
     : (F ◯ G) ◯ H ≡ F ◯ (G ◯ H).
-  Proof. Admitted.
+  Proof.
+    srapply (Component_Is_Iso_NatIso {| component := λ x, _ |}).
+    { exact id[(F ◯ G) (H x)]. } { by intros. }
+    construct; by try exact id[(F ◯ G) (H x)].
+  Defined.
 End Functor_Setoid.

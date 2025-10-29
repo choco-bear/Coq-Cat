@@ -66,3 +66,5 @@ Program Definition NatIso_Component_Iso
      ; iso_to_from := iso_to_from η x
      ; iso_from_to := iso_from_to η x
     |}.
+#[export]
+Hint Resolve NatIso_Component_Iso : category_laws.

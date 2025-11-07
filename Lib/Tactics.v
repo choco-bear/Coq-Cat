@@ -16,6 +16,9 @@ Ltac simplify :=
      | [ H : () |- _ ] => destruct H
      | [ |- () ] => exact tt
 
+     | [ H : poly_unit |- _ ] => destruct H
+     | [ |- poly_unit ] => exact ttt
+
      | [ H : (_ &&& _) = true |- _ ] => rewrite <- andb_lazy_alt in H
      | [ |- (_ &&& _) = true ]       => rewrite <- andb_lazy_alt
      | [ H : (_ && _) = true |- _ ]  => apply andb_true_iff in H

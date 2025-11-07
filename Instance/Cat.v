@@ -11,18 +11,16 @@ Generalizable All Variables.
   * morphisms are functors. *)
 Program Definition Cat : Category :=
   {| obj := Category
-   ; hom := λ C D, C ⟶ D
-   ; homset := λ C D, @ob_setoid Fun[C,D]
-   ; id := λ C, Id[C]
+   ; hom := @Functor
+   ; homset := @Functor_Setoid
+   ; id := @Functor_Identity
    ; compose := @Functor_Compose
 
    ; compose_respects := @Functor_Compose_respects
 
-   ; id_left := λ C D F, Functor_Compose_Id_left F
-   ; id_right := λ C D F, Functor_Compose_Id_right F
+   ; id_left := @Functor_Compose_Id_left
+   ; id_right := @Functor_Compose_Id_right
 
-   ; comp_assoc := λ B C D E F G H,
-       Functor_Compose_Assoc F G H
-   ; comp_assoc_sym := λ B C D E F G H,
-       Functor_Compose_Assoc_Sym F G H
+   ; comp_assoc := @Functor_Compose_Assoc
+   ; comp_assoc_sym := @Functor_Compose_Assoc_Sym
   |}.

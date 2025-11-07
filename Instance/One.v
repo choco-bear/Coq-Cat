@@ -31,22 +31,6 @@ Program Instance Erase `(C : Category) : C ⟶ 1 :=
    ; fmap := fun _ _ _ => id
   |}.
 
-Section Lemmas.
-  Context {C : Category}.
-
-  (** Any two functors to [1] are equal. *)
-  Lemma Functor_to_1_unique (F G : C ⟶ 1) : F ≡ G.
-  Proof.
-    srapply Component_Is_Iso_NatIso; construct; cat.
-  Qed.
-
-  Lemma name (F : 1 ⟶ C) : fmap[F] ttt ≡ id[F ttt].
-  Proof.
-    (* idk why but [autorewrite with categories] fall in infinite loop *)
-    admit.
-  Admitted.
-End Lemmas.
-
 Section Correspondence.
   Context {C : Category}.
 
@@ -70,9 +54,9 @@ Section Correspondence.
       construct.
       - destruct x. exact (id[F ttt]).
       - simpl. destruct x, y, f.
-        now rewrite name.
-    } simpl.
-    intros []. construct; [exact id|..]; cat.
+        now rewrite fmap_id.
+    } simpl. intros [].
+    construct; [exact id|..]; cat.
   Qed.
 
   Lemma unwrap_Wrap (x : C) : unwrap (Wrap x) = x.

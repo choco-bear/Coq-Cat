@@ -19,8 +19,6 @@ Program Definition _1@{o h p} : Category@{o h p} :=
    ; id := fun _ => ttt
    ; compose := fun _ _ _ _ _ => ttt
   |}.
-Next Obligation. now destruct f. Qed.
-Next Obligation. now destruct f. Qed.
 
 Notation "1" := _1 : category_scope.
 
@@ -48,16 +46,7 @@ Section Correspondence.
   Definition unwrap (F : 1 ⟶ C) : C := F ttt.
 
   Lemma Wrap_unwrap (F : 1 ⟶ C) : Wrap (unwrap F) ≡ F.
-  Proof.
-    unfold unwrap. srapply Component_Is_Iso_NatIso.
-    { (* Definition of η *)
-      construct.
-      - destruct x. exact (id[F ttt]).
-      - simpl. destruct x, y, f.
-        now rewrite fmap_id.
-    } simpl. intros [].
-    construct; [exact id|..]; cat.
-  Qed.
+  Proof. srapply Component_Is_Iso_NatIso; construct; cat. Qed.
 
   Lemma unwrap_Wrap (x : C) : unwrap (Wrap x) = x.
   Proof. reflexivity. Qed.

@@ -6,6 +6,7 @@ Require Export Category.Lib.Base.
 Generalizable All Variables.
 Set Primitive Projections.
 Set Universe Polymorphism.
+Set Printing Universes.
 Unset Transparent Obligations.
 
 Class Setoid A :=

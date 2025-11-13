@@ -5,6 +5,7 @@ Require Export Category.Lib.Tactics.
 Generalizable All Variables.
 Set Primitive Projections.
 Set Universe Polymorphism.
+Set Printing Universes.
 Unset Transparent Obligations.
 
 Import ListNotations.

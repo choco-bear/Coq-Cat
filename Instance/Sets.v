@@ -10,6 +10,21 @@ Module Defs.
     ; is_setoid :> Setoid carrier
     }.
   #[export] Existing Instance is_setoid.
+  
+  (** Function between SetoidObjects is also a SetoidObject *)
+  Definition SetoidObject_function
+    (X : SetoidObject) (Y : SetoidObject) : SetoidObject :=
+      {| carrier := X → Y |}.
+
+  (** Product of SetoidObjects is also a SetoidObject *)
+  Definition SetoidObject_prod
+    (X : SetoidObject) (Y : SetoidObject) : SetoidObject :=
+      {| carrier := X * Y |}.
+
+  (** Sum of SetoidObjects is also a SetoidObject *)
+  Definition SetoidObject_sum
+    (X : SetoidObject) (Y : SetoidObject) : SetoidObject :=
+      {| carrier := X + Y |}.
 
   (** A setoid morphism is a function between setoid objects that respects the
     * equivalence relations on the source and target setoids.

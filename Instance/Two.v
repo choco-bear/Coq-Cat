@@ -60,29 +60,3 @@ Next Obligation. two_solver. Qed.
 Next Obligation. two_solver. Qed.
 
 Notation "2" := _2 : category_scope.
-
-Section Correspondence.
-  Context {C : Category}.
-
-  (** There is a one-to-one correspondence between morphisms of [C] and functors
-    * from [2] to [C]. *)
-  Program Definition Wrap {x y : C} (f : x ~{C}~> y) : 2 ⟶ C :=
-    {| fobj := λ o, match o with
-                    | TwoA => x
-                    | TwoB => y
-                    end
-     ; fmap := λ _ _ ϕ, match ϕ with
-                        | TwoIdA => id[x]
-                        | TwoIdB => id[y]
-                        | TwoF   => f
-                        end
-    |}.
-  Next Obligation. now two_solver. Qed.
-  Next Obligation. two_solver; cat. Qed.
-  
-  Definition Unwrap (F : 2 ⟶ C) : F TwoA ~> F TwoB := fmap[F] TwoF.
-
-  Lemma Wrap_Unwrap (F : 2 ⟶ C) : Wrap (Unwrap F) ≡ F.
-  Proof.
-  Admitted.  
-End Correspondence.

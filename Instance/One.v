@@ -12,9 +12,9 @@ Generalizable All Variables.
   * category or singleton category.
   *)
 
-Program Definition _1@{o h p} : Category@{o h p} := 
-  {| obj := poly_unit@{o}
-   ; hom := fun _ _ => poly_unit@{h}
+Program Definition _1 : Category := 
+  {| obj := poly_unit
+   ; hom := fun _ _ => poly_unit
    ; homset := Morphism_equality
    ; id := fun _ => ttt
    ; compose := fun _ _ _ _ _ => ttt

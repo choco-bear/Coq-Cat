@@ -1,6 +1,5 @@
 #[export] Set Primitive Projections.
 #[export] Set Universe Polymorphism.
-#[export] Set Printing Universes.
 #[export] Set Uniform Inductive Parameters.
 #[export] Set Default Proof Using "Type".
 #[export] Set Default Goal Selector "!".

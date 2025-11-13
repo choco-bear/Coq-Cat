@@ -5,7 +5,6 @@ Require Export Category.Lib.Setoid.
 Generalizable All Variables.
 Set Primitive Projections.
 Set Universe Polymorphism.
-Set Printing Universes.
 Unset Transparent Obligations.
 
 Open Scope lazy_bool_scope.

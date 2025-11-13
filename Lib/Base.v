@@ -4,7 +4,6 @@ From Coq Require Export CMorphisms.
 Generalizable All Variables.
 Set Primitive Projections.
 Set Universe Polymorphism.
-Set Printing Universes.
 Unset Transparent Obligations.
 
 Close Scope nat_scope.

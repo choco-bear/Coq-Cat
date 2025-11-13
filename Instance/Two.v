@@ -8,9 +8,9 @@ Require Import Category.Construction.Fun.
 
 Generalizable All Variables.
 
-Inductive TwoObj@{o} : Type@{o} := TwoA | TwoB.
+Inductive TwoObj : Type := TwoA | TwoB.
 
-Inductive TwoHom@{o h} : TwoObj@{o} → TwoObj@{o} → Type@{h} :=
+Inductive TwoHom : TwoObj → TwoObj → Type :=
   | TwoIdA : TwoHom TwoA TwoA
   | TwoIdB : TwoHom TwoB TwoB
   | TwoF   : TwoHom TwoA TwoB
@@ -44,9 +44,9 @@ Local Ltac two_solver :=
 (** The category 2 has two objects, their identity morphisms, and one morphism from
   * the first object to the second object.
   *)
-Program Definition _2@{o h p} : Category@{o h p} :=
-  {| obj    := TwoObj@{o}
-   ; hom    := TwoHom@{o h}
+Program Definition _2 : Category :=
+  {| obj    := TwoObj
+   ; hom    := TwoHom
    ; homset := Morphism_equality
    ; id     := λ x, match x with
                     | TwoA => TwoIdA
@@ -62,8 +62,7 @@ Next Obligation. two_solver. Qed.
 Notation "2" := _2 : category_scope.
 
 Section Correspondence.
-  Polymorphic Universes o h p.
-  Context {C : Category@{o h p}}.
+  Context {C : Category}.
 
   (** There is a one-to-one correspondence between morphisms of [C] and functors
     * from [2] to [C]. *)
@@ -83,9 +82,7 @@ Section Correspondence.
   
   Definition Unwrap (F : 2 ⟶ C) : F TwoA ~> F TwoB := fmap[F] TwoF.
 
-  (*
   Lemma Wrap_Unwrap (F : 2 ⟶ C) : Wrap (Unwrap F) ≡ F.
   Proof.
-  Admitted.
-  *)
+  Admitted.  
 End Correspondence.

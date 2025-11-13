@@ -6,12 +6,11 @@ Require Export Category.Lib.Base.
 Generalizable All Variables.
 Set Primitive Projections.
 Set Universe Polymorphism.
-Set Printing Universes.
 Unset Transparent Obligations.
 
-Class Setoid@{t u} (A : Type@{t}) : Type@{max(t, u+1)} :=
-  { equiv : crelation@{t u} A
-  ; setoid_equiv : Equivalence@{t u} equiv
+Class Setoid (A : Type) : Type :=
+  { equiv : crelation A
+  ; setoid_equiv : Equivalence equiv
   }.
 #[export] Existing Instance setoid_equiv.
 
@@ -21,49 +20,35 @@ Notation "f ≡ g" := (equiv f g) (at level 79) : category_theory_scope.
 Notation "f '≡[' A ']' g" := (@equiv A _ f g)
   (at level 79, only parsing) : category_theory_scope.
 
-Definition eq_Reflexive@{t u} {A : Type@{t}} : Reflexive@{t u} (@eq A) :=
-  λ x, eq_refl.
+Definition eq_equivalence {A : Type} : @Equivalence A (@eq A) :=
+  @Build_Equivalence A (@eq A : crelation A)
+    (@eq_Reflexive A) (@eq_Symmetric A) (@eq_Transitive A).
 
-Definition eq_Symmetric@{t u} {A : Type@{t}} : Symmetric@{t u} (@eq A) :=
-  λ (x y : A) (e : x = y), match e in (_ = a) return (a = x) with
-                           | eq_refl => eq_refl
-                           end.
+Inductive poly_unit : Type := ttt.
 
-Definition eq_Transitive@{t u} {A : Type@{t}} : Transitive@{t u} (@eq A) :=
-  λ (x y z : A) (Hxy : x = y) (Hyz : y = z), match Hyz in (_ = a) return (x = a) with
-                                             | eq_refl => Hxy
-                                             end.
-
-Definition eq_equivalence@{t u} {A : Type@{t}} : @Equivalence@{t u} A (@eq A) :=
-  @Build_Equivalence@{t u} A
-    (@eq A : crelation@{t u} A) (@eq_Reflexive@{t u} A) (@eq_Symmetric@{t u} A) (@eq_Transitive@{t u} A).
-
-Inductive poly_unit@{u} : Type@{u} := ttt.
-
-Definition unit_setoid@{t u} : Setoid@{t u} poly_unit@{t} :=
-  {| equiv := @eq poly_unit@{t}
-   ; setoid_equiv := @eq_equivalence@{t u} poly_unit@{t}
+Definition unit_setoid : Setoid poly_unit :=
+  {| equiv := @eq poly_unit
+   ; setoid_equiv := @eq_equivalence poly_unit
   |}.
 
-Definition eq_Setoid@{t u} (A : Type@{t}) : Setoid@{t u} A :=
-  Build_Setoid@{t u} A (λ f g, eq f g) eq_equivalence@{t u}.
+Definition eq_Setoid (A : Type) : Setoid A :=
+  Build_Setoid A (λ f g, eq f g) eq_equivalence.
 
 #[export]
-Program Instance funext_Setoid@{t1 t2 u}
-  {T : Type@{t1}} (t : T → Type@{t2}) (a b : T) {SETOID : Setoid@{t2 u} (t b)}
-  : Setoid@{t2 u} (t a → t b) | 9 :=
+Program Instance funext_Setoid
+  {T : Type} (t : T → Type) (a b : T) {SETOID : Setoid (t b)}
+  : Setoid (t a → t b) | 9 :=
     {| equiv        := λ f g, ∀ x, f x ≡ g x
-     ; setoid_equiv := @Build_Equivalence@{t2 u} (t a → t b) _
+     ; setoid_equiv := @Build_Equivalence (t a → t b) _
                        (λ f x, @Equivalence_Reflexive (t b) _ _ (f x))
                        (λ f g Heq x, @Equivalence_Symmetric (t b) _ _ (f x) (g x) (Heq x))
                        (λ f g h Hfg Hgh x, @Equivalence_Transitive (t b) _ _ (f x) (g x) (h x) (Hfg x) (Hgh x))
     |}.
 
 #[export]
-Program Instance Fin_Setoid@{u} {n} : Setoid@{Set u} (Fin.t n) :=
-  eq_Setoid@{Set u} (Fin.t n).
+Program Instance Fin_Setoid {n} : Setoid (Fin.t n) := eq_Setoid (Fin.t n).
 
-Class Unique@{t u p} `{S : Setoid@{t u} A} (P : A → Type@{p}) :=
+Class Unique `{S : Setoid A} (P : A → Type) :=
   { unique_obj : A
   ; unique_property : P unique_obj
   ; uniqueness      : ∀ v : A, P v → unique_obj ≡ v
@@ -78,13 +63,13 @@ Notation "∃! x .. y , P" := (Unique (fun x => .. (Unique (fun y => P)) ..))
 
 Local Set Warnings "-not-a-class".
 
-Class injective@{t1 u1 t2 u2}
-  {A : Type@{t1}} `{Setoid@{t1 u1} A}
-  {B : Type@{t2}} `{Setoid@{t2 u2} B} (f : A -> B) :=
+Class injective
+  {A : Type} `{Setoid A}
+  {B : Type} `{Setoid B} (f : A -> B) :=
   { inj {x y} : f x ≡ f y -> x ≡ y }.
 
-Class surjective@{t1 t2 u}
-  {A : Type@{t1}} {B : Type@{t2}} `{Setoid@{t2 u} B} (f : A -> B) :=
+Class surjective
+  {A : Type} {B : Type} `{Setoid B} (f : A -> B) :=
   { surj {y} : { x & f x ≡ y} }.
 
 Local Set Warnings "not-a-class".

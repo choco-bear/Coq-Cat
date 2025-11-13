@@ -7,8 +7,8 @@ Generalizable All Variables.
 Program Definition PreOrderSet `(PRE : @PreOrder X R) : Category :=
   {| obj := X
    ; hom := R
-   ; homset := (* Since there can be at most one morphism between any two objects,
-                * multiple morphisms of the same type are equal. *)
+   ; homset := (* Since there can be at most one morphism between any two
+                * objects, multiple morphisms of the same type are equal. *)
         λ x y, {| equiv := λ _ _, True |}
    ; id := λ x, @reflexivity X R (@PreOrder_Reflexive X R PRE) x
    ; compose :=

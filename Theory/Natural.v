@@ -10,9 +10,8 @@ Generalizable All Variables.
 (** A natural transformation between two functors is a family of morphisms that is
   * "natural" in a specific sense. *)
 Section NaturalTransform.
-  Universes o1 h1 p1 o2 h2 p2.
-  Context {C : Category@{o1 h1 p2}}.
-  Context {D : Category@{o2 h2 p2}}.
+  Context {C : Category}.
+  Context {D : Category}.
   Context {F G : C ⟶ D}.
 
   Class NaturalTransform : Type :=

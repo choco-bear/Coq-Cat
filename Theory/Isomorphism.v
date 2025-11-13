@@ -5,8 +5,7 @@ Require Import Category.Theory.Morphisms.
 Generalizable All Variables.
 
 Section Isomorphism.
-  Universe o h p.
-  Context {C : Category@{o h p}}.
+  Context {C : Category}.
 
   (** An isomorphism between two objects [x] and [y] in a category [C] is a
     * pair of morphisms [to : x ~> y] and [from : y ~> x] such that

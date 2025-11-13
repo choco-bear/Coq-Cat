@@ -14,19 +14,17 @@ Generalizable All Variables.
   * structural properties and laws.
   *)
 
-Polymorphic Class Functor@{o1 h1 p1 o2 h2 p2}
-  {C : Category@{o1 h1 p1}} {D : Category@{o2 h2 p2}} := {
-  fobj : C → D;
-  fmap {x y : C} (f : x ~> y) : fobj x ~> fobj y;
+Class Functor {C : Category} {D : Category} : Type :=
+    { fobj : C → D
+    ; fmap {x y : C} (f : x ~> y) : fobj x ~> fobj y
 
-  fmap_respects : ∀ x y,
-    Proper@{h2 p2} (respectful@{h1 p1 h2 p2 h2 p2}
-                      equiv@{h1 p1} equiv@{h2 p2}) (@fmap x y);
+    ; fmap_respects : ∀ x y,
+        Proper (respectful equiv equiv) (@fmap x y)
 
-  fmap_id {x : C} : fmap (@id C x) ≡ id;
-  fmap_comp {x y z : C} (f : y ~> z) (g : x ~> y) :
-    fmap (f ∘ g) ≡ fmap f ∘ fmap g
-}.
+    ; fmap_id {x : C} : fmap (@id C x) ≡ id
+    ; fmap_comp {x y z : C} (f : y ~> z) (g : x ~> y) :
+        fmap (f ∘ g) ≡ fmap f ∘ fmap g
+    }.
 #[export] Existing Instance fmap_respects.
 
 Declare Scope functor_scope.
@@ -73,12 +71,13 @@ Notation "fmap[ F ]" := (@fmap _ _ F%functor _ _)
 
 (** [AFunctor] allows the object mapping to be stated explicitly. *)
 Section AFunctor.
-  Context {C D : Category}.
+  Context {C : Category} {D : Category}.
 
   Class AFunctor (F : C → D) : Type :=
     { a_fmap {x y : C} (f : x ~> y) : F x ~> F y
 
-    ; a_fmap_respects {x y : C} : Proper (equiv ==> equiv) (@a_fmap x y)
+    ; a_fmap_respects {x y : C} :
+        Proper (respectful equiv equiv) (@a_fmap x y)
 
     ; a_fmap_id {x : C} : a_fmap id[x] ≡ id[F x]
     ; a_fmap_comp {x y z : C} (f : y ~> z) (g : x ~> y) :
@@ -112,23 +111,25 @@ Section AFunctor.
   Proof. reflexivity. Qed.
 End AFunctor.
 
-Section Construction.
-  #[local] Set Transparent Obligations.
-  Program Definition Functor_Compose {C D E : Category} (F : D ⟶ E) (G : C ⟶ D)
-    : C ⟶ E :=
-      {| fobj := λ x, fobj[F] (fobj[G] x)
-       ; fmap := λ x y f, fmap[F] (fmap[G] f)
-      |}.
-  Next Obligation. proper. now rewrites. Defined.
+Definition Functor_Compose {C : Category} {D : Category} {E : Category}
+                           (F : D ⟶ E) (G : C ⟶ D) : C ⟶ E :=
+  {| fobj := λ x, fobj[F] (fobj[G] x)
+    ; fmap := λ x y f, fmap[F] (fmap[G] f)
 
-  Program Definition Functor_Identity {C : Category} : C ⟶ C :=
-    {| fobj := Datatypes.id
-     ; fmap := λ _ _, Datatypes.id
-     ; fmap_respects := λ x y, subrelation_id_proper (subrelation_refl equiv)
-     ; fmap_id := λ x, @Equivalence_Reflexive _ equiv setoid_equiv _
-     ; fmap_comp := λ x y z f g, @Equivalence_Reflexive _ equiv setoid_equiv _
-    |}.
-End Construction.
+    ; fmap_respects :=
+      λ x y f g EQ, fmap_respects _ _ _ _ (fmap_respects _ _ _ _ EQ)
+  
+    ; fmap_id   := λ x, transitivity (fmap_respects _ _ _ _ fmap_id) fmap_id
+    ; fmap_comp := λ x y z f g, transitivity (fmap_respects _ _ _ _ (fmap_comp f g)) (fmap_comp _ _)
+  |}.
+
+Definition Functor_Identity {C : Category} : C ⟶ C :=
+  {| fobj := Datatypes.id
+    ; fmap := λ _ _, Datatypes.id
+    ; fmap_respects := λ x y, subrelation_id_proper (subrelation_refl equiv)
+    ; fmap_id := λ x, @Equivalence_Reflexive _ equiv setoid_equiv _
+    ; fmap_comp := λ x y z f g, @Equivalence_Reflexive _ equiv setoid_equiv _
+  |}.
 
 Notation "F '◯' G" := (Functor_Compose F G)
   (at level 40, left associativity) : functor_scope.

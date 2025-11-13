@@ -22,21 +22,20 @@ Reserved Infix "∘" (at level 40, left associativity).
   * Categories are identified by [homset := Morphism_equality]
   *)
 
-Class Category@{o h p | h <= p} : Type@{max(o+1,h+1,p+1)} := {
-  obj : Type@{o};
+Class Category : Type := {
+  obj : Type;
 
-  uhom := Type@{h} : Type@{h+1};
-  hom : obj → obj → uhom where "a ~> b" := (hom a b);
-  homset : ∀ X Y, Setoid@{h p} (X ~> Y);
+  uhom := Type : Type;
+  hom : obj → obj → uhom
+    where "a ~> b" := (hom a b);
+  homset : ∀ X Y, Setoid (X ~> Y);
 
   id {x} : x ~> x;
   compose {x y z} (f: y ~> z) (g : x ~> y) : x ~> z
     where "f ∘ g" := (compose f g);
 
   compose_respects {x y z} :
-    Proper@{h p} (respectful@{h p h p h p} equiv
-                    (respectful@{h p h p h p} equiv equiv))
-      (@compose x y z);
+    Proper (equiv ==> equiv ==> equiv) (@compose x y z);
 
   dom {x y} (f : x ~> y) := x;
   cod {x y} (f : x ~> y) := y;
@@ -147,10 +146,9 @@ Open Scope object_scope.
 Open Scope homset_scope.
 Open Scope morphism_scope.
 
-Program Definition Morphism_equality@{o h p}
-  {ob : Type@{o}} {hom : ob → ob → Type@{h}}
-  (x y : ob) : Setoid@{h p} (hom x y) :=
-    {| equiv := eq |}.
+Program Definition Morphism_equality
+  {ob : Type} {hom : ob → ob → Type} (x y : ob)
+  : Setoid (hom x y) := {| equiv := eq |}.
 Arguments Morphism_equality {_ _} _ _ /.
 
 Section Category.

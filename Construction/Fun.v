@@ -10,11 +10,11 @@ Generalizable All Variables.
   * category, whose objects are functors, and whose morphisms are natural
   * transformations.
   *)
-Program Definition Fun@{o1 o2 h o p u1 u2}
-  (C : Category@{o1 h h}) (D : Category@{o2 h h}) : Category@{o p p} :=
+Program Definition Fun
+  (C : Category) (D : Category) : Category :=
     {| obj := C ⟶ D
      ; hom := λ F G, F ⟹ G
-     ; homset := λ F G, NaturalTransform_Setoid@{o1 h u2 o2 h h p u1}
+     ; homset := λ F G, NaturalTransform_Setoid
      ; id := @NaturalTransform_id _ _
      ; compose := @NaturalTransform_compose _ _
 

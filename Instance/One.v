@@ -1,8 +1,8 @@
 Require Import Category.Lib.
 Require Import Category.Theory.Category.
-Require Import Category.Theory.Isomorphism.
 Require Import Category.Theory.Functor.
 Require Import Category.Theory.Functor.Setoid.
+Require Import Category.Theory.Isomorphism.
 Require Import Category.Theory.Natural.
 Require Import Category.Construction.Fun.
 
@@ -43,11 +43,11 @@ Section Correspondence.
      ; fmap_comp := λ _ _ _ f g, symmetry (id_right id[x])
     |}.
   
-  Definition unwrap (F : 1 ⟶ C) : C := F ttt.
+  Definition Unwrap (F : 1 ⟶ C) : C := F ttt.
 
-  Lemma Wrap_unwrap (F : 1 ⟶ C) : Wrap (unwrap F) ≡ F.
+  Lemma Wrap_Unwrap (F : 1 ⟶ C) : Wrap (Unwrap F) ≡ F.
   Proof. srapply Component_Is_Iso_NatIso; construct; cat. Qed.
 
-  Lemma unwrap_Wrap (x : C) : unwrap (Wrap x) = x.
+  Lemma Unwrap_Wrap (x : C) : Unwrap (Wrap x) = x.
   Proof. reflexivity. Qed.
 End Correspondence.

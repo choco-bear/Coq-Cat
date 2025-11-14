@@ -86,20 +86,20 @@ Section AFunctor.
   #[export] Existing Instance a_fmap_respects.
 
   Definition FromAFunctor `(AFunctor F) : C ⟶ D :=
-    {| fobj := λ x, F x
-     ; fmap := @a_fmap F _
-     ; fmap_respects := @a_fmap_respects F _
-     ; fmap_id := @a_fmap_id F _
-     ; fmap_comp := @a_fmap_comp F _
+    {|  fobj := λ x, F x
+      ; fmap := @a_fmap F _
+      ; fmap_respects := @a_fmap_respects F _
+      ; fmap_id := @a_fmap_id F _
+      ; fmap_comp := @a_fmap_comp F _
     |}.
 
   Coercion FromAFunctor : AFunctor >-> Functor.
 
   Definition ToAFunctor (F : C ⟶ D) : AFunctor F :=
-    {| a_fmap := @fmap _ _ F
-     ; a_fmap_respects := @fmap_respects _ _ F
-     ; a_fmap_id := @fmap_id _ _ F
-     ; a_fmap_comp := @fmap_comp _ _ F
+    {|  a_fmap := @fmap _ _ F
+      ; a_fmap_respects := @fmap_respects _ _ F
+      ; a_fmap_id := @fmap_id _ _ F
+      ; a_fmap_comp := @fmap_comp _ _ F
     |}.
 
   Corollary FromAFunctor_ToAFunctor {F}
@@ -113,7 +113,7 @@ End AFunctor.
 
 Definition Functor_Compose {C : Category} {D : Category} {E : Category}
                            (F : D ⟶ E) (G : C ⟶ D) : C ⟶ E :=
-  {| fobj := λ x, fobj[F] (fobj[G] x)
+  {|  fobj := λ x, fobj[F] (fobj[G] x)
     ; fmap := λ x y f, fmap[F] (fmap[G] f)
 
     ; fmap_respects :=
@@ -124,10 +124,12 @@ Definition Functor_Compose {C : Category} {D : Category} {E : Category}
   |}.
 
 Definition Functor_Identity {C : Category} : C ⟶ C :=
-  {| fobj := Datatypes.id
+  {|  fobj := Datatypes.id
     ; fmap := λ _ _, Datatypes.id
+
     ; fmap_respects := λ x y, subrelation_id_proper (subrelation_refl equiv)
-    ; fmap_id := λ x, @Equivalence_Reflexive _ equiv setoid_equiv _
+
+    ; fmap_id   := λ x, @Equivalence_Reflexive _ equiv setoid_equiv _
     ; fmap_comp := λ x y z f g, @Equivalence_Reflexive _ equiv setoid_equiv _
   |}.
 

@@ -140,6 +140,21 @@ Notation "'Id'" := Functor_Identity (only parsing) : functor_scope.
 Notation "'Id[' C ']'" := (@Functor_Identity C)
   (at level 0, format "Id[ C ]") : functor_scope.
 
+Definition constant_Functor {C : Category} {D : Category} (v : D) : C ⟶ D :=
+  {|  fobj := λ _, v
+    ; fmap := λ _ _ _, id[v]
+
+    ; fmap_respects := λ _ _ _ _ _, reflexivity id[v]
+
+    ; fmap_id := λ _, reflexivity id[v]
+    ; fmap_comp := λ _ _ _ _ _, symmetry (id_right id[v])
+  |}.
+
+Notation "'Const' v" := (constant_Functor v)
+  (at level 0,  right associativity, only parsing) : functor_scope.
+Notation "'Const[' C '⟶' D ']' v" := (@constant_Functor C D v)
+  (at level 0, format "Const[ C '⟶' D ]  v") : functor_scope.
+
 (** A functor [F] is said to be faithful if it is injective on the morphism
   * level, i.e., for any two morphisms [f, g : x ~> y] in [C], if
   * [fmap[F] f ≡ fmap[F] g], then [f ≡ g].

@@ -38,6 +38,13 @@ Module Defs.
       {| equiv := SetoidMorphism_equiv |}.
   Next Obligation. equivalence. now transitivity (y0 a). Qed.
 
+  #[export]
+  Program Instance SetoidMorphism_respects {x y : SetoidObject}
+    : Proper (equiv ==> equiv ==> equiv) (λ (f : SetoidMorphism x y) (c : x), f c). 
+  Next Obligation.
+    proper. rewrite X0. apply X.
+  Qed.
+
   (** Identity morphism *)
   Definition SetoidMorphism_id {x : SetoidObject}
     : SetoidMorphism x x := {| morphism := Datatypes.id |}.

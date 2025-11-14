@@ -152,8 +152,8 @@ Definition constant_Functor {C : Category} {D : Category} (v : D) : C ⟶ D :=
 
 Notation "'Const' v" := (constant_Functor v)
   (at level 0,  right associativity, only parsing) : functor_scope.
-Notation "'Const[' C '⟶' D ']' v" := (@constant_Functor C D v)
-  (at level 0, format "Const[ C '⟶' D ]  v") : functor_scope.
+Notation "'Const[' C ']' v" := (@constant_Functor C _ v)
+  (at level 0, format "Const[ C ]  v") : functor_scope.
 
 (** A functor [F] is said to be faithful if it is injective on the morphism
   * level, i.e., for any two morphisms [f, g : x ~> y] in [C], if

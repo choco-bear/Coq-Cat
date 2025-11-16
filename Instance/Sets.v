@@ -55,7 +55,8 @@ Module Defs.
   Next Obligation. proper. now do 2 apply proper_morphism. Qed.
   #[export] Hint Unfold SetoidMorphism_compose : core.
 
-  Program Definition SetoidMorphism_compose_respects
+  #[export]
+  Instance SetoidMorphism_compose_respects
     {x y z : SetoidObject}
     : Proper (equiv ==> equiv ==> equiv)
       (@SetoidMorphism_compose x y z).

@@ -37,6 +37,11 @@ Module Defs.
     : Setoid (SetoidMorphism x y) :=
       {| equiv := SetoidMorphism_equiv |}.
   Next Obligation. equivalence. now transitivity (y0 a). Qed.
+  
+  #[export]
+  Instance morphism_is_proper {x y : SetoidObject}
+    : Proper (equiv ==> equiv) (@morphism _ x _ y).
+  Proof. proper. Qed.
 
   (** Identity morphism *)
   Definition SetoidMorphism_id {x : SetoidObject}

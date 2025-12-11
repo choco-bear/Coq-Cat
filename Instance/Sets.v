@@ -14,14 +14,16 @@ Module Defs.
   (** A setoid morphism is a function between setoid objects that respects the
     * equivalence relations on the source and target setoids.
     *)
-  Record SetoidMorphism `{Setoid x} `{Setoid y} :=
-    { morphism :> x → y
-    ; proper_morphism :> Proper (respectful equiv equiv) morphism
+  Record SetoidMorphism {x : SetoidObject} {y : SetoidObject} :=
+    { morphism : x → y
+    ; proper_morphism : Proper (equiv ==> equiv) morphism
     }.
+  Arguments proper_morphism {_ _ _} _ _ /.
   #[export] Existing Instance proper_morphism.
 
-  Arguments SetoidMorphism {_} _ {_} _.
-  Arguments morphism {_ _ _ _ _} _.
+  Arguments SetoidMorphism _ _ : clear implicits.
+  Arguments morphism {_ _ _} _.
+  Coercion morphism : SetoidMorphism >-> Funclass.
 
   (** Equivalence relation over the setoid morphisms is defined as functional
     * extensionality. *)
@@ -40,8 +42,8 @@ Module Defs.
   
   #[export]
   Instance morphism_is_proper {x y : SetoidObject}
-    : Proper (equiv ==> equiv) (@morphism _ x _ y).
-  Proof. proper. Qed.
+    : Proper (equiv ==> equiv ==> equiv) (@morphism x y).
+  Proof. proper; now rewrites. Qed.
 
   (** Identity morphism *)
   Definition SetoidMorphism_id {x : SetoidObject}
@@ -89,3 +91,6 @@ Program Definition Sets : Category :=
    ; compose := @SetoidMorphism_compose
    ; compose_respects := @SetoidMorphism_compose_respects
   |}.
+
+(* [fequal] for setoid morphisms. *)
+Ltac setoid_fequal := apply morphism_is_proper; [|reflexivity].

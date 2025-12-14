@@ -20,8 +20,6 @@ Section Isomorphism.
     ; iso_from_to : from ∘ to ≡ id[x]
     }.
   #[local] Hint Resolve @to @from : category_laws.
-  #[local] Hint Rewrite @iso_to_from : categories.
-  #[local] Hint Rewrite @iso_from_to : categories.
     
   Arguments to {x y} _.
   Arguments from {x y} _.
@@ -119,8 +117,8 @@ Section Isomorphism.
   Proof. intros. now rewrite g. Qed.
 End Isomorphism.
 #[export] Hint Resolve @to @from : category_laws.
-#[export] Hint Rewrite @iso_to_from : categories.
-#[export] Hint Rewrite @iso_from_to : categories.
+#[export] Hint Rewrite @iso_to_from : categories normalize.
+#[export] Hint Rewrite @iso_from_to : categories normalize.
 
 Declare Scope isomorphism_scope.
 Delimit Scope isomorphism_scope with isomorphism.

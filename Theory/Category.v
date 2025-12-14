@@ -105,8 +105,8 @@ Notation "f '<<' A '~~>' B '>>' g" :=
 
 Coercion obj : Category >-> Sortclass.
 
-#[export] Hint Rewrite @id_left : categories.
-#[export] Hint Rewrite @id_right : categories.
+#[export] Hint Rewrite @id_left : categories normalize.
+#[export] Hint Rewrite @id_right : categories normalize.
 
 (** [Build_Category'] is a custom constructor that automatically provides the
   * definition of [comp_assoc_sym]. It is intended to be used with the [refine]
@@ -183,6 +183,12 @@ Program Instance hom_preorder {C : Category} : PreOrder (@hom C) := {
   PreOrder_Reflexive  := fun _ => id;
   PreOrder_Transitive := fun _ _ _ f g => g ∘ f
 }.
+
+Tactic Notation "normalize" := autorewrite with normalize.
+Tactic Notation "normalize" "in" hyp(H) := autorewrite with normalize in H.
+
+Tactic Notation "left" uconstr(f) := refine (_ ∘ f).
+Tactic Notation "right" uconstr(f) := refine (f ∘ _).
 
 Tactic Notation "comp_left" :=
   try rewrite <- !comp_assoc;

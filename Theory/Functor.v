@@ -61,12 +61,13 @@ Notation "fobj[ F ]" := (@fobj _ _ F%functor)
 Notation "fmap[ F ]" := (@fmap _ _ F%functor _ _)
   (at level 0, format "fmap[ F ]") : morphism_scope.
 
-#[export] Hint Rewrite @fmap_id : categories.
+#[export] Hint Rewrite @fmap_id : categories normalize.
 (** Prefer contracting composed fmaps into a single fmap to avoid
   * expansion/contraction cycles when autorewrite runs on polymorphic/category-heavy
   * terms. Orienting this rewrite to the <- direction makes autorewrite reduce term
   * size instead of expanding it, avoiding potential non-termination. *)
 #[export] Hint Rewrite <- @fmap_comp : categories.
+#[export] Hint Rewrite @fmap_comp : normalize.
 #[export] Hint Resolve fmap : category_laws.
 
 (** [AFunctor] allows the object mapping to be stated explicitly. *)

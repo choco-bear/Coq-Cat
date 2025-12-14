@@ -186,9 +186,6 @@ Program Instance hom_preorder {C : Category} : PreOrder (@hom C) := {
 
 #[export] Hint Rewrite @comp_assoc : normalize.
 
-Tactic Notation "normalize" := autorewrite with normalize.
-Tactic Notation "normalize" "in" hyp(H) := autorewrite with normalize in H.
-
 Tactic Notation "left" uconstr(f) := refine (_ ∘ f).
 Tactic Notation "right" uconstr(f) := refine (f ∘ _).
 

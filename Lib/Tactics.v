@@ -267,5 +267,10 @@ Tactic Notation "snrapply" uconstr(term)
 Tactic Notation "snrapply'" uconstr(term)
   := do_with_holes' ltac:(fun x => snrefine x) term.
 
+(** Normalize the categorical expressions *)
+Tactic Notation "normalize" := autorewrite with normalize.
+Tactic Notation "normalize" "in" hyp(H) := autorewrite with normalize in H.
+
 (** Very fast [done] tactic. *)
 Ltac done := now idtac.
+Tactic Notation "nby" tactic(t) := now (t; normalize).

@@ -32,6 +32,8 @@ End NaturalTransform.
 Arguments component {_ _ _ _} _ _.
 Arguments naturality {_ _ _ _} _ {_ _} _.
 
+#[export] Hint Rewrite @naturality : normalize.
+
 Declare Scope natural_scope.
 Declare Scope natural_type_scope.
 Bind Scope natural_scope with NaturalTransform.

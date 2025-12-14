@@ -184,6 +184,8 @@ Program Instance hom_preorder {C : Category} : PreOrder (@hom C) := {
   PreOrder_Transitive := fun _ _ _ f g => g ∘ f
 }.
 
+#[export] Hint Rewrite @comp_assoc : normalize.
+
 Tactic Notation "normalize" := autorewrite with normalize.
 Tactic Notation "normalize" "in" hyp(H) := autorewrite with normalize in H.
 

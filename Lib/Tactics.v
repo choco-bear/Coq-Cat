@@ -266,3 +266,7 @@ Tactic Notation "snrapply" uconstr(term)
   := do_with_holes ltac:(fun x => snrefine x) term.
 Tactic Notation "snrapply'" uconstr(term)
   := do_with_holes' ltac:(fun x => snrefine x) term.
+
+(** Very fast [done] tactic, and [fby] tactical, which is [by] corresponding to it. *)
+Ltac done := now idtac.
+Tactic Notation "fby" tactic(t) := t; done.

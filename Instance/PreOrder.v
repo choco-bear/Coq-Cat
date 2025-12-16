@@ -14,3 +14,5 @@ Program Definition PreOrderSet `(PRE : @PreOrder X R) : Category :=
    ; compose :=
         λ x y z f g, @transitivity X R (@PreOrder_Transitive X R PRE) x y z g f
   |}.
+
+Coercion PreOrderSet : PreOrder >-> Category.

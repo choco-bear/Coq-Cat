@@ -170,7 +170,7 @@ Section Faithful.
     }.
 
   Instance Faithful_Injective (F : C ⟶ D) {FAITHFUL : Faithful F} {x y : C}
-    : injective (@fmap _ _ F x y).
+    : Injective (@fmap _ _ F x y).
   Proof. construct. now apply faithful. Defined.
 End Faithful.
 
@@ -187,6 +187,6 @@ Section Full.
     }.
 
   Instance Full_Surjective (F : C ⟶ D) {FULL : Full F} {x y : C}
-    : surjective (@fmap _ _ F x y).
+    : Surjective (@fmap _ _ F x y).
   Proof. construct. now apply full. Defined.
 End Full.

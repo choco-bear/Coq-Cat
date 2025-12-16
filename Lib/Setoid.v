@@ -73,15 +73,11 @@ Definition singleton_unique `{S : Setoid A} {SINGLE : Singleton S} (P : A → Ty
             ; uniqueness := λ v _, is_singleton v
           |}.
 
-Local Set Warnings "-not-a-class".
-
-Class injective
+Class Injective
   {A : Type} `{Setoid A}
   {B : Type} `{Setoid B} (f : A -> B) :=
   { inj {x y} : f x ≡ f y -> x ≡ y }.
 
-Class surjective
+Class Surjective
   {A : Type} {B : Type} `{Setoid B} (f : A -> B) :=
   { surj {y} : { x & f x ≡ y} }.
-
-Local Set Warnings "not-a-class".

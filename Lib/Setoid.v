@@ -61,6 +61,18 @@ Arguments uniqueness {_ _ _} _.
 Notation "∃! x .. y , P" := (Unique (fun x => .. (Unique (fun y => P)) ..))
   (at level 200, x binder, y binder, right associativity) : category_theory_scope.
 
+Class Singleton `(S : Setoid A) :=
+  { single_element : A
+  ; is_singleton   : ∀ a : A, single_element ≡ a
+  }.
+
+Definition singleton_unique `{S : Setoid A} {SINGLE : Singleton S} (P : A → Type)
+  : P single_element → Unique P :=
+    λ HP, {|  unique_obj := single_element
+            ; unique_property := HP
+            ; uniqueness := λ v _, is_singleton v
+          |}.
+
 Local Set Warnings "-not-a-class".
 
 Class injective

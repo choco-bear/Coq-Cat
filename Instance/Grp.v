@@ -2,6 +2,7 @@ Require Import Category.Lib.
 Require Import Category.Theory.Category.
 
 Generalizable All Variables.
+Set Universe Polymorphism.
 
 (** The category [Grp] is a category, whose objects are groups, and whose morphisms
   * are group-homomorphisms. *)

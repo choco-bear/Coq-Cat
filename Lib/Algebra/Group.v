@@ -191,7 +191,8 @@ Program Definition mk_subgroup {G : Group} (P : G → Type)
     |}.
 Next Obligation. now proper; rewrite X, X0. Qed.
 
-Program Definition center (G : Group) : Group :=
-  mk_subgroup (λ g, ∀ h, g ⋅ h ≡[G] h ⋅ g) {| nonempty := _ |}.
+Program Definition center (G : Group) : AbGroup :=
+  {| ab_grp := mk_subgroup (λ g : G, ∀ h, g ⋅ h ≡ h ⋅ g) {| nonempty := _ |} |}.
 Next Obligation. now rewrite <-X, !grp_assoc, X0. Qed.
 Next Obligation. now specialize (X (x⁻¹ ⋅ h ⋅ x⁻¹)); grp_simplify in X. Qed.
+Next Obligation. now construct; destruct x, y. Qed.

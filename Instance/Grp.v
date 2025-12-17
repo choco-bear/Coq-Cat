@@ -1,6 +1,5 @@
 Require Import Category.Lib.
 Require Import Category.Theory.Category.
-Require Import Category.Theory.Groupoid.
 
 Generalizable All Variables.
 

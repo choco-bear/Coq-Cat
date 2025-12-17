@@ -261,3 +261,22 @@ Ltac rewrites :=
   | [ H : ∀ _ _ _, ?X _ _ _ ≡ ?Y _ _ _ |- context[?Y] ] => rewrite <- !H; clear H
   | [ H : ∀ _ _ _, ?X _ _ _ ≡ ?Y _ _ _ |- context[?Y] ] => srewrite <- H; clear H
   end.
+
+Section Group.
+  Local Open Scope group_scope.
+
+  Definition of_group (G : Group) : Category :=
+    {|  obj := poly_unit
+      ; hom := λ _ _, G
+
+      ; id      := λ _, ε
+      ; compose := λ _ _ _, (⋅)
+
+      ; id_left  := λ _ _, grp_id_l G
+      ; id_right := λ _ _, grp_id_r G
+
+      ; comp_assoc     := λ _ _ _ _ f g h, symmetry (grp_assoc G f g h)
+      ; comp_assoc_sym := λ _ _ _ _, grp_assoc G
+    |}.
+End Group.
+Coercion of_group : Group >-> Category.

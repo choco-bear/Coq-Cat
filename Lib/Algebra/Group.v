@@ -3,6 +3,7 @@ Require Import Category.Lib.Tactics.
 Generalizable All Variables.
 Set Universe Polymorphism.
 
+(** Group *)
 Record Group :=
   { grp_carrier : Type
   ; grp_setoid  : Setoid grp_carrier
@@ -165,3 +166,10 @@ End homomorphism.
   : Proper (equiv ==> equiv ==> equiv) (@grp_hom_comp G G' G'') :=
     λ φ ψ Hφψ φ' ψ' Hφψ', _.
 Next Obligation. now rewrite Hφψ', Hφψ. Qed.
+
+(** Abelian Group *)
+Record AbGroup :=
+  { ab_grp :> Group 
+  ; ab_comm : Commutative (grp_op ab_grp)
+  }.
+#[export] Existing Instance ab_comm.

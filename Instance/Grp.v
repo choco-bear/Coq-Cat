@@ -19,3 +19,11 @@ Program Definition Grp : Category :=
     ; id_left := @grp_id_map_left
     ; id_right := @grp_id_map_right
   |}.
+
+(** The category [Ab] is a category, whose objects are abelian groups, and whose
+  * morphisms are group-homomorphisms. *)
+Program Definition Ab : Category :=
+  {|  obj := AbGroup
+    ; hom := GroupHomomorphism
+    ; id  := grp_id_map
+  |}.

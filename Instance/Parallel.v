@@ -12,7 +12,7 @@ Inductive ParHom : bool → ParObj → ParObj → Set :=
   | ParG : ParHom false ParA ParB.
 #[export] Hint Constructors ParHom : parallel_laws.
 
-Definition ParHom_inv_t : ∀ b x y, ParHom b x y → Prop.
+Definition ParHom_inv_t : ∀ b x y, ParHom b x y → Type.
   intros [] [] [] f.
   - exact (f = ParIdA).
   - exact (f = ParF).

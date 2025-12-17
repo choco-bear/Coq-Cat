@@ -17,11 +17,11 @@ Inductive TwoHom : TwoObj → TwoObj → Type :=
   .
 #[export] Hint Constructors TwoHom : two_laws.
 
-Definition TwoHom_inv_t : ∀ x y, TwoHom x y → Prop.
+Definition TwoHom_inv_t : ∀ x y, TwoHom x y → Type.
   intros [] [] f.
   - exact (f = TwoIdA).
   - exact (f = TwoF).
-  - exact False.
+  - exact poly_void.
   - exact (f = TwoIdB).
 Defined.
 

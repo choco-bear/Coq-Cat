@@ -15,16 +15,16 @@ Inductive ThreeHom : ThreeObj → ThreeObj → Set :=
   .
 #[export] Hint Constructors ThreeHom : three_laws.
 
-Definition ThreeHom_inv_t : ∀ x y, ThreeHom x y → Prop.
+Definition ThreeHom_inv_t : ∀ x y, ThreeHom x y → Type.
   intros [] [] f.
   - exact (f = ThreeIdA).
   - exact (f = ThreeAB).
   - exact (f = ThreeAC).
-  - exact False.
+  - exact poly_void.
   - exact (f = ThreeIdB).
   - exact (f = ThreeBC).
-  - exact False.
-  - exact False.
+  - exact poly_void.
+  - exact poly_void.
   - exact (f = ThreeIdC).
 Defined.
 

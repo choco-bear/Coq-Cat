@@ -39,7 +39,7 @@ Section Isomorphism.
     }.
 
   #[export]
-  Program Instance IsIsoToIso {x y : C} (f : x ~> y) (_ : IsIsomorphism f)
+  Instance IsIsoToIso {x y : C} (f : x ~> y) (_ : IsIsomorphism f)
     : Isomorphism x y :=
       {| to := f
        ; from := two_sided_inverse
@@ -53,7 +53,7 @@ Section Isomorphism.
      ; from := id[x]
     |}.
 
-  Program Definition iso_sym {x y : C} (f : x ≅ y) : y ≅ x :=
+  Definition iso_sym {x y : C} (f : x ≅ y) : y ≅ x :=
     {| to := from f
      ; from := to f
      ; iso_to_from := iso_from_to f
@@ -74,7 +74,7 @@ Section Isomorphism.
   Qed.
 
   #[export]
-  Program Instance iso_equivalence : Equivalence Isomorphism :=
+  Instance iso_equivalence : Equivalence Isomorphism :=
     {| Equivalence_Reflexive := @iso_id
      ; Equivalence_Symmetric := @iso_sym
      ; Equivalence_Transitive := λ _ _ _ f g, iso_compose g f
@@ -98,15 +98,15 @@ Section Isomorphism.
   Next Obligation. intros ???[][]. split; cat. Qed.
 
   #[export]
-  Program Instance iso_setoid {x y : C} : Setoid (x ≅ y) :=
+  Instance iso_setoid {x y : C} : Setoid (x ≅ y) :=
     {| equiv := iso_equiv
      ; setoid_equiv := iso_equiv_equivalence
     |}.
 
   #[export]
-  Program Instance Iso_Proper
+  Instance Iso_Proper
     : Proper (Isomorphism ==> Isomorphism ==> iffT) Isomorphism.
-  Next Obligation.
+  Proof.
     proper.
     - now transitivity x0; [transitivity x; [symmetry|]|].
     - now transitivity y; [|transitivity y0; [|symmetry]].

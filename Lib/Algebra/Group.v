@@ -39,6 +39,22 @@ Record GroupHomomorphism {G : Group} {G' : Group} :=
 Arguments grp_map_op {G G' φ} (g h)%_group_scope : rename.
 Arguments GroupHomomorphism (G G') : clear implicits.
 
+#[export] Program Instance group_hom_setoid {G : Group} {G' : Group}
+  : Setoid (GroupHomomorphism G G') := {| equiv := λ φ ψ, ∀ g, φ g ≡ ψ g |}.
+Next Obligation.
+  now equivalence; transitivity (y g).
+Qed.
+
+Program Definition grp_id_map (G : Group) :=
+  {| grp_map := Datatypes.id |}.
+Next Obligation. done. Qed.
+
+Program Definition grp_hom_comp {G : Group} {G' : Group} {G'' : Group}
+  (φ : GroupHomomorphism G' G'') (ψ : GroupHomomorphism G G')
+  : GroupHomomorphism G G'' := {|  grp_map := λ g, φ (ψ g) |}.
+Next Obligation. now proper; rewrite X. Qed.
+Next Obligation. now rewrite !grp_map_op. Qed.
+
 Notation "x ⋅ y" := (op x%group y%group)
   (at level 40, left associativity) : group_scope.
 Notation "'(⋅)'" := op (only parsing) : group_scope.
@@ -120,7 +136,13 @@ End group.
                        @grp_inv_simpl_1 @grp_inv_simpl_2 : grp_simplify.
 
 Section homomorphism.
-  Context {G : Group} {G' : Group} {φ : GroupHomomorphism G G'}.
+  Context {G : Group} {G' : Group}.
+  Context {φ : GroupHomomorphism G G'}.
+
+  Lemma grp_id_map_left : grp_hom_comp (grp_id_map G') φ ≡ φ.
+  Proof. done. Qed.
+  Lemma grp_id_map_right : grp_hom_comp φ (grp_id_map G) ≡ φ.
+  Proof. done. Qed.
 
   Lemma homomorphism_id : φ ε ≡ ε.
   Proof. now eapply grp_id_unique_l; rewrite <-grp_map_op; __grp_simplify. Qed.
@@ -133,3 +155,9 @@ Section homomorphism.
   Qed.
 End homomorphism.
 #[export] Hint Rewrite @homomorphism_id @homomorphism_inverse_natural : grp_simplify.
+
+#[export] Program Instance grp_hom_comp_respects
+  {G : Group} {G' : Group} {G'' : Group}
+  : Proper (equiv ==> equiv ==> equiv) (@grp_hom_comp G G' G'') :=
+    λ φ ψ Hφψ φ' ψ' Hφψ', _.
+Next Obligation. now rewrite Hφψ', Hφψ. Qed.

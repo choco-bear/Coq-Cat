@@ -91,3 +91,6 @@ Class Operation A `{Setoid A} :=
   ; op_proper : Proper (equiv ==> equiv ==> equiv) op
   }.
 #[export] Existing Instance op_proper.
+
+Class Commutative `(Operation A) :=
+  { commutative {x y} : op x y ≡ op y x }.

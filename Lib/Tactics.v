@@ -134,7 +134,7 @@ Ltac cat_simpl :=
     end;
     program_simpl; autounfold in *;
     simpl in *; intros; simplify;
-    simpl in *; cat];
+    simpl in *; cat; try apply _];
   simpl in *.
 #[global] Obligation Tactic := cat_simpl.
 

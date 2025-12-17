@@ -1,9 +1,7 @@
 Require Import Category.Lib.Tactics.
 
 Generalizable All Variables.
-Set Primitive Projections.
 Set Universe Polymorphism.
-Unset Transparent Obligations.
 
 Class Operation A `{Setoid A} :=
   { op        : A → A → A
@@ -29,12 +27,23 @@ Record Group :=
 Coercion grp_carrier : Group >-> Sortclass.
 #[export] Existing Instance grp_setoid.
 #[export] Existing Instance grp_op.
-Arguments grp_id {G}%_type_scope : rename.
-Arguments grp_inv {G}%_type_scope g : rename.
+Arguments grp_id {G} : rename.
+Arguments grp_inv {G} g : rename.
+
+#[export] Hint Rewrite @grp_id_l @grp_id_r @grp_inv_l @grp_inv_r : grp_simplify.
 
 Declare Scope group_scope.
 Bind Scope group_scope with Group.
 Delimit Scope group_scope with group.
+
+Record GroupHomomorphism {G : Group} {G' : Group} :=
+  { grp_map :> G → G'
+  ; grp_map_respects : Proper (equiv ==> equiv) grp_map
+  ; grp_map_op : ∀ g h, grp_map (op g h) ≡ op (grp_map g) (grp_map h)
+  }.
+#[export] Existing Instance grp_map_respects.
+Arguments grp_map_op {G G' φ} (g h)%_group_scope : rename.
+Arguments GroupHomomorphism (G G') : clear implicits.
 
 Notation "x ⋅ y" := (op x%group y%group)
   (at level 40, left associativity) : group_scope.
@@ -43,10 +52,12 @@ Notation "'(' x '⋅)'" := (op x%group) (only parsing) : group_scope.
 Notation "'(⋅' x ')'" := (λ y, op y x%group) (only parsing) : group_scope.
 
 Notation "'ε'" := grp_id : group_scope.
-Notation "'ε[' G ']'" := (@grp_id G) : group_scope.
+Notation "'ε[' G ']'" := (@grp_id G) (only parsing) : group_scope.
 
 Notation "x '⁻¹'" := (grp_inv x%group) (at level 9) : group_scope.
 Notation "'(⁻¹)'" := grp_inv (only parsing) : group_scope.
+
+Local Open Scope group_scope.
 
 Module BasicGrpTactics.
   Tactic Notation "op_left" uconstr(t) "in" hyp(H) :=
@@ -62,52 +73,69 @@ Module BasicGrpTactics.
         (assert (H : op x t ≡ op y t)
           by now apply op_proper); clear H'
     end; rewrite !grp_assoc in H.
-    
-  Local Open Scope group_scope.
   
-  Tactic Notation "grp_simplify" :=
-    repeat match goal with
-    | [ |- context[?x⁻¹ ⋅ ?x] ] => rewrite !grp_inv_l
-    | [ |- context[?x ⋅ ?x⁻¹] ] => rewrite !grp_inv_r
-    | [ |- context[ε ⋅ ?x] ]    => rewrite !grp_id_l
-    | [ |- context[?x ⋅ ε] ]    => rewrite !grp_id_r
-    end.
+  Tactic Notation "__grp_simplify" := autorewrite with grp_simplify.
+  Tactic Notation "__grp_simplify" "in" hyp(H) := autorewrite with grp_simplify in H.
+  Tactic Notation "__grp_simplify" "in" "*" := autorewrite with grp_simplify in *.
 
+  Tactic Notation "grp_simplify" := rewrite <-!grp_assoc; __grp_simplify.
   Tactic Notation "grp_simplify" "in" hyp(H) :=
-    repeat match type of H with
-    | context[?x⁻¹ ⋅ ?x] => rewrite !grp_inv_l in H
-    | context[?x ⋅ ?x⁻¹] => rewrite !grp_inv_r in H
-    | context[ε ⋅ ?x]    => rewrite !grp_id_l in H
-    | context[?x ⋅ ε]    => rewrite !grp_id_r in H
-    end.
-
+    rewrite <-!grp_assoc in H; __grp_simplify in H.
   Tactic Notation "grp_simplify" "in" "*" :=
-    repeat match goal with
-    | [ |- context[?x⁻¹ ⋅ ?x] ]       => rewrite !grp_inv_l in *
-    | [ _ : context[?x⁻¹ ⋅ ?x] |- _ ] => rewrite !grp_inv_l in *
-    | [ |- context[?x ⋅ ?x⁻¹] ]       => rewrite !grp_inv_r in *
-    | [ _ : context[?x ⋅ ?x⁻¹] |- _ ] => rewrite !grp_inv_r in *
-    | [ |- context[ε ⋅ ?x] ]          => rewrite !grp_id_l in *
-    | [ _ : context[ε ⋅ ?x] |- _ ]    => rewrite !grp_id_l in *
-    | [ |- context[?x ⋅ ε] ]          => rewrite !grp_id_r in *
-    | [ _ : context[?x ⋅ ε] |- _ ]    => rewrite !grp_id_r in *
-    end.
+    rewrite <-!grp_assoc in *; __grp_simplify in *.
 End BasicGrpTactics.
 Export BasicGrpTactics.
 
 Section group.
   Context {G : Group}.
   Implicit Types x y z : G.
-  Local Open Scope group_scope.
   
   Lemma grp_cancel_l x y z : x ⋅ z ≡ y ⋅ z → x ≡ y.
   Proof.
     intro. op_right (z⁻¹) in X.
-    now grp_simplify in X.
+    now __grp_simplify in X.
   Qed.
   Lemma grp_cancel_r x y z : x ⋅ y ≡ x ⋅ z → y ≡ z.
   Proof.
     intro. op_left (x⁻¹) in X.
-    now grp_simplify in X.
+    now __grp_simplify in X.
   Qed.
+
+  Lemma grp_id_unique_l e x : e ⋅ x ≡ x → e ≡ ε.
+  Proof. now intro H; op_right (x⁻¹) in H; __grp_simplify in H. Qed.
+  Lemma grp_id_unique_r e x : x ⋅ e ≡ x → e ≡ ε.
+  Proof. now intro H; op_left (x⁻¹) in H; __grp_simplify in H. Qed.
+
+  Lemma grp_inv_unique_r x y : x ⋅ y ≡ ε → y ≡ x⁻¹.
+  Proof. now intro H; op_left (x⁻¹) in H; __grp_simplify in H. Qed.
+  Lemma grp_inv_unique_l x y : x ⋅ y ≡ ε → x ≡ y⁻¹.
+  Proof. now intro H; op_right (y⁻¹) in H; __grp_simplify in H. Qed.
+
+  Lemma inv_involutive x : (x⁻¹)⁻¹ ≡ x.
+  Proof. rewrite <-grp_inv_unique_r; [done|now __grp_simplify]. Qed.
+
+  Lemma id_inv_id : ε⁻¹ ≡ ε[G].
+  Proof. now symmetry; apply grp_inv_unique_r; __grp_simplify. Qed.
+
+  Lemma grp_inv_simpl_1 x y : x ⋅ y ⋅ y⁻¹ ≡ x.
+  Proof. now rewrite grp_assoc; __grp_simplify. Qed.
+  Lemma grp_inv_simpl_2 x y : x ⋅ y⁻¹ ⋅ y ≡ x.
+  Proof. now rewrite grp_assoc; __grp_simplify. Qed.
 End group.
+#[export] Hint Rewrite @inv_involutive @id_inv_id
+                       @grp_inv_simpl_1 @grp_inv_simpl_2 : grp_simplify.
+
+Section homomorphism.
+  Context {G : Group} {G' : Group} {φ : GroupHomomorphism G G'}.
+
+  Lemma homomorphism_id : φ ε ≡ ε.
+  Proof. now eapply grp_id_unique_l; rewrite <-grp_map_op; __grp_simplify. Qed.
+
+  Lemma homomorphism_inverse_natural x : φ (x⁻¹) ≡ (φ x)⁻¹.
+  Proof.
+    apply grp_inv_unique_r.
+    rewrite <-grp_map_op; __grp_simplify.
+    apply homomorphism_id.
+  Qed.
+End homomorphism.
+#[export] Hint Rewrite @homomorphism_id @homomorphism_inverse_natural : grp_simplify.

@@ -9,7 +9,7 @@ Program Definition PreOrderSet `(PRE : @PreOrder X R) : Category :=
    ; hom := R
    ; homset := (* Since there can be at most one morphism between any two
                 * objects, multiple morphisms of the same type are equal. *)
-        λ x y, {| equiv := λ _ _, True |}
+        λ x y, {| equiv := λ _ _, poly_unit |}
    ; id := λ x, @reflexivity X R (@PreOrder_Reflexive X R PRE) x
    ; compose :=
         λ x y z f g, @transitivity X R (@PreOrder_Transitive X R PRE) x y z g f

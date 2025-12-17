@@ -16,12 +16,12 @@ Definition ParHom_inv_t : ∀ b x y, ParHom b x y → Prop.
   intros [] [] [] f.
   - exact (f = ParIdA).
   - exact (f = ParF).
-  - exact False.
+  - exact poly_void.
   - exact (f = ParIdB).
-  - exact False.
+  - exact poly_void.
   - exact (f = ParG).
-  - exact False.
-  - exact False.
+  - exact poly_void.
+  - exact poly_void.
 Defined.
 
 Corollary ParHom_inv {b x y} f : ParHom_inv_t b x y f.

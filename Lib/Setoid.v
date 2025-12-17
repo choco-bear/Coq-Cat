@@ -24,12 +24,18 @@ Definition eq_equivalence {A : Type} : @Equivalence A (@eq A) :=
   @Build_Equivalence A (@eq A : crelation A)
     (@eq_Reflexive A) (@eq_Symmetric A) (@eq_Transitive A).
 
-Inductive poly_unit : Type := ttt.
-
 Definition unit_setoid : Setoid poly_unit :=
   {| equiv := @eq poly_unit
    ; setoid_equiv := @eq_equivalence poly_unit
   |}.
+
+Definition void_setoid : Setoid poly_void :=
+  {| equiv := @eq poly_void
+   ; setoid_equiv := @eq_equivalence poly_void
+  |}.
+
+Definition poly_exfalso [T : Type] (CONTRA : poly_void) : T :=
+  match CONTRA return T with end.
 
 Definition eq_Setoid (A : Type) : Setoid A :=
   Build_Setoid A (λ f g, eq f g) eq_equivalence.
@@ -76,6 +82,12 @@ Definition singleton_unique `{S : Setoid A} {SINGLE : Singleton S} (P : A → Ty
             ; unique_property := HP
             ; uniqueness := λ v _, is_singleton v
           |}.
+
+Program Definition subset `(S : Setoid A) (Φ : A → Type)
+  : Setoid (∃ a : A, Φ a) :=
+    {| equiv := λ x y, `1 x ≡ `1 y |}.
+Next Obligation. now constructor; intuition; repeat intro; transitivity (`1 y). Qed.
+Notation "'{' S '&' Φ '}'" := (subset S Φ) : category_theory_scope.
 
 Class Injective
   {A : Type} `{Setoid A}

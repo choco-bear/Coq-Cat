@@ -274,3 +274,5 @@ Tactic Notation "normalize" "in" hyp(H) := autorewrite with normalize in H.
 (** Very fast [done] tactic. *)
 Ltac done := now idtac.
 Tactic Notation "nby" tactic(t) := now (t; normalize).
+
+Tactic Notation "exfalso" := apply poly_exfalso.

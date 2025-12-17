@@ -39,6 +39,11 @@ Arguments Basics.compose {_ _ _} _ _ /.
 Arguments Basics.arrow _ _ /.
 Arguments Datatypes.id {_} _ /.
 
+Inductive poly_unit : Type := ttt.
+#[export] Hint Constructors poly_unit : core.
+
+Inductive poly_void : Type := .
+
 Notation "∀  x .. y , P" := (forall x, .. (forall y, P) ..)
   (at level 10, x binder, y binder, P at level 200, right associativity) :
   category_theory_scope.
@@ -56,9 +61,9 @@ Notation "x → y" := (x -> y)
   (at level 99, y at level 200, right associativity): category_theory_scope.
 Notation "x ↔ y" := (iffT x y)
   (at level 95, no associativity) : category_theory_scope.
-Notation "¬ x" := (x → False)
+Notation "¬ x" := (x → poly_void)
   (at level 75, right associativity) : category_theory_scope.
-Notation "x ≠ y" := (x <> y) (at level 70) : category_theory_scope.
+Notation "x ≠ y" := (¬ (x = y)) (at level 70) : category_theory_scope.
 
 Infix "∧" := prod (at level 80, right associativity) : category_theory_scope.
 Infix "∨" := sum (at level 85, right associativity) : category_theory_scope.

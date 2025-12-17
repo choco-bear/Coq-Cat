@@ -145,11 +145,11 @@ Program Instance sum_setoid {A B} `{Setoid A} `{Setoid B}
                           | inl x =>
                               match y with
                               | inl y => equiv x y
-                              | inr y => False
+                              | inr y => poly_void
                               end
                           | inr x =>
                               match y with
-                              | inl y => False
+                              | inl y => poly_void
                               | inr y => equiv x y
                               end
                           end
@@ -170,8 +170,8 @@ Program Instance inr_respects {A B} `{Setoid A} `{Setoid B}
 Program Instance option_setoid `{Setoid A} : Setoid (option A) :=
   { equiv := fun x y => match x, y with
                         | Some x, Some y => x ≡ y
-                        | None, None => True
-                        | _, _ => False
+                        | None, None => poly_unit
+                        | _, _ => poly_void
                         end
   }.
 Next Obligation. intuition; discriminate. Qed.
@@ -191,9 +191,9 @@ Program Instance Some_respects {A} `{Setoid A} : Proper (equiv ==> equiv) (@Some
 
 Fixpoint list_equiv `{Setoid A} (xs ys : list A) : Type :=
   match xs, ys with
-  | nil, nil => True
+  | nil, nil => poly_unit
   | x :: xs, y :: ys => x ≡ y ∧ list_equiv xs ys
-  | _, _ => False
+  | _, _ => poly_void
   end.
 
 #[global]
@@ -233,7 +233,7 @@ Next Obligation.
   - simplify; auto.
 Qed.
 
-Lemma length_remove A (A_eq_dec : ∀ x y : A, { x = y } + { x ≠ y }) x xs
+Lemma length_remove A (A_eq_dec : ∀ x y : A, { x = y } + { x <> y }) x xs
   : (length (remove A_eq_dec x xs) <= length xs)%nat.
 Proof.
   induction xs; auto.

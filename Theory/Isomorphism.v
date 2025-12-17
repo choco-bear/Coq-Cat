@@ -89,13 +89,13 @@ Section Isomorphism.
     |}.
 
   Definition iso_equiv {x y : C} : crelation (x ≅ y) :=
-    λ f g, (to f ≡ to g) * (from f ≡ from g).
+    λ f g, (to f ≡ to g).
 
   #[export]
   Program Instance iso_equiv_equivalence {x y : C} : Equivalence (@iso_equiv x y).
-  Next Obligation. now split. Qed.
-  Next Obligation. intros ??[]. now split. Qed.
-  Next Obligation. intros ???[][]. split; cat. Qed.
+  Next Obligation. now unfold iso_equiv. Qed.
+  Next Obligation. now unfold iso_equiv. Qed.
+  Next Obligation. now unfold iso_equiv; intros; transitivity (to y0). Qed.
 
   #[export]
   Instance iso_setoid {x y : C} : Setoid (x ≅ y) :=
@@ -110,6 +110,14 @@ Section Isomorphism.
     proper.
     - now transitivity x0; [transitivity x; [symmetry|]|].
     - now transitivity y; [|transitivity y0; [|symmetry]].
+  Qed.
+
+  #[export]
+  Instance proper_from {x y : C} : Proper (equiv ==> equiv) (@from x y).
+  Proof.
+    proper. rename x0 into f. rename y0 into g. unfold iso_equiv in X.
+    rewrite <-id_right, <-(id_right (from g)), <-(iso_to_from f).
+    now rewrite !comp_assoc, iso_from_to, X, iso_from_to.
   Qed.
 
   (* Example of Use of Iso_Proper *)

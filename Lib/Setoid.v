@@ -85,3 +85,9 @@ Class Injective
 Class Surjective
   {A : Type} {B : Type} `{Setoid B} (f : A -> B) :=
   { surj {y} : { x & f x ≡ y} }.
+
+Class Operation A `{Setoid A} :=
+  { op        : A → A → A
+  ; op_proper : Proper (equiv ==> equiv ==> equiv) op
+  }.
+#[export] Existing Instance op_proper.

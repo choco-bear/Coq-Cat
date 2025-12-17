@@ -3,12 +3,6 @@ Require Import Category.Lib.Tactics.
 Generalizable All Variables.
 Set Universe Polymorphism.
 
-Class Operation A `{Setoid A} :=
-  { op        : A → A → A
-  ; op_proper : Proper (equiv ==> equiv ==> equiv) op
-  }.
-#[export] Existing Instance op_proper.
-
 Record Group :=
   { grp_carrier : Type
   ; grp_setoid  : Setoid grp_carrier

@@ -196,7 +196,7 @@ Tactic Notation "comp_left" :=
 Tactic Notation "comp_left" uconstr(p) "in" hyp(H) :=
   match type of H with
   | ?f ≡ ?g => unshelve (eapply (compose_respects p p _ f g) in H); [reflexivity|]
-  end.
+  end; rewrite !comp_assoc in H.
 
 Tactic Notation "comp_right" :=
   try rewrite !comp_assoc;
@@ -208,8 +208,9 @@ Tactic Notation "comp_right" uconstr(p) "in" hyp(H) :=
       let H' := fresh H in
         pose proof H as H'; clear H;
         assert (H : f ∘ p ≡ g ∘ p)
-          by (snrapply (compose_respects f g H' p p _); reflexivity)
-  end.
+          by (snrapply (compose_respects f g H' p p _); reflexivity);
+        clear H'
+  end; rewrite <-!comp_assoc in H.
 
 #[export] Hint Extern 10 (?X ∘ ?Y ≡ ?Z ∘ ?Q) =>
   apply compose_respects; auto : category_laws.

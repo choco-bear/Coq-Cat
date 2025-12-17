@@ -64,7 +64,8 @@ Proof.
   rewrite !last_cons; reflexivity.
 Qed.
 
-Lemma Forall_app {A} p (l1 l2: list A)
+(** TODO : Define [Forall] without using [Prop] universe, and comment out the below. *)
+(* Lemma Forall_app {A} p (l1 l2: list A)
   : Forall p (l1 ++ l2) <-> (Forall p l1 /\ Forall p l2).
 Proof.
   intros.
@@ -87,7 +88,7 @@ Proof.
   apply Forall_app in H0.
   destruct H0.
   now inversion H0.
-Qed.
+Qed. *)
 
 Lemma map_inj {A B : Type} (f : A → B) (f_inj : ∀ x y, f x = f y → x = y) xs ys
   : List.map f xs = List.map f ys → xs = ys.
@@ -233,7 +234,9 @@ Next Obligation.
   - simplify; auto.
 Qed.
 
-Lemma length_remove A (A_eq_dec : ∀ x y : A, { x = y } + { x <> y }) x xs
+(** TODO : Define [Decidable] without using [Prop] universe, and comment out the
+  *        below. *)
+(* Lemma length_remove A (A_eq_dec : ∀ x y : A, { x = y } + { x <> y }) x xs
   : (length (remove A_eq_dec x xs) <= length xs)%nat.
 Proof.
   induction xs; auto.
@@ -242,9 +245,10 @@ Proof.
     apply PeanoNat.Nat.le_le_succ_r, IHxs.
   simpl.
   apply le_n_S, IHxs.
-Qed.
+Qed. *)
 
-Section Symmetric_Product2.
+(** TODO : Define symmetric product without using [Prop] universe. *)
+(* Section Symmetric_Product2.
   Variable A : Type.
   Variable leA : A → A → Prop.
 
@@ -275,7 +279,7 @@ Section Symmetric_Product2.
     destruct a.
     apply Acc_symprod2; auto with sets.
   Defined.
-End Symmetric_Product2.
+End Symmetric_Product2. *)
 
 Lemma list_rect2
   : ∀ (A : Type) (P : list A → list A → Type),

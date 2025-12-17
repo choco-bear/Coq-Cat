@@ -93,11 +93,11 @@ Module BasicGrpTactics.
   Tactic Notation "__grp_simplify" "in" hyp(H) := autorewrite with grp_simplify in H.
   Tactic Notation "__grp_simplify" "in" "*" := autorewrite with grp_simplify in *.
 
-  Tactic Notation "grp_simplify" := rewrite <-!grp_assoc; __grp_simplify.
+  Tactic Notation "grp_simplify" := repeat rewrite <-grp_assoc; __grp_simplify.
   Tactic Notation "grp_simplify" "in" hyp(H) :=
-    rewrite <-!grp_assoc in H; __grp_simplify in H.
+    repeat rewrite <-grp_assoc in H; __grp_simplify in H.
   Tactic Notation "grp_simplify" "in" "*" :=
-    rewrite <-!grp_assoc in *; __grp_simplify in *.
+    repeat rewrite <-grp_assoc in *; __grp_simplify in *.
 End BasicGrpTactics.
 Export BasicGrpTactics.
 
@@ -173,3 +173,25 @@ Record AbGroup :=
   ; ab_comm : Commutative (grp_op ab_grp)
   }.
 #[export] Existing Instance ab_comm.
+
+Record IsSubGroupProperty {G : Group} (P : G → Type) :=
+  { nonempty      : P ε
+  ; op_closed x y : P x → P y → P (x ⋅ y)
+  ; inv_closed x  : P x → P (x⁻¹)
+  }.
+
+Local Obligation Tactic := cat_simpl; grp_simplify; simpl; try done.
+Program Definition mk_subgroup {G : Group} (P : G → Type)
+  : IsSubGroupProperty P → Group := λ SGP,
+    {|  grp_setoid := {grp_setoid G & P}
+
+      ; grp_op := {| op := λ X Y, (`1 X ⋅ `1 Y; op_closed P SGP _ _ (`2 X) (`2 Y)) |}
+      ; grp_id := (ε; nonempty P SGP)
+      ; grp_inv := λ X, ((`1 X)⁻¹; inv_closed P SGP _ (`2 X))
+    |}.
+Next Obligation. now proper; rewrite X, X0. Qed.
+
+Program Definition center (G : Group) : Group :=
+  mk_subgroup (λ g, ∀ h, g ⋅ h ≡[G] h ⋅ g) {| nonempty := _ |}.
+Next Obligation. now rewrite <-X, !grp_assoc, X0. Qed.
+Next Obligation. now specialize (X (x⁻¹ ⋅ h ⋅ x⁻¹)); grp_simplify in X. Qed.

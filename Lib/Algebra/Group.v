@@ -55,11 +55,15 @@ Program Definition grp_hom_comp {G : Group} {G' : Group} {G'' : Group}
 Next Obligation. now proper; rewrite X. Qed.
 Next Obligation. now rewrite !grp_map_op. Qed.
 
-Notation "x ⋅ y" := (op x%group y%group)
+Notation "x ⋅ y" := (@op _ _ (grp_op _) x%group y%group)
   (at level 40, left associativity) : group_scope.
-Notation "'(⋅)'" := op (only parsing) : group_scope.
-Notation "'(' x '⋅)'" := (op x%group) (only parsing) : group_scope.
-Notation "'(⋅' x ')'" := (λ y, op y x%group) (only parsing) : group_scope.
+Notation "'(⋅)'" := (@op _ _ (grp_op _)) (only parsing) : group_scope.
+Notation "'(' x '⋅)'" := (@op _ _ (grp_op _) x%group) (only parsing) : group_scope.
+Notation "'(⋅' x ')'" := (λ y, @op _ _ (grp_op _) y x%group)
+  (only parsing) : group_scope.
+Notation "x '⋅[' G ']' y" :=
+  (@op G%group (grp_setoid G%group) (grp_op G%group) x%group y%group)
+  (at level 40) : group_scope.
 
 Notation "'ε'" := grp_id : group_scope.
 Notation "'ε[' G ']'" := (@grp_id G) (only parsing) : group_scope.

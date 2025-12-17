@@ -1,7 +1,6 @@
 Require Import Category.Lib.
 Require Import Category.Theory.Category.
 Require Import Category.Theory.Isomorphism.
-Require Import Category.Lib.Algebra.
 
 Generalizable All Variables.
 

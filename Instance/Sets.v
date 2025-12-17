@@ -2,6 +2,7 @@ Require Import Category.Lib.
 Require Import Category.Theory.Category.
 
 Generalizable All Variables.
+Set Universe Polymorphism.
 
 Module Defs.
   (** A setoid object is a type equipped with an equivalence relation. *)

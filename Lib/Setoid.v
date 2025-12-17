@@ -66,6 +66,10 @@ Class Singleton `(S : Setoid A) :=
   ; is_singleton   : ∀ a : A, single_element ≡ a
   }.
 
+Program Instance unit_singleton : Singleton unit_setoid :=
+  {| single_element := ttt |}.
+Next Obligation. now destruct a. Qed.
+
 Definition singleton_unique `{S : Setoid A} {SINGLE : Singleton S} (P : A → Type)
   : P single_element → Unique P :=
     λ HP, {|  unique_obj := single_element

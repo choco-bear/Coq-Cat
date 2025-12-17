@@ -1,0 +1,29 @@
+Require Import Category.Lib.
+Require Import Category.Theory.Category.
+Require Import Category.Theory.Isomorphism.
+
+Generalizable All Variables.
+
+Class Groupoid (C : Category) :=
+  { every_is_iso x y (f : x ~> y) : IsIsomorphism f }.
+#[export] Existing Instance every_is_iso.
+
+Section Lemmas.
+  Context `{GRPoid : @Groupoid G}.
+  
+  Lemma groupoid_cancel_r `(f : y ~{G}~> z) g `(h : x ~{G}~> y)
+    : f ∘ h ≡ g ∘ h → f ≡ g.
+  Proof using GRPoid.
+    intros. remember (IsIsoToIso h _) as H. 
+    replace h with (to H) in X by now rewrite HeqH.
+    comp_right (H⁻¹) in X. now normalize in X.
+  Qed.
+
+  Lemma groupoid_cancel_l `(g : x ~{G}~> y) h `(f : y ~{G}~> z)
+    : f ∘ g ≡ f ∘ h → g ≡ h.
+  Proof using GRPoid.
+    intros. remember (IsIsoToIso f _) as F.
+    replace f with (to F) in X by now rewrite HeqF.
+    comp_left (F⁻¹) in X. now normalize in X.
+  Qed.
+End Lemmas.

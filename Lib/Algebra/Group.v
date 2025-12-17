@@ -1,6 +1,9 @@
 Require Import Category.Lib.Tactics.
 
 Generalizable All Variables.
+Set Primitive Projections.
+Set Universe Polymorphism.
+Unset Transparent Obligations.
 
 Class Operation A `{Setoid A} :=
   { op        : A → A → A
@@ -8,18 +11,26 @@ Class Operation A `{Setoid A} :=
   }.
 #[export] Existing Instance op_proper.
 
-Class Group G `(Operation G) :=
-  { grp_id    : G
+Record Group :=
+  { grp_carrier : Type
+  ; grp_setoid  : Setoid grp_carrier
+  ; grp_op      : Operation grp_carrier
+
+  ; grp_id    : grp_carrier
   ; grp_id_l  : ∀ x, op grp_id x ≡ x
   ; grp_id_r  : ∀ x, op x grp_id ≡ x
 
-  ; grp_inv : G → G
+  ; grp_inv   : grp_carrier → grp_carrier
   ; grp_inv_l : ∀ x, op (grp_inv x) x ≡ grp_id
   ; grp_inv_r : ∀ x, op x (grp_inv x) ≡ grp_id
 
   ; grp_assoc : ∀ x y z, op (op x y) z ≡ op x (op y z)
   }.
-Arguments Group (G)%_type_scope {SETOID OPERATION} : rename.
+Coercion grp_carrier : Group >-> Sortclass.
+#[export] Existing Instance grp_setoid.
+#[export] Existing Instance grp_op.
+Arguments grp_id {G}%_type_scope : rename.
+Arguments grp_inv {G}%_type_scope g : rename.
 
 Declare Scope group_scope.
 Bind Scope group_scope with Group.
@@ -32,6 +43,7 @@ Notation "'(' x '⋅)'" := (op x%group) (only parsing) : group_scope.
 Notation "'(⋅' x ')'" := (λ y, op y x%group) (only parsing) : group_scope.
 
 Notation "'ε'" := grp_id : group_scope.
+Notation "'ε[' G ']'" := (@grp_id G) : group_scope.
 
 Notation "x '⁻¹'" := (grp_inv x%group) (at level 9) : group_scope.
 Notation "'(⁻¹)'" := grp_inv (only parsing) : group_scope.
@@ -84,7 +96,7 @@ End BasicGrpTactics.
 Export BasicGrpTactics.
 
 Section group.
-  Context `{Group G}.
+  Context {G : Group}.
   Implicit Types x y z : G.
   Local Open Scope group_scope.
   

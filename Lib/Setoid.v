@@ -1,6 +1,6 @@
-Require Import Coq.Classes.RelationClasses.
-Require Import Coq.Setoids.Setoid.
-Require Import Coq.Vectors.Fin.
+From Coq Require Import Classes.RelationClasses
+                        Setoids.Setoid
+                        Vectors.Fin.
 Require Export Category.Lib.Base.
 
 Generalizable All Variables.
@@ -36,6 +36,17 @@ Definition void_setoid : Setoid poly_void :=
 
 Definition poly_exfalso [T : Type] (CONTRA : poly_void) : T :=
   match CONTRA return T with end.
+
+Program Definition iffT_equivalence : Equivalence iffT :=
+  {| Equivalence_Reflexive  := iffT_Reflexive
+   ; Equivalence_Symmetric  := iffT_Symmetric
+   ; Equivalence_Transitive := iffT_Transitive
+  |}.
+
+Program Definition type_setoid : Setoid Type :=
+  {| equiv := iffT
+   ; setoid_equiv := iffT_equivalence
+  |}.
 
 Definition eq_Setoid (A : Type) : Setoid A :=
   Build_Setoid A (λ f g, eq f g) eq_equivalence.
@@ -106,3 +117,9 @@ Class Operation A `{Setoid A} :=
 
 Class Commutative `(Operation A) :=
   { commutative {x y} : op x y ≡ op y x }.
+
+Program Definition nat_setoid : Setoid nat := eq_Setoid nat.
+
+Class Property `{Setoid A} (P : A → Type) :=
+  { property_proper : Proper (equiv ==> iffT) P }.
+#[export] Existing Instance property_proper.

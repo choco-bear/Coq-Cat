@@ -12,6 +12,9 @@ Module Defs.
     }.
   #[export] Existing Instance is_setoid.
 
+  Program Definition of_setoid `(S : Setoid A)
+    : SetoidObject := {| is_setoid := S |}.
+
   (** A setoid morphism is a function between setoid objects that respects the
     * equivalence relations on the source and target setoids.
     *)

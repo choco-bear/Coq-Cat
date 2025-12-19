@@ -75,6 +75,15 @@ Notation "'(•)⁻¹'" := grp_inv (only parsing) : group_scope.
 
 Local Open Scope group_scope.
 
+Definition power {G : Group} (n : Z) (g :G) : G :=
+  match n with
+  | Z0 => ε
+  | Zpos p => Pos.iter (g⋅) ε p
+  | Zneg p => Pos.iter (g⁻¹⋅) ε p
+  end.
+  
+Notation "g ^ n" := (power n%Z g%group) : group_scope.
+
 Module BasicGrpTactics.
   Tactic Notation "op_left" uconstr(t) "in" hyp(H) :=
     match type of H with
@@ -147,6 +156,63 @@ End group.
 #[export] Hint Rewrite @inv_involutive @id_inv_id
                        @grp_inv_simpl_1 @grp_inv_simpl_2
                        @grp_op_inv : grp_simplify.
+
+Section Power.
+  Context {G : Group}.
+
+  Lemma op_iter_op g g' p : Pos.iter (op g) ε p ⋅ g' ≡[G] Pos.iter (op g) g' p.
+  Proof.
+    now revert g'; induction p; ss; grp_simplify
+    ; try rewrite <-IHp, !grp_assoc, !IHp.
+  Qed.
+
+  Lemma op_iter_op_eq g g' p
+    : g ⋅ Pos.iter (op g) g' p ≡[G] Pos.iter (op g) (g ⋅ g') p.
+  Proof. now revert g g'; induction p; ss; rewrite !IHp. Qed.
+
+  Lemma op_iter_inv g p : (Pos.iter (op g) ε p)⁻¹ ≡[G] Pos.iter (op g⁻¹) ε p.
+  Proof.
+    symmetry. apply grp_inv_unique_r. rewrite op_iter_op.
+    remember ε as g'; clear Heqg'.
+    revert g' g; induction p; ss; grp_simplify
+    ; try now try rewrite !IHp.
+    now rewrite !(op_iter_op_eq g⁻¹), !IHp; grp_simplify.
+  Qed.
+
+  Lemma power_neg g n : g^(-n) ≡[G] (g⁻¹)^n.
+  Proof. now destruct n; ss; grp_simplify. Qed.
+
+  Lemma power_inv g n : (g^n)⁻¹ ≡[G] (g⁻¹)^n.
+  Proof. destruct n; ss; solve [now grp_simplify|now rewrite op_iter_inv]. Qed.
+
+  Lemma power_pos_sub g p q
+    : g^(Z.pos_sub p q) ≡[G] Pos.iter (op g) ε p ⋅ Pos.iter (op g⁻¹) ε q.
+  Proof.
+    rewrite Z.pos_sub_spec.
+    remember (p ?= q)%positive as cmp.
+    destruct cmp; symmetry in Heqcmp; ss.
+    - apply Pos.compare_eq in Heqcmp as ->.
+      now rewrite <-op_iter_inv; grp_simplify.
+    - erewrite <-(Pos.sub_add q p); try assumption.
+      replace (q - p + p - p)%positive with (q - p)%positive by lia.
+      rewrite Pos.add_comm, Pos.iter_add, <-(op_iter_op g⁻¹ _ p), <-(op_iter_inv g p).
+      now grp_simplify.
+    - apply Pos.compare_gt_iff in Heqcmp.
+      rewrite <-(Pos.sub_add p q); try assumption.
+      replace (_ - _ + _ - _)%positive with (p - q)%positive by lia.
+      rewrite Pos.iter_add, <-(op_iter_op g (Pos.iter _ _ _) (p - q)), <-op_iter_inv.
+      now grp_simplify.
+  Qed.
+
+  Lemma power_add g n m : g^(n+m) ≡[G] g^n ⋅ g^m.
+  Proof.
+    now destruct n, m; ss; grp_simplify
+    ; (try now try rewrite Pos.iter_add, op_iter_op)
+    ; [|rewrite <-Z.pos_sub_opp, power_neg]
+    ; rewrite power_pos_sub; grp_simplify.
+  Qed.
+End Power.
+#[export] Hint Rewrite <- @power_add : grp_simplify.
 
 Section homomorphism.
   Context {G : Group} {G' : Group}.

@@ -276,3 +276,154 @@ Ltac done := now idtac.
 Tactic Notation "nby" tactic(t) := now (t; normalize).
 
 Tactic Notation "exfalso" := apply poly_exfalso.
+
+(** Solve by inverts *)
+Ltac solve_by_inverts n :=
+  match goal with | H : ?T |- _ =>
+  match type of T with Prop =>
+    solve [
+      inversion H;
+      match n with
+      | S (S (?n')) => subst; solve_by_inverts (S n') 
+      | S O => subst; simpl in *; eauto
+      end ]
+  end end.
+
+Ltac solve_by_invert := solve_by_inverts (S O).
+
+(** Revert until *)
+Ltac on_last_hyp tac :=
+  match goal with [ H : _ |- _ ] => first [ tac H | fail 1 ] end.
+
+Ltac revert_until id :=
+  on_last_hyp ltac:(fun id' =>
+    match id' with
+      | id => idtac
+      | _ => revert id' ; revert_until id
+    end).
+
+(** [repeat] guranteeing termination *)
+Tactic Notation "hrepeat_or_fail" tactic(tac) :=
+  tryif tac then (
+  tryif tac then (
+  tryif tac then (
+  tryif tac then (
+  tryif tac then (
+  tryif tac then (
+  tryif tac then (
+  tryif tac then (
+  tryif tac then (
+  tryif tac then (
+  tryif tac then (
+  tryif tac then (
+  tryif tac then (
+  tryif tac then (
+  tryif tac then (
+  tryif tac then (
+  tryif tac then (
+  tryif tac then (
+  tryif tac then (
+  tryif tac then (
+  tryif tac then (
+  tryif tac then (
+  tryif tac then (
+  tryif tac then (
+  tryif tac then (
+  tryif tac then (
+  tryif tac then (
+  tryif tac then (
+  tryif tac then (
+  tryif tac then (
+  tryif tac then (
+  tryif tac then (
+  tryif tac then (
+  tryif tac then (
+  tryif tac then (
+  tryif tac then (
+  tryif tac then (
+  tryif tac then (
+  tryif tac then (
+  tryif tac then (
+  tryif tac then (
+  tryif tac then (
+  tryif tac then (
+  tryif tac then (
+  tryif tac then (
+  tryif tac then (
+  tryif tac then (
+  tryif tac then (
+  tryif tac then (
+  tryif tac then (
+      fail 10
+  ) else idtac
+  ) else idtac
+  ) else idtac
+  ) else idtac
+  ) else idtac
+  ) else idtac
+  ) else idtac
+  ) else idtac
+  ) else idtac
+  ) else idtac
+  ) else idtac
+  ) else idtac
+  ) else idtac
+  ) else idtac
+  ) else idtac
+  ) else idtac
+  ) else idtac
+  ) else idtac
+  ) else idtac
+  ) else idtac
+  ) else idtac
+  ) else idtac
+  ) else idtac
+  ) else idtac
+  ) else idtac
+  ) else idtac
+  ) else idtac
+  ) else idtac
+  ) else idtac
+  ) else idtac
+  ) else idtac
+  ) else idtac
+  ) else idtac
+  ) else idtac
+  ) else idtac
+  ) else idtac
+  ) else idtac
+  ) else idtac
+  ) else idtac
+  ) else idtac
+  ) else idtac
+  ) else idtac
+  ) else idtac
+  ) else idtac
+  ) else idtac
+  ) else idtac
+  ) else idtac
+  ) else idtac
+  ) else idtac
+  ) else fail
+.
+Tactic Notation "hrepeat" tactic(tac) := try (hrepeat_or_fail tac).
+
+(** Short for common tactics *)
+Tactic Notation "econs" := econstructor.
+Tactic Notation "econs" int_or_var(x) := econstructor x.
+Tactic Notation "i" := intros.
+Tactic Notation "ii" := hrepeat do 1 intro.
+Tactic Notation "s" := simpl.
+Tactic Notation "s" ident(a) := simpl a.
+Tactic Notation "s" constr(t) := simpl t.
+Tactic Notation "s" "in" hyp(H) := simpl in H.
+Tactic Notation "ss" := simpl in *; try done.
+Tactic Notation "r" := red.
+Tactic Notation "r" "in" hyp(H) := red in H.
+Tactic Notation "rr" := hrepeat do 1 red.
+Tactic Notation "rr" "in" hyp(H) := hrepeat do 1 red in H.
+
+(** Exploit a lemma *)
+Lemma mp : forall P Q : Type, P -> (P -> Q) -> Q.
+Proof. intuition. Defined.
+Ltac exploit x := eapply mp; [eapply x|].

@@ -1,6 +1,7 @@
 From Coq Require Import Classes.RelationClasses
                         Setoids.Setoid
-                        Vectors.Fin.
+                        Vectors.Fin
+                        ZArith.
 Require Export Category.Lib.Base.
 
 Generalizable All Variables.
@@ -121,3 +122,31 @@ Class Commutative `(Operation A) :=
 Class Property `{Setoid A} (P : A → Type) :=
   { property_proper : Proper (equiv ==> iffT) P }.
 #[export] Existing Instance property_proper.
+
+#[export]
+Instance proper_nat_iter `{Setoid A}
+  (f : A → A) (f_proper : Proper (equiv ==> equiv) f) n
+  : Proper (equiv ==> equiv) (Nat.iter n f).
+Proof.
+  induction n; repeat intro; simpl;
+  now try apply f_proper, IHn.
+Qed.
+
+#[export]
+Instance proper_pos_iter `{Setoid A}
+  (f : A → A) (f_proper : Proper (equiv ==> equiv) f)
+  : Proper (equiv ==> eq ==> equiv) (Pos.iter f).
+Proof.
+  repeat intro; subst. revert x y X.
+  now induction y0 as [p|p|]; simpl; intros
+  ; try (rewrite IHp; [|apply IHp]); try rewrite X.
+Qed.
+
+#[export]
+Instance proper_Z_iter `{Setoid A}
+  (f : A → A) (f_proper : Proper (equiv ==> equiv) f) n
+  : Proper (equiv ==> equiv) (Z.iter n f).
+Proof.
+  destruct n; repeat intro; intuition.
+  now simpl; rewrite X.
+Qed.

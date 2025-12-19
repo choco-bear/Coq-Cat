@@ -1,3 +1,4 @@
+From Coq Require Import ZArith Lia.
 Require Import Category.Lib.Tactics.
 
 Generalizable All Variables.
@@ -70,7 +71,7 @@ Notation "'ε'" := grp_id : group_scope.
 Notation "'ε[' G ']'" := (@grp_id G) (only parsing) : group_scope.
 
 Notation "x '⁻¹'" := (grp_inv x%group) (at level 9) : group_scope.
-Notation "'(⁻¹)'" := grp_inv (only parsing) : group_scope.
+Notation "'(•)⁻¹'" := grp_inv (only parsing) : group_scope.
 
 Local Open Scope group_scope.
 
@@ -136,9 +137,16 @@ Section group.
   Proof. now rewrite grp_assoc; __grp_simplify. Qed.
   Lemma grp_inv_simpl_2 x y : x ⋅ y⁻¹ ⋅ y ≡ x.
   Proof. now rewrite grp_assoc; __grp_simplify. Qed.
+
+  Lemma grp_op_inv x y : (x ⋅ y)⁻¹ ≡ y⁻¹ ⋅ x⁻¹.
+  Proof.
+    symmetry. apply grp_inv_unique_r.
+    now rewrite <-grp_assoc, grp_inv_simpl_1; __grp_simplify.
+  Qed.
 End group.
 #[export] Hint Rewrite @inv_involutive @id_inv_id
-                       @grp_inv_simpl_1 @grp_inv_simpl_2 : grp_simplify.
+                       @grp_inv_simpl_1 @grp_inv_simpl_2
+                       @grp_op_inv : grp_simplify.
 
 Section homomorphism.
   Context {G : Group} {G' : Group}.

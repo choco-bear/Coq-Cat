@@ -124,29 +124,23 @@ Class Property `{Setoid A} (P : A → Type) :=
 #[export] Existing Instance property_proper.
 
 #[export]
-Instance proper_nat_iter `{Setoid A}
-  (f : A → A) (f_proper : Proper (equiv ==> equiv) f) n
-  : Proper (equiv ==> equiv) (Nat.iter n f).
-Proof.
-  induction n; repeat intro; simpl;
-  now try apply f_proper, IHn.
-Qed.
+Instance proper_nat_iter `{Setoid A} n
+  : Proper ((equiv ==> equiv) ==> equiv ==> equiv) (@Nat.iter n A).
+Proof. now induction n; repeat intro; simpl; try apply X, IHn. Qed.
 
 #[export]
 Instance proper_pos_iter `{Setoid A}
-  (f : A → A) (f_proper : Proper (equiv ==> equiv) f)
-  : Proper (equiv ==> eq ==> equiv) (Pos.iter f).
+  : Proper ((equiv ==> equiv) ==> equiv ==> eq ==> equiv) (@Pos.iter A).
 Proof.
-  repeat intro; subst. revert x y X.
-  now induction y0 as [p|p|]; simpl; intros
-  ; try (rewrite IHp; [|apply IHp]); try rewrite X.
+  repeat intro; subst. revert x0 y0 X0.
+  induction y1 as [p|p|]; simpl; intros
+  ; now try apply X; try do 2 apply IHp.
 Qed.
 
 #[export]
-Instance proper_Z_iter `{Setoid A}
-  (f : A → A) (f_proper : Proper (equiv ==> equiv) f) n
-  : Proper (equiv ==> equiv) (Z.iter n f).
+Instance proper_Z_iter `{Setoid A} n
+  : Proper ((equiv ==> equiv) ==> equiv ==> equiv) (@Z.iter n A).
 Proof.
   destruct n; repeat intro; intuition.
-  now simpl; rewrite X.
+  now apply proper_pos_iter.
 Qed.

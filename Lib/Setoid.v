@@ -118,8 +118,6 @@ Class Operation A `{Setoid A} :=
 Class Commutative `(Operation A) :=
   { commutative {x y} : op x y ≡ op y x }.
 
-Program Definition nat_setoid : Setoid nat := eq_Setoid nat.
-
 Class Property `{Setoid A} (P : A → Type) :=
   { property_proper : Proper (equiv ==> iffT) P }.
 #[export] Existing Instance property_proper.

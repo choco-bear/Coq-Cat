@@ -1,6 +1,6 @@
 Require Import Coq.Lists.List.
 
-Require Export Category.Lib.List.
+Require Export Category.Lib.Arith.
 
 Generalizable All Variables.
 Set Primitive Projections.

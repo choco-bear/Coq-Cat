@@ -15,8 +15,3 @@ Program Definition AutomorphismGroup {C : Category} (x : C) : Group :=
 Notation "'Aut'" := (AutomorphismGroup) : group_scope.
 Notation "'Aut[' C ']'" :=
   (@AutomorphismGroup C) (only parsing) : group_scope.
-
-
-Require Import Category.Instance.Sets.
-Program Definition SymmetricGroup (n : nat) : Group :=
-  Aut[Sets] {| is_setoid := @Fin_Setoid n |}.

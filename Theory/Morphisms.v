@@ -37,7 +37,7 @@ Section Morphisms.
     Context {x y : C} {f : x ~> y}.
 
     Lemma has_right_inverse_epic
-      : (∃ g, f ∘ g ≡ id[y]) → Epic f.
+      : (∃ g, f ∘ g ≡ id) → Epic f.
     Proof.
       intros [g EQ]. construct.
       rewrite <- id_right, <- (id_right g2).
@@ -45,7 +45,7 @@ Section Morphisms.
     Qed.
 
     Lemma has_left_inverse_monic
-      : (∃ g, g ∘ f ≡ id[x]) → Monic f.
+      : (∃ g, g ∘ f ≡ id) → Monic f.
     Proof.
       intros [g EQ]. construct.
       rewrite <- id_left, <- (id_left g2).

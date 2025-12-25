@@ -66,6 +66,9 @@ Program Instance funext_Setoid
 #[export]
 Program Instance Fin_Setoid {n} : Setoid (Fin.t n) := eq_Setoid (Fin.t n).
 
+Notation "'{1..' n '}'" := (@Fin_Setoid n)
+  (only printing, format "{1.. n }") : category_theory_scope.
+
 Class Unique `{S : Setoid A} (P : A → Type) :=
   { unique_obj : A
   ; unique_property : P unique_obj

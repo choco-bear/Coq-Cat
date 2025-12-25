@@ -98,3 +98,5 @@ Program Definition Sets : Category :=
 
 (* [fequal] for setoid morphisms. *)
 Ltac setoid_fequal := apply morphism_is_proper; [|reflexivity].
+
+Coercion of_setoid : Setoid >-> SetoidObject.

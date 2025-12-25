@@ -45,3 +45,6 @@ Next Obligation.
     + replace (p~0)%positive with (p + p)%positive by lia.
       rewrite Pos.iter_add, !IHp, <-!Pos2Z.add_neg_neg; lia.
 Qed.
+
+Notation "'C[' n ']'" := (mk_cyclic_group n%Z)
+  (at level 0, format "C[ n ]") : group_type_scope.

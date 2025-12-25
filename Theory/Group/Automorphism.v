@@ -2,6 +2,8 @@ Require Import Category.Lib.
 Require Import Category.Theory.Category.
 Require Import Category.Theory.Isomorphism.
 
+Generalizable All Variables.
+
 Program Definition AutomorphismGroup {C : Category} (x : C) : Group :=
   {|  grp_carrier := x ≅ x
     ; grp_setoid := iso_setoid

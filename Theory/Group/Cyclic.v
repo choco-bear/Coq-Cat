@@ -1,6 +1,8 @@
 From Coq Require Export PeanoNat ZArith Lia.
 Require Import Category.Lib.
 
+Generalizable All Variables.
+
 Class IsCyclic (G : Group) :=
   { generator : G
   ; is_cyclic : ∀ g, ∃ n, g ≡ (generator^n)%group

@@ -6,8 +6,8 @@ Set Universe Polymorphism.
 
 (** Group *)
 Record Group :=
-  { grp_carrier : Type
-  ; grp_setoid  : Setoid grp_carrier
+  { grp_carrier :> Type
+  ; grp_setoid  :> Setoid grp_carrier
   ; grp_op      : Operation grp_carrier
 
   ; grp_id    : grp_carrier
@@ -20,7 +20,6 @@ Record Group :=
 
   ; grp_assoc : ∀ x y z, op (op x y) z ≡ op x (op y z)
   }.
-Coercion grp_carrier : Group >-> Sortclass.
 #[export] Existing Instance grp_setoid.
 #[export] Existing Instance grp_op.
 Arguments grp_id {G} : rename.
@@ -28,8 +27,12 @@ Arguments grp_inv {G} g : rename.
 
 #[export] Hint Rewrite @grp_id_l @grp_id_r @grp_inv_l @grp_inv_r : grp_simplify.
 
+Declare Scope group_type_scope.
+Bind Scope group_type_scope with Group.
+Delimit Scope group_type_scope with group_type.
+
 Declare Scope group_scope.
-Bind Scope group_scope with Group.
+Bind Scope group_scope with grp_carrier.
 Delimit Scope group_scope with group.
 
 Record GroupHomomorphism {G : Group} {G' : Group} :=
@@ -38,7 +41,7 @@ Record GroupHomomorphism {G : Group} {G' : Group} :=
   ; grp_map_op : ∀ g h, grp_map (op g h) ≡ op (grp_map g) (grp_map h)
   }.
 #[export] Existing Instance grp_map_respects.
-Arguments grp_map_op {G G' φ} (g h)%_group_scope : rename.
+Arguments grp_map_op {G G' φ} (g h)%_group_type_scope : rename.
 Arguments GroupHomomorphism (G G') : clear implicits.
 
 #[export] Program Instance group_hom_setoid {G : Group} {G' : Group}
@@ -60,19 +63,24 @@ Next Obligation. now rewrite !grp_map_op. Qed.
 Notation "x ⋅ y" := (@op _ _ (grp_op _) x%group y%group)
   (at level 40, left associativity) : group_scope.
 Notation "'(⋅)'" := (@op _ _ (grp_op _)) (only parsing) : group_scope.
-Notation "'(' x '⋅)'" := (@op _ _ (grp_op _) x%group) (only parsing) : group_scope.
+Notation "'(' x '⋅)'" := (@op _ _ (grp_op _) x%group)
+  (only parsing) : group_scope.
 Notation "'(⋅' x ')'" := (λ y, @op _ _ (grp_op _) y x%group)
   (only parsing) : group_scope.
 Notation "x '⋅[' G ']' y" :=
-  (@op G%group (grp_setoid G%group) (grp_op G%group) x%group y%group)
-  (at level 40) : group_scope.
+  (@op G%group_type (grp_setoid G%group_type) (grp_op G%group_type) x%group y%group)
+  (at level 40, only parsing) : group_scope.
+Notation "'(⋅)[' G ']'" :=
+  (@op G%group_type (grp_setoid G%group_type) (grp_op G%group_type))
+  (only parsing) : group_scope.
 
 Notation "'ε'" := grp_id : group_scope.
-Notation "'ε[' G ']'" := (@grp_id G) (only parsing) : group_scope.
+Notation "'ε[' G ']'" := (@grp_id G%group_type) (only parsing) : group_scope.
 
 Notation "x '⁻¹'" := (grp_inv x%group) (at level 9) : group_scope.
 Notation "'(•)⁻¹'" := grp_inv (only parsing) : group_scope.
 
+Local Open Scope group_type_scope.
 Local Open Scope group_scope.
 
 Definition power {G : Group} (n : Z) (g :G) : G :=

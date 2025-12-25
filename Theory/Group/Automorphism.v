@@ -12,6 +12,6 @@ Program Definition AutomorphismGroup {C : Category} (x : C) : Group :=
     ; grp_inv := iso_sym
   |}.
 
-Notation "'Aut'" := (AutomorphismGroup) : group_scope.
+Notation "'Aut'" := (AutomorphismGroup) : group_type_scope.
 Notation "'Aut[' C ']'" :=
-  (@AutomorphismGroup C) (only parsing) : group_scope.
+  (@AutomorphismGroup C) (only parsing) : group_type_scope.

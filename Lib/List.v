@@ -130,14 +130,50 @@ End In.
 
 Section Forall.
   Lemma Forall_forall `{Property A P} (l : list A)
-    : Forall P l ↔ ∀ a : A, In a l → P a.
+    : Forall P l ↔ ∀ a, In a l → P a.
   Proof.
     split.
     - induction 1; [now intros ??%In_nil_absurd|].
       intros ? []%In_cons_or; rewrite ?e; auto.
     - induction l; intuition.
   Qed.
+
+  Lemma Forall_app `{Property A P} (l1 l2: list A)
+    : Forall P (l1 ++ l2) ↔ (Forall P l1 ∧ Forall P l2).
+  Proof.
+    rewrite !Forall_forall; split
+    ; intuition; auto using In_or_app.
+    apply In_app_or in X as [X|X]; auto.
+  Qed.
+  
+  Lemma Forall_cons_and `{Property A P} (a : A) (l : list A)
+    : Forall P (a :: l) → (P a ∧ Forall P l).
+  Proof. now inversion 1; subst. Qed.
 End Forall.
+
+Section Exist.
+  Lemma Exist_exists `{Property A P} (l : list A)
+    : Exist P l ↔ ∃ a, In a l ∧ P a.
+  Proof.
+    split.
+    - induction 1; [exists x; intuition|].
+      destruct IHX as [a [HIn HP]]; exists a; intuition.
+    - intros [a [HIn HP]]. revert HP; induction HIn; auto.
+      constructor. eapply H0; eauto.
+  Qed.
+
+  Lemma Exist_app `{Property A P} (l1 l2 : list A)
+    : Exist P (l1 ++ l2) ↔ (Exist P l1 ∨ Exist P l2).
+  Proof.
+    rewrite !Exist_exists; split.
+    - intros [a [[IN|IN]%In_app_or Pa]]; eauto.
+    - intros [[a [IN Pa]]|[a [IN Pa]]]; eauto using In_or_app.
+  Qed.
+
+  Lemma Exist_cons_or `{Property A P} (a : A) (l : list A)
+    : Exist P (a :: l) → P a ∨ Exist P l.
+  Proof. inversion 1; subst; auto. Qed.
+End Exist.
 
 Definition rev_list_rect (A : Type) (P : list A → Type) (H : P [])
   (H0 : ∀ (a : A) (l : list A), P (rev l) → P (rev (a :: l))) (l : list A)
@@ -218,21 +254,7 @@ Proof.
 Qed.
 
 (** TODO : Define [Forall] without using [Prop] universe, and comment out the below. *)
-(* Lemma Forall_app [A : Type] (P : A → Type) (l1 l2: list A)
-  : Forall P (l1 ++ l2) ↔ (Forall P l1 ∧ Forall P l2).
-Proof.
-  intros.
-  rewrite !Forall_forall.
-  split; intros.
-    split; intros;
-    apply H; apply in_or_app.
-      left; trivial.
-    right; trivial.
-  apply in_app_or in H0.
-  destruct H, H0; eauto.
-Qed.
-
-Lemma last_Forall A (x y : A) l P : last l x = y → Forall P l → P x → P y.
+(* Lemma last_Forall A (x y : A) l P : last l x = y → Forall P l → P x → P y.
 Proof.
   generalize dependent x.
   destruct l using rev_ind; simpl; intros.

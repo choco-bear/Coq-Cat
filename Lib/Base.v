@@ -34,6 +34,7 @@ Tactic Notation "sufficient" lconstr(type) :=
 #[export] Hint Unfold Basics.compose : core.
 #[export] Hint Unfold Basics.arrow : core.
 #[export] Hint Unfold Datatypes.id : core.
+#[export] Hint Constructors sigT : core.
 
 Arguments Basics.compose {_ _ _} _ _ /.
 Arguments Basics.arrow _ _ /.
@@ -43,6 +44,9 @@ Inductive poly_unit : Type := ttt.
 #[export] Hint Constructors poly_unit : core.
 
 Inductive poly_void : Type := .
+
+Definition notT (X : Type) := X -> poly_void.
+#[export] Hint Unfold notT : core.
 
 Notation "∀  x .. y , P" := (forall x, .. (forall y, P) ..)
   (at level 10, x binder, y binder, P at level 200, right associativity) :
@@ -61,7 +65,7 @@ Notation "x → y" := (x -> y)
   (at level 99, y at level 200, right associativity): category_theory_scope.
 Notation "x ↔ y" := (iffT x y)
   (at level 95, no associativity) : category_theory_scope.
-Notation "¬ x" := (x → poly_void)
+Notation "¬ x" := (notT x)
   (at level 75, right associativity) : category_theory_scope.
 Notation "x ≠ y" := (¬ (x = y)) (at level 70) : category_theory_scope.
 
@@ -71,3 +75,15 @@ Infix "∨" := sum (at level 85, right associativity) : category_theory_scope.
 Notation "'λ'  x .. y , t" := (fun x => .. (fun y => t) ..)
   (at level 10, x binder, y binder, t at level 200, right associativity) :
   category_theory_scope.
+
+Global Instance proper_prod
+  : Proper (iffT ==> iffT ==> iffT) prod.
+Proof. intros X1 Y1 [] X2 Y2 []; split; intuition. Qed.
+
+Global Instance proper_sum
+  : Proper (iffT ==> iffT ==> iffT) sum.
+Proof. intros X1 Y1 [] X2 Y2 []; split; intuition. Qed.
+
+Global Instance proper_notT
+  : Proper (iffT ==> iffT) notT.
+Proof. intros X Y []; split; intuition. Qed.

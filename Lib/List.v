@@ -203,64 +203,66 @@ Proof.
   induction l2; auto.
 Defined.
 
-Lemma last_rcons A (x y : A) l : last (l ++ [x]) y = x.
-Proof.
-  induction l; simpl.
-    reflexivity.
-  rewrite IHl; clear IHl.
-  destruct l; auto.
-Qed.
+Section Last.
+  Lemma last_rcons A (x y : A) l : last (l ++ [x]) y = x.
+  Proof.
+    induction l; simpl.
+      reflexivity.
+    rewrite IHl; clear IHl.
+    destruct l; auto.
+  Qed.
 
-Lemma last_app_cons A (x : A) xs y ys : last (xs ++ y :: ys) x = last (y :: ys) x.
-Proof.
-  generalize dependent y.
-  generalize dependent xs.
-  induction ys using rev_ind; simpl; intros.
-    apply last_rcons.
-  rewrite last_rcons.
-  rewrite app_comm_cons.
-  rewrite app_assoc.
-  rewrite last_rcons.
-  destruct ys; auto.
-Qed.
+  Lemma last_app_cons A (x : A) xs y ys : last (xs ++ y :: ys) x = last (y :: ys) x.
+  Proof.
+    generalize dependent y.
+    generalize dependent xs.
+    induction ys using rev_ind; simpl; intros.
+      apply last_rcons.
+    rewrite last_rcons.
+    rewrite app_comm_cons.
+    rewrite app_assoc.
+    rewrite last_rcons.
+    destruct ys; auto.
+  Qed.
 
-Lemma last_cons A (x : A) y ys : last (y :: ys) x = last ys y.
-Proof.
-  generalize dependent x.
-  induction ys using rev_ind; simpl; intros.
-    reflexivity.
-  rewrite !last_rcons.
-  destruct ys; auto.
-Qed.
+  Lemma last_cons A (x : A) y ys : last (y :: ys) x = last ys y.
+  Proof.
+    generalize dependent x.
+    induction ys using rev_ind; simpl; intros.
+      reflexivity.
+    rewrite !last_rcons.
+    destruct ys; auto.
+  Qed.
 
-Lemma match_last {A} {a : A} {xs x}
-  : match xs with
-    | [] => a
-    | _ :: _ => last xs x
-    end = last xs a.
-Proof.
-  induction xs; auto.
-  rewrite !last_cons; reflexivity.
-Qed.
+  Lemma match_last {A} {a : A} {xs x}
+    : match xs with
+      | [] => a
+      | _ :: _ => last xs x
+      end = last xs a.
+  Proof.
+    induction xs; auto.
+    rewrite !last_cons; reflexivity.
+  Qed.
 
-Lemma map_inj {A B : Type} (f : A → B) (f_inj : ∀ x y, f x = f y → x = y) xs ys
-  : List.map f xs = List.map f ys → xs = ys.
-Proof.
-  generalize dependent ys.
-  induction xs, ys; simpl; intros; auto; try inv H.
-  apply f_inj in H1; subst.
-  f_equal.
-  now apply IHxs.
-Qed.
+  Lemma map_inj {A B : Type} (f : A → B) (f_inj : ∀ x y, f x = f y → x = y) xs ys
+    : List.map f xs = List.map f ys → xs = ys.
+  Proof.
+    generalize dependent ys.
+    induction xs, ys; simpl; intros; auto; try inv H.
+    apply f_inj in H1; subst.
+    f_equal.
+    now apply IHxs.
+  Qed.
 
-(** TODO : Define [Forall] without using [Prop] universe, and comment out the below. *)
-(* Lemma last_Forall A (x y : A) l P : last l x = y → Forall P l → P x → P y.
-Proof.
-  generalize dependent x.
-  destruct l using rev_ind; simpl; intros.
-    now subst.
-  rewrite last_rcons in H; subst.
-  apply Forall_app in H0.
-  destruct H0.
-  now inversion H0.
-Qed. *)
+  (** TODO : Define [Forall] without using [Prop] universe, and comment out the below. *)
+  (* Lemma last_Forall A (x y : A) l P : last l x = y → Forall P l → P x → P y.
+  Proof.
+    generalize dependent x.
+    destruct l using rev_ind; simpl; intros.
+      now subst.
+    rewrite last_rcons in H; subst.
+    apply Forall_app in H0.
+    destruct H0.
+    now inversion H0.
+  Qed. *)
+End Last.

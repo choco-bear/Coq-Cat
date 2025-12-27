@@ -147,3 +147,18 @@ Proof.
   destruct n; repeat intro; intuition.
   now apply proper_pos_iter.
 Qed.
+
+Class Decidable `(Setoid A) :=
+  { dec_equiv : ∀ x y : A, x ≡ y ∨ ¬ x ≡ y }.
+
+#[export]
+Instance singleton_decidable `(S : Setoid A) `(@Singleton A S) : Decidable S.
+Proof. now split; left; rewrite <-(is_singleton x), <-(is_singleton y). Qed.
+
+#[export]
+Instance fin_decidable n : Decidable (@Fin_Setoid n).
+Proof.
+  split; intros; destruct (eq_dec x y).
+  - now left; rewrite e.
+  - now right; intro H; apply n0 in H.
+Qed.

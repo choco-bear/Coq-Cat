@@ -152,7 +152,10 @@ Notation "f '⁻¹'" := (from f) (at level 9, format "f '⁻¹'") : morphism_sco
 #[export] Hint Unfold iso_equiv : core.
 
 Ltac isomorphism :=
-  unshelve (refine {| to := _; from := _ |}; simpl; intros).
+  unshelve (refine {| to := _; from := _ |}; simpl; repeat intro).
+
+Definition from_compose_natural `(f : y ≅[C] z) `(g : x ≅[C] y)
+  : (f ○ g)⁻¹ = g⁻¹ ∘ f⁻¹ := eq_refl.
 
 (** Lemmas related to the [Category.Theory.Morphisms] module. *)
 Section Morphisms.

@@ -69,9 +69,6 @@ Section ZeroObject.
     ∘ @terminal_morphism C zero zero_terminal X.
 
   Local Notation "'0'" := zero : object_scope.
-  Local Notation "'0[' C ']'" := (@zero C%category _)
-    (at level 0, format "0[ C ]") : object_scope.
-
   Local Notation "'0'" := zero_morphism : morphism_scope.
 
   Section Lemmas.
@@ -95,8 +92,13 @@ Section ZeroObject.
   End Lemmas.
 End ZeroObject.
 
+#[export] Existing Instance zero_terminal.
+#[export] Existing Instance zero_initial.
+
 Notation "'0'" := zero : object_scope.
 Notation "'0[' C ']'" := (@zero C%category _)
-  (at level 0, format "0[ C ]") : object_scope.
+  (at level 0, only parsing) : object_scope.
 
 Notation "'0'" := zero_morphism : morphism_scope.
+Notation "'0{' x '~>' y '}'" := (@zero_morphism _ _ x y) 
+  (only parsing) : morphism_scope.

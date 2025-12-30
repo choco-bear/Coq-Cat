@@ -31,6 +31,30 @@ Arguments initial_morphism {_%_category_scope _%_object_scope _} _%_object_scope
 Arguments initial_unique {_%_category_scope _%_object_scope _ _%_object_scope}
   _%_morphism_scope _%_morphism_scope.
 
+Section Proper.
+  #[export]
+  Instance proper_terminal {C : Category}
+    : Proper (Isomorphism ==> iffT) Terminal.
+  Proof.
+    assert (∀ x y, x ≅ y → Terminal x → Terminal y); cycle 1.
+    { proper; eapply X; solve [eassumption | symmetry; eassumption]. }
+    construct; try exact (X ∘ terminal_morphism _).
+    pose (terminal_unique (X⁻¹ ∘ f) (X⁻¹ ∘ g)).
+    by comp_left X in e.
+  Qed.
+
+  #[export]
+  Instance proper_initial {C : Category}
+    : Proper (Isomorphism ==> iffT) Initial.
+  Proof.
+    assert (∀ x y, x ≅ y → Initial x → Initial y); cycle 1.
+    { proper; eapply X; solve [eassumption | symmetry; eassumption]. }
+    construct; try exact (initial_morphism _ ∘ X⁻¹).
+    pose (initial_unique (f ∘ X) (g ∘ X)).
+    by comp_right (X⁻¹) in e.
+  Qed.
+End Proper.
+
 Section Lemmas.
   Context {C : Category}.
 

@@ -52,10 +52,10 @@ Ltac simplify :=
        unshelve (refine (existT _ _ _))
      end; intros).
 
-(** [cat] tactic is like [set_solver] in stdpp. But much weaker and faster. *)
+(** [cat] tactic is like [set_solver] in coq-stdpp. But much weaker and faster. *)
 Ltac cat :=
   simplify;
-  autorewrite with categories;
+  autorewrite with categories in *;
   auto with category_laws;
   try reflexivity.
 

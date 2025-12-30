@@ -11,10 +11,10 @@ Class Idempotent `(f : x ~{C}~> x) := { idempotent : f ∘ f ≡ f }.
 
 Class Split `(f : x ~{C}~> x) :=
   { other : C
-  ; split_epi : x ~> other
+  ; split_epic : x ~> other
   ; split_monic : other ~> x
-  ; splits : split_monic ∘ split_epi ≡ f
-  ; split_inverse : split_epi ∘ split_monic ≡ id
+  ; splits : split_monic ∘ split_epic ≡ f
+  ; split_inverse : split_epic ∘ split_monic ≡ id
   }.
 
 (** A morphism [f] is said to be involutive if [f ∘ f ≡ id]. *)
@@ -103,7 +103,7 @@ End Inverse.
 Section Composition.
   Context `{f : y ~{C}~> z} `{g : x ~{C}~> y}.
 
-  Definition epi_compose  :
+  Definition epic_compose  :
     Epic f → Epic g → Epic (f ∘ g).
   Proof.
     construct. do 2 apply epic.

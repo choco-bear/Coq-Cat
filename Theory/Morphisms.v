@@ -103,17 +103,25 @@ End Inverse.
 Section Composition.
   Context `{f : y ~{C}~> z} `{g : x ~{C}~> y}.
 
-  Definition epic_compose  :
-    Epic f → Epic g → Epic (f ∘ g).
+  Definition epic_compose
+    : Epic f → Epic g → Epic (f ∘ g).
   Proof.
     construct. do 2 apply epic.
     now rewrite <-!comp_assoc.
   Qed.
 
-  Definition monic_compose :
-    Monic f → Monic g → Monic (f ∘ g).
+  Definition epic_erase
+    : Epic (f ∘ g) → Epic f.
+  Proof. construct. comp_right g in X0. by apply epic. Qed.
+
+  Definition monic_compose
+    : Monic f → Monic g → Monic (f ∘ g).
   Proof.
     construct. do 2 apply monic.
     now rewrite !comp_assoc.
   Qed.
+
+  Definition monic_erase
+    : Monic (f ∘ g) → Monic g.
+  Proof. construct. comp_left f in X0. by apply monic. Qed.
 End Composition.

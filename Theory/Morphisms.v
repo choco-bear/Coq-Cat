@@ -2,9 +2,20 @@ Require Import Category.Lib.
 Require Import Category.Theory.Category.
 
 Generalizable All Variables.
+Set Primitive Projections.
+Set Universe Polymorphism.
+Unset Transparent Obligations.
 
 (** A morphism [f] is said to be idempotent if [f ∘ f ≡ f]. *)
 Class Idempotent `(f : x ~{C}~> x) := { idempotent : f ∘ f ≡ f }.
+
+Class Split `(f : x ~{C}~> x) :=
+  { other : C
+  ; split_epi : x ~> other
+  ; split_monic : other ~> x
+  ; splits : split_monic ∘ split_epi ≡ f
+  ; split_inverse : split_epi ∘ split_monic ≡ id
+  }.
 
 (** A morphism [f] is said to be involutive if [f ∘ f ≡ id]. *)
 Class Involutive `(f : x ~{C}~> x) := { involutive : f ∘ f ≡ id }.
@@ -20,6 +31,38 @@ Class Monic `(f : x ~{C}~> y) :=
 (** A morphism is a bimorphism if it is both an epimorphism and a monomorphism. *)
 Definition BiMorphic `(f : x ~{C}~> y) := Epic f * Monic f.
 #[export] Hint Unfold BiMorphic : core.
+
+Section Proper.
+  Context {C : Category}.
+
+  #[export]
+  Instance proper_epic {x y : C} : Proper (equiv ==> iffT) (@Epic C x y).
+  Proof.
+    proper; split; ss; apply epic
+    ; solve [now rewrite X|now rewrite <-X].
+  Qed.
+
+  #[export]
+  Instance proper_monic {x y : C} : Proper (equiv ==> iffT) (@Monic C x y).
+  Proof.
+    proper; split; ss; apply monic
+    ; solve [now rewrite X|now rewrite <-X].
+  Qed.
+
+  #[export]
+  Instance proper_idempotent {x : C} : Proper (equiv ==> iffT) (@Idempotent _ x).
+  Proof.
+    proper; inversion X0; construct
+    ; solve [now rewrite X|now rewrite <-X].
+  Qed.
+End Proper.
+
+#[export]
+Instance split_idempotent `(@Split C x f) : Idempotent f.
+Proof.
+  rewrite <-splits; construct.
+  by comp_left; rewrite comp_assoc, split_inverse.
+Qed.
 
 (** Lemmas about identity morphisms *)
 Section Id.
@@ -74,21 +117,3 @@ Section Composition.
     now rewrite !comp_assoc.
   Qed.
 End Composition.
-
-Section Proper.
-  Context {C : Category}.
-
-  #[export]
-  Instance proper_epic {x y : C} : Proper (equiv ==> iffT) (@Epic C x y).
-  Proof.
-    proper; inversion X0; split; ss; apply epic
-    ; solve [now rewrite X|now rewrite <-X].
-  Qed.
-
-  #[export]
-  Instance proper_monic {x y : C} : Proper (equiv ==> iffT) (@Monic C x y).
-  Proof.
-    proper; inversion X0; split; ss; apply monic0
-    ; solve [now rewrite X|now rewrite <-X].
-  Qed.
-End Proper.

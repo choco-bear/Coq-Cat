@@ -1,10 +1,10 @@
 Require Import Coq.Vectors.Fin.
 Require Import Coq.Lists.List.
 Require Import Category.Lib.
-Require Import Category.Theory.Group.Automorphism.
-Require Import Category.Theory.Group.Cyclic.
-Require Import Category.Instance.Sets.
 Require Import Category.Theory.Isomorphism.
+Require Import Category.Instance.Sets.
+Require Import Category.Facts.Group.Automorphism.
+Require Import Category.Facts.Group.Cyclic.
 
 Generalizable All Variables.
 

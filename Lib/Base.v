@@ -56,10 +56,10 @@ Notation "'exists' x .. y , p" := (sigT (fun x => .. (sigT (fun y => p)) ..))
   (at level 200, x binder, right associativity,
    format "'[' 'exists'  '/  ' x  ..  y ,  '/  ' p ']'") :
   category_theory_scope.
-
 Notation "∃  x .. y , P" := (exists x, .. (exists y, P) ..)
   (at level 10, x binder, y binder, P at level 200, right associativity) :
   category_theory_scope.
+#[export] Hint Constructors sigT : core.
 
 Notation "x → y" := (x -> y)
   (at level 99, y at level 200, right associativity): category_theory_scope.
@@ -71,6 +71,7 @@ Notation "x ≠ y" := (¬ (x = y)) (at level 70) : category_theory_scope.
 
 Infix "∧" := prod (at level 80, right associativity) : category_theory_scope.
 Infix "∨" := sum (at level 85, right associativity) : category_theory_scope.
+#[export] Hint Constructors prod sum : core.
 
 Notation "'λ'  x .. y , t" := (fun x => .. (fun y => t) ..)
   (at level 10, x binder, y binder, t at level 200, right associativity) :

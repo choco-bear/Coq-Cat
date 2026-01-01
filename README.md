@@ -35,6 +35,9 @@ This project is organized using Coq's logical path system, which is configured b
 * **`Lib/`** (Mapped to `Category.Lib`) \
     This directory contains the core foundational library and utilities used throughout the project.
 
+* **`Axioms/`** (Mapped to `Category.Axioms`) \
+    This directory contains the axioms that underpin the formalization of category theory in this project.
+
 * **`Theory/`** (Mapped to `Category.Theory`) \
     This directory holds the formalization of category theory concepts.
 
@@ -44,5 +47,14 @@ This project is organized using Coq's logical path system, which is configured b
 * **`Construction/`** (Mapped to `Category.Construction`) \
     This directory contains various constructions in category theory. In other words, it includes ways to build new categories from existing ones.
 
+* **`Facts/`** (Mapped to `Category.Facts`) \
+    This directory contains various lemmas and definitions about categories and related structures, but is not part of the main theory development.
+
 * **`imports/`** (Mapped to `Category`) \
     This directory serves as the main entry point for the project.
+
+## Design Decisions
+Some features and choices made in this library:
+* **Typeclasses**: The library heavily relies on Coq's typeclass mechanism to define and manage categorical structures. This allows for more flexible and reusable code. When a type class instance would be too general, it is presented as a definition that can later be added to instance resolution with `Existing Instance`.
+* **Type Universe**: All definitions are in `Type`, so that `Prop` is not used in the development. This increases the proof work necessary to establish certain properties, but it also allows for greater generality and applicability of the results.
+* **Axioms**: Axioms are separated into their own directory (`Axioms/`) to clearly distinguish between foundational assumptions and derived results. Each axiom is presented as the form of typeclass, and this makes it easy to manage different sets of axioms for different contexts.

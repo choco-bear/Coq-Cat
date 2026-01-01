@@ -2,9 +2,6 @@ Require Import Category.Lib.
 Require Import Category.Theory.Category.
 
 Generalizable All Variables.
-Set Primitive Projections.
-Set Universe Polymorphism.
-Unset Transparent Obligations.
 
 (** A morphism [f] is said to be idempotent if [f ∘ f ≡ f]. *)
 Class Idempotent `(f : x ~{C}~> x) := { idempotent : f ∘ f ≡ f }.
@@ -31,6 +28,13 @@ Class Monic `(f : x ~{C}~> y) :=
 (** A morphism is a bimorphism if it is both an epimorphism and a monomorphism. *)
 Definition BiMorphic `(f : x ~{C}~> y) := Epic f * Monic f.
 #[export] Hint Unfold BiMorphic : core.
+
+(** A morphism [f : a ~> b] is regular if there is a morphism [g : b ~> a] such
+  * that [f ∘ g ∘ f ≡ f]. *)
+Class Regular `(f : x ~{C}~> y) :=
+  { pseudo_inverse : y ~> x
+  ; regular : f ∘ pseudo_inverse ∘ f ≡ f
+  }.
 
 Section Proper.
   Context {C : Category}.
@@ -90,6 +94,10 @@ Section Inverse.
     by rewrite <-EQ, !comp_assoc.
   Qed.
 
+  Lemma has_right_inverse_regular
+    : (∃ g, f ∘ g ≡ id) → Regular f.
+  Proof. by intros [g EQ]; construct; [exact g|rewrite EQ]. Qed.
+
   Lemma has_left_inverse_monic
     : (∃ g, g ∘ f ≡ id) → Monic f.
   Proof.
@@ -97,6 +105,10 @@ Section Inverse.
     rewrite <-id_left, <-(id_left g2).
     by rewrite <-EQ, <-!comp_assoc.
   Qed.
+
+  Lemma has_left_inverse_regular
+    : (∃ g, g ∘ f ≡ id) → Regular f.
+  Proof. by intros [g EQ]; construct; [exact g|rewrite <-comp_assoc, EQ]. Qed.
 End Inverse.
 
 (** Lemmas about composition of morphisms *)

@@ -96,7 +96,4 @@ Program Definition Sets : Category :=
    ; compose_respects := @SetoidMorphism_compose_respects
   |}.
 
-(* [fequal] for setoid morphisms. *)
-Ltac setoid_fequal := apply morphism_is_proper; [|reflexivity].
-
 Coercion of_setoid : Setoid >-> SetoidObject.

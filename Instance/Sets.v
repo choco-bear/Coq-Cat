@@ -45,9 +45,9 @@ Module Defs.
   Next Obligation. equivalence. now transitivity (y0 a). Qed.
   
   #[export]
-  Instance morphism_is_proper {x y : SetoidObject}
-    : Proper (equiv ==> equiv ==> equiv) (@morphism x y).
-  Proof. proper; now rewrites. Qed.
+  Instance morphism_is_proper (x y : SetoidObject)
+    : Proper (equiv ==> pointwise_relation x (@equiv y y)) (@morphism x y).
+  Proof. proper. Qed.
 
   (** Identity morphism *)
   Definition SetoidMorphism_id {x : SetoidObject}

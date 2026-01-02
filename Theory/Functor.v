@@ -190,3 +190,17 @@ Section Full.
     : Surjective (@fmap _ _ F x y).
   Proof. construct. now apply full. Defined.
 End Full.
+
+Section Simpl.
+  Context {C : Category}.
+  Context {D : Category}.
+
+  Lemma simpl_1 {x y : C} {z : D} (F : C ⟶ D) (f : F y ~> z) (g : x ≅ y)
+    : f ∘ fmap[F] g ∘ fmap[F] g⁻¹ ≡ f.
+  Proof. by rewrite <-comp_assoc, <-fmap_comp, iso_to_from. Qed.
+
+  Lemma simpl_2 {x y : C} {z : D} (F : C ⟶ D) (f : F y ~> z) (g : y ≅ x)
+    : f ∘ fmap[F] g⁻¹ ∘ fmap[F] g ≡ f.
+  Proof. by rewrite <-comp_assoc, <-fmap_comp, iso_from_to. Qed.
+End Simpl.
+#[export] Hint Rewrite @simpl_1 @simpl_2 : categories normalize.

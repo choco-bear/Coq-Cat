@@ -10,63 +10,64 @@ Require Import Category.Construction.Fun.
   *)
 
 Section Functor_Setoid.
-  Global Instance Functor_Setoid {C : Category} {D : Category}
-    : Setoid (C ⟶ D) := @ob_setoid Fun[C,D].
+  #[export]
+  Program Instance Functor_Setoid
+    {C : Category} {D : Category} : Setoid (C ⟶ D) :=
+    { equiv := λ F G, { iso : ∀ x : C, F x ≅ G x
+                      & ∀ (x y : C) (f : x ~> y), fmap[F] f ≡ from (iso y) ∘ fmap[G] f ∘ to (iso x)
+                      }
+    ; setoid_equiv := Build_Equivalence _ _ _ _
+    }.
+  Next Obligation.
+    intros F G [ISO EQ]; construct.
+    - isomorphism.
+      + exact (from (ISO x)).
+      + exact (to (ISO x)).
+      + cat.
+      + cat.
+    - ss. now rewrite EQ; normalize.
+  Defined.
+  Next Obligation.
+    intros F G H [ISO0 EQ0] [ISO1 EQ1]; construct.
+    - isomorphism.
+      + exact (to (ISO1 x) ∘ to (ISO0 x)).
+      + exact (from (ISO0 x) ∘ from (ISO1 x)).
+      + now normalize.
+      + now normalize.
+    - ss. now rewrite EQ0, EQ1; normalize.
+  Defined.
 
   #[export]
   Instance Functor_Compose_respects
     {C : Category} {D : Category} {E : Category}
     : Proper (equiv ==> equiv ==> equiv) (@Functor_Compose C D E).
   Proof.
-    intros F1 G1 η1 F2 G2 η2.
-    simpl in * |-. unfold ob_equiv in * |-.
-    srapply (Component_Is_Iso_NatIso {| component := λ x, _ |}).
-    { exact (fmap[G1] (to η2 x) ∘ to η1 (F2 x)). } (* [to η] *)
-    { (* naturality *)
-      simpl; intros. rewrite <- naturality, <- comp_assoc, <- fmap_comp.
-      rewrite naturality. comp_right. by rewrite <- fmap_comp, naturality.
-    } simpl. construct.
-    { exact (η1⁻¹ (F2 x) ∘ fmap[G1] (η2⁻¹ x)). } (* [from η] *)
-    - (* to ∘ from ≡ id *)
-      rewrite <- comp_assoc, (comp_assoc (to η1 _)), (iso_to_from η1 (F2 x)).
-      simpl. by rewrite id_left, <- fmap_comp, (iso_to_from η2 x).
-    - (* from ∘ to ≡ id *)
-      rewrite <- comp_assoc, (comp_assoc (fmap[G1] _)).
-      rewrite <- fmap_comp, (iso_from_to η2 x), fmap_id.
-      by rewrite id_left, (iso_from_to η1 (F2 x)).
+    intros F1 G1 [ISO1 EQ1] F2 G2 [ISO2 EQ2]; construct.
+    - isomorphism.
+      + exact (to (ISO1 _) ∘ (fmap[F1] (to (ISO2 x)))).
+      + exact (from (ISO1 _) ∘ fmap[G1] (from (ISO2 x))).
+      + rewrite EQ1. by normalize.
+      + rewrite EQ1. now normalize.
+    - ss. now rewrite !EQ1, !EQ2; normalize.
   Defined.
 
   Definition Functor_Compose_Id_left
     {C : Category} {D : Category} (F : C ⟶ D) : Id[D] ◯ F ≡ F.
-  Proof.
-    srapply (Component_Is_Iso_NatIso {| component := λ x, _ |}).
-    { exact id[F x]. } { by intros. } construct; by try exact id[F x].
-  Defined.
+  Proof. by construct; [exact iso_id|]. Defined.
 
   Definition Functor_Compose_Id_right
     {C : Category} {D : Category} (F : C ⟶ D) : F ◯ Id[C] ≡ F.
-  Proof.
-    srapply (Component_Is_Iso_NatIso {| component := λ x, _ |}).
-    { exact id[F x]. } { by intros. } construct; by try exact id[F x].
-  Defined.
+  Proof. by construct; [exact iso_id|]. Defined.
 
   Definition Functor_Compose_Assoc
     {B : Category} {C : Category} {D : Category} {E : Category}
     (F : D ⟶ E) (G : C ⟶ D) (H : B ⟶ C)
     : F ◯ (G ◯ H) ≡ (F ◯ G) ◯ H.
-  Proof.
-    srapply (Component_Is_Iso_NatIso {| component := λ x, _ |}).
-    { exact id[F (G (H x))]. } { by intros. }
-    construct; by try exact id[F (G (H x))].
-  Defined.
+  Proof. by construct. Defined.
 
   Definition Functor_Compose_Assoc_Sym
     {B : Category} {C : Category} {D : Category} {E : Category}
     (F : D ⟶ E) (G : C ⟶ D) (H : B ⟶ C)
     : (F ◯ G) ◯ H ≡ F ◯ (G ◯ H).
-  Proof.
-    srapply (Component_Is_Iso_NatIso {| component := λ x, _ |}).
-    { exact id[(F ◯ G) (H x)]. } { by intros. }
-    construct; by try exact id[(F ◯ G) (H x)].
-  Defined.
+  Proof. by construct. Defined.
 End Functor_Setoid.

@@ -123,10 +123,18 @@ Section Isomorphism.
   (* Example of Use of Iso_Proper *)
   Goal ∀ {F G K} (f : G ≅ K) (g : F ≅ G), F ≅ K.
   Proof. intros. now rewrite g. Qed.
+
+  Lemma iso_simpl_1 {x y z : C} (f : y ~> z) (g : x ≅ y)
+    : f ∘ to g ∘ from g ≡ f.
+  Proof. by rewrite <-comp_assoc, iso_to_from. Qed.
+
+  Lemma iso_simpl_2 {x y z : C} (f : y ~> z) (g : y ≅ x)
+    : f ∘ from g ∘ to g ≡ f.
+  Proof. by rewrite <-comp_assoc, iso_from_to. Qed.
 End Isomorphism.
 #[export] Hint Resolve @to @from : category_laws.
-#[export] Hint Rewrite @iso_to_from : categories normalize.
-#[export] Hint Rewrite @iso_from_to : categories normalize.
+#[export] Hint Rewrite @iso_to_from @iso_from_to @iso_simpl_1 @iso_simpl_2
+                       : categories normalize.
 
 Declare Scope isomorphism_scope.
 Delimit Scope isomorphism_scope with isomorphism.

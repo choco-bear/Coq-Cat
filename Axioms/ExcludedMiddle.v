@@ -1,4 +1,4 @@
-Require Import Category.Lib.Tactics.
+Require Import Category.Lib.
 
 Generalizable All Variables.
 Set Primitive Projections.
@@ -6,7 +6,7 @@ Set Universe Polymorphism.
 Unset Transparent Obligations.
 
 Axiom ExcludedMiddle : Type.
-Existing Class ExcludedMiddle.
+#[export] Existing Class ExcludedMiddle.
 
 Axiom LEM : ∀ `{ExcludedMiddle} (P : Type), P ∨ ¬ P.
 #[export] Hint Resolve LEM : core.

@@ -1,5 +1,5 @@
 Require Import Category.Lib.
-Require Import Category.Axioms.Excluded_Middle.
+Require Import Category.Axioms.
 From Category.Theory Require Import
   Category
   Morphisms.
@@ -18,15 +18,28 @@ Proof.
     all: by try construct.
 Qed.
 
-Definition from_nonempty_is_regular `{ExcludedMiddle}
-  `(f : X ~{Sets}~> Y) (x : X) : Regular f.
-Proof.
-  construct.
-  {
-    unshelve esplit.
-    - intro y. classic (∃ x, f x ≡ y) as HIm.
-      + destruct HIm as [x' EQ]. exact x'.
-      + exact x.
-    - proper. admit.
-  }
-Admitted.
+Program Definition from_nonempty_is_regular `{Choice}
+  `(f : X ~{Sets}~> Y) (x : X) : Regular f :=
+  {| pseudo_inverse := _ |}.
+Next Obligation.
+  set ((λ x y, f x ≡ f y) : crelation X) as R.
+  assert (EQUIV : Equivalence R) by by unfold R; construct.
+  unshelve esplit.
+  - intro y. classic (∃ x, f x ≡ y) as HIm.
+    + clear x. destruct HIm as [x EQ].
+      destruct (AC_fun_repr EQUIV) as [CHOICE HCHOICE].
+      exact (CHOICE x).
+    + exact x.
+  - ss. classic.
+    {
+      destruct (AC_fun_repr EQUIV) as [C RW].
+      destruct (RW x1) as [_ RW'].
+      erewrite RW'; try reflexivity.
+      now red; rewrite e, e0.
+    } all: now exfalso; apply n; eexists; rewrites.
+Defined.
+Next Obligation.
+  classic; [|now exfalso; apply n; eexists].
+  remember (AC_fun_repr _) as s; destruct s as [CHOICE HCHOICE]; clear Heqs.
+  now destruct (HCHOICE x0) as [<- _].
+Defined.

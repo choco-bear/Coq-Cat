@@ -61,6 +61,10 @@ Notation "∃  x .. y , P" := (exists x, .. (exists y, P) ..)
   category_theory_scope.
 #[export] Hint Constructors sigT : core.
 
+Global Instance proper_sigT A
+  : Proper ((pointwise_relation A iffT) ==> iffT) (@sigT A).
+Proof. intros P Q H; split; intros []; eexists; apply H; eauto. Qed.
+
 Notation "x → y" := (x -> y)
   (at level 99, y at level 200, right associativity): category_theory_scope.
 Notation "x ↔ y" := (iffT x y)
@@ -73,10 +77,6 @@ Infix "∧" := prod (at level 80, right associativity) : category_theory_scope.
 Infix "∨" := sum (at level 85, right associativity) : category_theory_scope.
 #[export] Hint Constructors prod sum : core.
 
-Notation "'λ'  x .. y , t" := (fun x => .. (fun y => t) ..)
-  (at level 10, x binder, y binder, t at level 200, right associativity) :
-  category_theory_scope.
-
 Global Instance proper_prod
   : Proper (iffT ==> iffT ==> iffT) prod.
 Proof. intros X1 Y1 [] X2 Y2 []; split; intuition. Qed.
@@ -88,3 +88,7 @@ Proof. intros X1 Y1 [] X2 Y2 []; split; intuition. Qed.
 Global Instance proper_notT
   : Proper (iffT ==> iffT) notT.
 Proof. intros X Y []; split; intuition. Qed.
+
+Notation "'λ'  x .. y , t" := (fun x => .. (fun y => t) ..)
+  (at level 10, x binder, y binder, t at level 200, right associativity) :
+  category_theory_scope.

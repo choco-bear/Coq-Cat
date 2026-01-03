@@ -4,6 +4,8 @@ Require Import Category.Theory.Isomorphism.
 Require Import Category.Theory.Functor.
 Require Import Category.Construction.Opposite.
 
+Generalizable All Variables.
+
 (** Being given two categories [C] and [D], we can construct their product category
   * [C × D], which has objects that are pairs of objects in [C] and objects in [D],
   * and morphisms that are pairs of morphisms.
@@ -34,7 +36,8 @@ Program Definition ProductCategory (C D : Category) : Category :=
         , comp_assoc_sym (snd f) (snd g) (snd h) )
   |}.
 
-Notation "C × D" := (ProductCategory C D) (at level 40, left associativity) : category_scope.
+Notation "C × D" := (ProductCategory C%category D%category)
+  (at level 40, left associativity) : category_scope.
 
 (** The projection functors [Fst : C × D ⟶ C] and [Snd : C × D ⟶ D] map each object
   * [(c, d)] in [C × D] to the object [c] in [C] and to the object [d] in [D],
@@ -132,3 +135,36 @@ Ltac bimap_left :=
 
 Ltac bimap_right :=
   apply bimap_respects; [|reflexivity].
+
+Section UniversalProperty.
+  Program Definition ProductFunctor `(T : D ⟶ B) `(R : D ⟶ C) : D ⟶ B × C :=
+    {|  fobj := λ d, (T d, R d) : B × C
+      ; fmap := λ x y f, (fmap[T] f, fmap[R] f)
+    |}.
+  Next Obligation. now proper; rewrites. Defined.
+
+  Notation "F × G" := (ProductFunctor F%functor G%functor)
+    (at level 40, left associativity) : functor_scope.
+
+  Definition ProductFunctor_Fst `(T : D ⟶ B) `(R : D ⟶ C)
+    : Fst ◯ (T × R) ≡ T.
+  Proof. by construct. Qed.
+
+  Definition ProductFunctor_Snd `(T : D ⟶ B) `(R : D ⟶ C)
+    : Snd ◯ (T × R) ≡ R.
+  Proof. by construct. Qed.
+
+  Program Definition ProductFunctor_Unique `(T : D ⟶ B) `(R : D ⟶ C)
+    (F' : D ⟶ B × C) (HProj1 : Fst ◯ F' ≡ T) (HProj2 : Snd ◯ F' ≡ R)
+    : F' ≡ T × R := (_; _).
+  Next Obligation.
+    isomorphism.
+    - exact (HProj1 x : fst (F' x) ~> T x, HProj2 x : snd (F' x) ~> R x).
+    - exact ((HProj1 x)⁻¹, (HProj2 x)⁻¹).
+    - cat.
+    - cat.
+  Defined.
+End UniversalProperty.
+
+Notation "F × G" := (ProductFunctor F%functor G%functor)
+  (at level 40, left associativity) : functor_scope.

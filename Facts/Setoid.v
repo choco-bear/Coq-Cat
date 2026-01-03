@@ -4,7 +4,9 @@ From Category.Theory Require Import
   Category
   Morphisms
   Terminal
-  Initial.
+  Initial
+  Functor.
+Require Import Category.Construction.Opposite.
 Require Import Category.Instance.Sets.
 
 Generalizable All Variables.
@@ -55,3 +57,17 @@ Program Instance Sets_Initial : @Initial Sets :=
   {| terminal_obj := void_setoid : Sets |}.
 Next Obligation. construct; intuition. Defined.
 Next Obligation. intuition. Qed.
+
+Section Powerset.
+  #[local] Obligation Tactic := proper; ss; rewrites; try done.
+  Program Definition Powerset : Sets^op ⟶ Sets :=
+    {|  fobj := λ X, property_setoid X
+      ; fmap := λ Y X f, {| morphism := λ P, (λ x, `1 P (f x); _) |}
+    |}.
+  Next Obligation. now property; rewrites. Defined.
+  Next Obligation.
+    - now rewrite <-X0; eauto.
+    - now rewrite X0; eauto.
+  Defined.
+End Powerset.
+Notation 𝒫 := Powerset.

@@ -26,7 +26,7 @@ Section Isomorphism.
   Arguments iso_to_from {x y} _.
   Arguments iso_from_to {x y} _.
 
-  Infix "≅" := Isomorphism (at level 91) : category_scope.
+  Local Infix "≅" := Isomorphism (at level 91).
 
   (** A morphism [f] between two objects [x] and [y] in a category [C] is said to be
     * an isomorphism if there exists a morphism [g : y ~> x] such that

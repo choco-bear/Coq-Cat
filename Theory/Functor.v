@@ -7,11 +7,8 @@ Reserved Infix "◯" (at level 40, left associativity).
 Generalizable All Variables.
 
 (** Functors map objects and morphisms between categories, where such mappings
-  * preserve equivalences and basic categorical structure (identity and
-  * composition). Note that there are many species of functor, one each for the
-  * various categorical structures (included below), for example, the
-  * `CartesianFunctor` that maps products to products and preserves all its
-  * structural properties and laws.
+  * preserve equivalences and basic categorical structure -- identity and
+  * composition.
   *)
 
 Class Functor {C : Category} {D : Category} : Type :=

@@ -27,7 +27,7 @@ Program Definition Opposite (C : Category) : Category :=
         @comp_assoc C w z y x h g f
   |}.
 
-Notation "C '^op'" := (Opposite C)
+Notation "C '^op'" := (Opposite C%category)
   (at level 0, format "C '^op'") : category_scope.
 
 Lemma op_invol {C : Category} : (C^op)^op = C.

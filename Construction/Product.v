@@ -8,7 +8,7 @@ Require Import Category.Construction.Opposite.
   * [C × D], which has objects that are pairs of objects in [C] and objects in [D],
   * and morphisms that are pairs of morphisms.
   *)
-Program Definition BinaryProduct (C D : Category) : Category :=
+Program Definition ProductCategory (C D : Category) : Category :=
   {| obj := obj[C] * obj[D]
    ; hom := λ x y, (hom (fst x) (fst y)) * (hom (snd x) (snd y))
    ; homset := λ x y, prod_setoid
@@ -34,7 +34,7 @@ Program Definition BinaryProduct (C D : Category) : Category :=
         , comp_assoc_sym (snd f) (snd g) (snd h) )
   |}.
 
-Notation "C × D" := (BinaryProduct C D) (at level 40, left associativity) : category_scope.
+Notation "C × D" := (ProductCategory C D) (at level 40, left associativity) : category_scope.
 
 (** The projection functors [Fst : C × D ⟶ C] and [Snd : C × D ⟶ D] map each object
   * [(c, d)] in [C × D] to the object [c] in [C] and to the object [d] in [D],
@@ -67,10 +67,10 @@ End Projection.
 #[export] Hint Rewrite @fst_comp @snd_comp : categories.
 
 (** The opposite category of [C × D] is [C^op × D^op]. *)
-Lemma BinaryProduct_Opposite (C D : Category)
+Lemma ProductCategory_Opposite (C D : Category)
   : (C × D)^op = C^op × D^op.
 Proof.
-  unfold Opposite, BinaryProduct; simpl.
+  unfold Opposite, ProductCategory; simpl.
   destruct C, D; simpl. f_equal.
 (* SLOW *) Qed.
 

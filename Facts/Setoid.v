@@ -2,7 +2,8 @@ Require Import Category.Lib.
 Require Import Category.Axioms.
 From Category.Theory Require Import
   Category
-  Morphisms.
+  Morphisms
+  Terminal.
 Require Import Category.Instance.Sets.
 
 Generalizable All Variables.
@@ -43,3 +44,11 @@ Next Obligation.
   remember (AC_fun_repr _) as s; destruct s as [CHOICE HCHOICE]; clear Heqs.
   now destruct (HCHOICE x0) as [<- _].
 Defined.
+
+Program Instance initial_void : Initial (void_setoid : Sets).
+Next Obligation. construct; intuition. Defined.
+Next Obligation. intuition. Qed.
+
+Program Instance terminal_unit : Terminal (unit_setoid : Sets).
+Next Obligation. construct; intuition. Defined.
+Next Obligation. now destruct (f a), (g a). Qed.

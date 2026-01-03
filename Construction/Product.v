@@ -5,6 +5,7 @@ Require Import Category.Theory.Functor.
 Require Import Category.Construction.Opposite.
 
 Generalizable All Variables.
+Set Transparent Obligations.
 
 (** Being given two categories [C] and [D], we can construct their product category
   * [C × D], which has objects that are pairs of objects in [C] and objects in [D],
@@ -67,7 +68,7 @@ Section Projection.
     : snd (f ∘ g) ≡ snd f ∘ snd g.
   Proof. reflexivity. Qed.
 End Projection.
-#[export] Hint Rewrite @fst_comp @snd_comp : categories.
+#[export] Hint Rewrite @fst_comp @snd_comp : categories normalize.
 
 (** The opposite category of [C × D] is [C^op × D^op]. *)
 Lemma BinaryProductCategory_Opposite (C D : Category)
@@ -76,6 +77,39 @@ Proof.
   unfold Opposite, BinaryProductCategory; simpl.
   destruct C, D; simpl. f_equal.
 (* SLOW *) Qed.
+
+Section BinaryProductFunctor.
+  Program Definition BinaryProductFunctor `(T : D ⟶ B) `(R : D ⟶ C) : D ⟶ B × C :=
+    {|  fobj := λ d, (T d, R d) : B × C
+      ; fmap := λ x y f, (fmap[T] f, fmap[R] f)
+    |}.
+  Next Obligation. now proper; rewrites. Defined.
+
+  Notation "F × G" := (BinaryProductFunctor F%functor G%functor)
+    (at level 40, left associativity) : functor_scope.
+
+  Lemma BinaryProductFunctor_Fst `(T : D ⟶ B) `(R : D ⟶ C)
+    : Fst ◯ (T × R) ≡ T.
+  Proof. by construct. Qed.
+
+  Lemma BinaryProductFunctor_Snd `(T : D ⟶ B) `(R : D ⟶ C)
+    : Snd ◯ (T × R) ≡ R.
+  Proof. by construct. Qed.
+
+  Program Definition BinaryProductFunctor_Unique `(T : D ⟶ B) `(R : D ⟶ C)
+    (F' : D ⟶ B × C) (HProj1 : Fst ◯ F' ≡ T) (HProj2 : Snd ◯ F' ≡ R)
+    : F' ≡ T × R := (_; _).
+  Next Obligation.
+    isomorphism.
+    - exact (HProj1 x : fst (F' x) ~> T x, HProj2 x : snd (F' x) ~> R x).
+    - exact ((HProj1 x)⁻¹, (HProj2 x)⁻¹).
+    - cat.
+    - cat.
+  Defined.
+End BinaryProductFunctor.
+
+Notation "F × G" := (BinaryProductFunctor F%functor G%functor)
+  (at level 40, left associativity) : functor_scope.
 
 (** A bifunctor is any functor from product of two categories, to another category;
   * so we do not formalize it separately. But there are some helper functions
@@ -136,35 +170,63 @@ Ltac bimap_left :=
 Ltac bimap_right :=
   apply bimap_respects; [|reflexivity].
 
-Section UniversalProperty.
-  Program Definition BinaryProductFunctor `(T : D ⟶ B) `(R : D ⟶ C) : D ⟶ B × C :=
-    {|  fobj := λ d, (T d, R d) : B × C
-      ; fmap := λ x y f, (fmap[T] f, fmap[R] f)
+Program Definition ProductCategory [I : Type] (C : I → Category) : Category :=
+  {|  obj := ∀ i, C i
+    ; hom := λ x y, ∀ i, (x i) ~{C i}~> (y i)
+    ; homset := λ x y, {| equiv := λ f g, ∀ i, f i ≡[C i] g i |}
+
+    ; id := λ x i, id
+    ; compose := λ x y z f g i, f i ∘ g i
+  |}.
+Next Obligation. now equivalence; rewrite X, X0. Defined.
+
+Notation "∏ C" := (ProductCategory (C%category))
+  (at level 41, right associativity) : category_scope.
+
+Section ProductCategoryProjection.
+  Context {I : Type} {C : I → Category}.
+
+  #[export]
+  Program Instance Project (j : I) : ∏ C ⟶ (C j) :=
+    {|  fobj := λ x, x j
+      ; fmap := λ x y f, f j
+    |}.
+
+  Corollary project_comp {j : I} {x y z : ∏ C}
+    (f : y ~{∏ C}~> z) (g : x ~{∏ C}~> y) : (f ∘ g) j ≡ f j ∘ g j.
+  Proof. reflexivity. Qed.
+End ProductCategoryProjection.
+#[export] Hint Rewrite @project_comp : categories normalize.
+
+(** The opposite category of [∏ C] is [∏ (fun i => (C i)^op)]. *)
+(* TODO : Resolve the assymetry of the definition. *)
+(* Lemma ProductCategory_Opposite {I : Type} (C : I → Category)
+  : (∏ C)^op = ∏ (fun i => (C i)^op).
+Proof. Admitted. *)
+
+Section ProductFunctor.
+  Program Definition ProductFunctor [I : Type] `(F : ∀ i : I, D ⟶ C i) : D ⟶ ∏ C :=
+    {|  fobj := λ x i, F i x
+      ; fmap := λ x y f i, fmap[F i] f
     |}.
   Next Obligation. now proper; rewrites. Defined.
 
-  Notation "F × G" := (BinaryProductFunctor F%functor G%functor)
-    (at level 40, left associativity) : functor_scope.
+  Notation "'Π' F" := (ProductFunctor F%functor)
+    (at level 41, right associativity) : functor_scope.
 
-  Definition ProductFunctor_Fst `(T : D ⟶ B) `(R : D ⟶ C)
-    : Fst ◯ (T × R) ≡ T.
+  Lemma ProductFunctor_Project [I : Type]
+    `(F : ∀ i : I, D ⟶ C i) (j : I) : Project j ◯ (Π F) ≡ F j.
   Proof. by construct. Qed.
 
-  Definition ProductFunctor_Snd `(T : D ⟶ B) `(R : D ⟶ C)
-    : Snd ◯ (T × R) ≡ R.
-  Proof. by construct. Qed.
-
-  Program Definition ProductFunctor_Unique `(T : D ⟶ B) `(R : D ⟶ C)
-    (F' : D ⟶ B × C) (HProj1 : Fst ◯ F' ≡ T) (HProj2 : Snd ◯ F' ≡ R)
-    : F' ≡ T × R := (_; _).
+  Program Definition ProductFunctor_Unique [I : Type]
+    `(F : ∀ i : I, D ⟶ C i) (F' : D ⟶ ∏ C)
+    (HProj : ∀ j : I, Project j ◯ F' ≡ F j) : F' ≡ Π F := (_; _).
   Next Obligation.
     isomorphism.
-    - exact (HProj1 x : fst (F' x) ~> T x, HProj2 x : snd (F' x) ~> R x).
-    - exact ((HProj1 x)⁻¹, (HProj2 x)⁻¹).
+    - exact (λ i, `1 (HProj i) x).
+    - exact (λ i, (`1 (HProj i) x)⁻¹).
     - cat.
     - cat.
   Defined.
-End UniversalProperty.
-
-Notation "F × G" := (BinaryProductFunctor F%functor G%functor)
-  (at level 40, left associativity) : functor_scope.
+  Next Obligation. by pose (`2 (HProj i)). Defined.
+End ProductFunctor.

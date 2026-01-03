@@ -10,7 +10,7 @@ Generalizable All Variables.
   * [C × D], which has objects that are pairs of objects in [C] and objects in [D],
   * and morphisms that are pairs of morphisms.
   *)
-Program Definition ProductCategory (C D : Category) : Category :=
+Program Definition BinaryProductCategory (C D : Category) : Category :=
   {| obj := obj[C] * obj[D]
    ; hom := λ x y, (hom (fst x) (fst y)) * (hom (snd x) (snd y))
    ; homset := λ x y, prod_setoid
@@ -36,7 +36,7 @@ Program Definition ProductCategory (C D : Category) : Category :=
         , comp_assoc_sym (snd f) (snd g) (snd h) )
   |}.
 
-Notation "C × D" := (ProductCategory C%category D%category)
+Notation "C × D" := (BinaryProductCategory C%category D%category)
   (at level 40, left associativity) : category_scope.
 
 (** The projection functors [Fst : C × D ⟶ C] and [Snd : C × D ⟶ D] map each object
@@ -70,10 +70,10 @@ End Projection.
 #[export] Hint Rewrite @fst_comp @snd_comp : categories.
 
 (** The opposite category of [C × D] is [C^op × D^op]. *)
-Lemma ProductCategory_Opposite (C D : Category)
+Lemma BinaryProductCategory_Opposite (C D : Category)
   : (C × D)^op = C^op × D^op.
 Proof.
-  unfold Opposite, ProductCategory; simpl.
+  unfold Opposite, BinaryProductCategory; simpl.
   destruct C, D; simpl. f_equal.
 (* SLOW *) Qed.
 
@@ -137,13 +137,13 @@ Ltac bimap_right :=
   apply bimap_respects; [|reflexivity].
 
 Section UniversalProperty.
-  Program Definition ProductFunctor `(T : D ⟶ B) `(R : D ⟶ C) : D ⟶ B × C :=
+  Program Definition BinaryProductFunctor `(T : D ⟶ B) `(R : D ⟶ C) : D ⟶ B × C :=
     {|  fobj := λ d, (T d, R d) : B × C
       ; fmap := λ x y f, (fmap[T] f, fmap[R] f)
     |}.
   Next Obligation. now proper; rewrites. Defined.
 
-  Notation "F × G" := (ProductFunctor F%functor G%functor)
+  Notation "F × G" := (BinaryProductFunctor F%functor G%functor)
     (at level 40, left associativity) : functor_scope.
 
   Definition ProductFunctor_Fst `(T : D ⟶ B) `(R : D ⟶ C)
@@ -166,5 +166,5 @@ Section UniversalProperty.
   Defined.
 End UniversalProperty.
 
-Notation "F × G" := (ProductFunctor F%functor G%functor)
+Notation "F × G" := (BinaryProductFunctor F%functor G%functor)
   (at level 40, left associativity) : functor_scope.

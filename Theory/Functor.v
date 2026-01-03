@@ -160,36 +160,38 @@ Notation "'Const[' C ']' v" := (@constant_Functor C _ v)
   * level, i.e., for any two morphisms [f, g : x ~> y] in [C], if
   * [fmap[F] f ≡ fmap[F] g], then [f ≡ g].
   *)
-Section Faithful.
-  Context {C : Category}.
-  Context {D : Category}.
-
-  Class Faithful (F : C ⟶ D) :=
-    { faithful : ∀ {x y : C} (f g : x ~> y),
-        fmap[F] f ≡ fmap[F] g → f ≡ g
-    }.
-
-  Instance Faithful_Injective (F : C ⟶ D) {FAITHFUL : Faithful F} {x y : C}
-    : Injective (@fmap _ _ F x y).
-  Proof. construct. now apply faithful. Defined.
-End Faithful.
+Class Faithful `(F : C ⟶ D) :=
+  { faithful : ∀ {x y : C} (f g : x ~> y),
+      fmap[F] f ≡ fmap[F] g → f ≡ g
+  }.
 
 (** A functor [F : C ⟶ D] is said to be full if for any morphism [g : F x ~> F y] in
   * [D], there exists a morphism [f : x ~> y] in [C] such that [fmap[F] f ≡ g].
   *)
-Section Full.
-  Context {C : Category}.
-  Context {D : Category}.
+Class Full `(F : C ⟶ D) :=
+  { full : ∀ {x y : C} (g : fobj[F] x ~> fobj[F] y),
+      ∃ f : x ~> y, fmap[F] f ≡ g
+  }.
 
-  Class Full (F : C ⟶ D) :=
-    { full : ∀ {x y : C} (g : fobj[F] x ~> fobj[F] y),
-        ∃ f : x ~> y, fmap[F] f ≡ g
-    }.
+Instance Faithful_Injective `(F : C ⟶ D) `{@Faithful _ _ F} {x y : C}
+  : Injective (@fmap _ _ F x y).
+Proof. construct. now apply faithful. Defined.
 
-  Instance Full_Surjective (F : C ⟶ D) {FULL : Full F} {x y : C}
-    : Surjective (@fmap _ _ F x y).
-  Proof. construct. now apply full. Defined.
-End Full.
+Instance Full_Surjective `(F : C ⟶ D) `{@Full _ _ F} {x y : C}
+  : Surjective (@fmap _ _ F x y).
+Proof. construct. now apply full. Defined.
+
+Lemma fully_faithful `(F : C ⟶ D) `{@Full _ _ F} `{@Faithful _ _ F}
+    : ∀ x y, F x ≅ F y → x ≅ y.
+Proof.
+  ii. remember (full X) as to. remember (full X⁻¹) as from. isomorphism.
+  - exact (`1 to).
+  - exact (`1 from).
+  - destruct to, from. s. apply faithful.
+    by normalize; rewrite e, e0.
+  - destruct to, from. s. apply faithful.
+    by normalize; rewrite e, e0.
+Qed.
 
 (** Lemmas for automatic simplfication *)
 Section Simpl.

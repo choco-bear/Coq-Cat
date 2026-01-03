@@ -191,6 +191,7 @@ Section Full.
   Proof. construct. now apply full. Defined.
 End Full.
 
+(** Lemmas for automatic simplfication *)
 Section Simpl.
   Context {C : Category}.
   Context {D : Category}.

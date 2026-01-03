@@ -29,11 +29,11 @@ Arguments HomFunctor {_%_category_scope} {_%_object_scope}.
 Arguments HomFunctor_op {_%_category_scope} {_%_object_scope}.
 
 Notation "'Hom(' x ',-)'" := (@HomFunctor _ x%object)
-  (at level 0) : functor_scope.
+  (at level 9, format "Hom( x ,-)") : functor_scope.
 Notation "'Hom[' C '](' x ',-)'" := (@HomFunctor C%category x%object)
-  (at level 0, only parsing) : functor_scope.
+  (at level 9, only parsing) : functor_scope.
 
 Notation "'Hom(-,' y ')'" := (@HomFunctor_op _ y%object)
-  (at level 0) : functor_scope.
+  (at level 9, format "Hom(-, y )") : functor_scope.
 Notation "'Hom[' C '](-,' y ')'" := (@HomFunctor_op C%category y%object)
-  (at level 0, only parsing) : functor_scope.
+  (at level 9, only parsing) : functor_scope.

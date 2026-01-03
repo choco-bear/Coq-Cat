@@ -1,6 +1,7 @@
 Require Import Category.Lib.
 Require Import Category.Theory.Category.
 Require Import Category.Theory.Functor.
+Require Import Category.Theory.Isomorphism.
 
 Generalizable All Variables.
 
@@ -34,3 +35,12 @@ Proof. unfold Opposite; destruct C; simpl. f_equal. Qed.
 
 Definition op   {C : Category} {x y} (f : y ~{C}~> x) : x ~{C^op}~> y := f.
 Definition unop {C : Category} {x y} (f : x ~{C^op}~> y) : y ~{C}~> x := f.
+
+#[export]
+Instance iso_op `(x ≅[C] y) : x ≅[C^op] y.
+Proof. inversion H; construct; eauto. Defined.
+#[export] Hint Resolve @iso_op : category_laws.
+#[export] Hint Rewrite @iso_op : categories normalize.
+
+Definition iso_op' `{x ≅[C^op] y} : x ≅[C] y.
+Proof. now apply iso_op in H. Qed.

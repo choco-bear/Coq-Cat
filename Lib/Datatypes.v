@@ -100,8 +100,8 @@ Qed.
 #[global]
 Program Instance Some_respects {A} `{Setoid A} : Proper (equiv ==> equiv) (@Some A).
 
-(** TODO : Define [Decidable] without using [Prop] universe, and comment out the
-  *        below. *)
+(** TODO : Define [Decidable] and [remove] without using [Prop] universe, and
+  *        comment out the below. *)
 (* Lemma length_remove A (A_eq_dec : ∀ x y : A, { x = y } + { x <> y }) x xs
   : (length (remove A_eq_dec x xs) <= length xs)%nat.
 Proof.

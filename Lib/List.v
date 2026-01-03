@@ -159,7 +159,7 @@ Section Exist.
     - induction 1; [exists x; intuition|].
       destruct IHX as [a [HIn HP]]; exists a; intuition.
     - intros [a [HIn HP]]. revert HP; induction HIn; auto.
-      constructor. eapply H0; eauto.
+      constructor. now eapply H0; eauto.
   Qed.
 
   Lemma Exist_app `{Property A P} (l1 l2 : list A)

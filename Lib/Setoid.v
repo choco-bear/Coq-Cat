@@ -123,8 +123,12 @@ Class Commutative `(Operation A) :=
   { commutative {x y} : op x y ≡ op y x }.
 
 Class Property `{Setoid A} (P : A → Type) :=
-  { property_proper : Proper (equiv ==> iffT) P }.
-#[export] Existing Instance property_proper.
+  { property_respects : Proper (equiv ==> arrow) P }.
+#[export] Existing Instance property_respects.
+
+#[export]
+Instance property_proper `{Property A P} : Proper (equiv ==> iffT) P.
+Proof. now split; apply property_respects. Qed.
 
 #[export]
 Instance proper_nat_iter `{Setoid A} n
@@ -161,4 +165,14 @@ Proof.
   split; intros; destruct (eq_dec x y).
   - now left; rewrite e.
   - now right; intro H; apply n0 in H.
+Qed.
+
+Program Definition property_setoid `(Setoid A)
+  : Setoid {P : A → Type & Property P} :=
+    {| equiv := λ X Y, ∀ a b, a ≡ b → (`1 X a ↔ `1 Y b) |}.
+Next Obligation.
+  split; repeat intro.
+  - refine (property_proper a b X). now destruct x.
+  - symmetry. now apply X.
+  - now etransitivity; [apply X|apply X0].
 Qed.

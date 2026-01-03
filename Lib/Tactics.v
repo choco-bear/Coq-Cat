@@ -95,6 +95,9 @@ Ltac equivalence :=
 (** Useful when dealing with [Proper] instances. *)
 Ltac proper := repeat intro; simpl; try cat; intuition.
 
+(** Useful when dealing with [Property] instances. *)
+Ltac property := constructor; repeat intro; simpl; try cat intuition.
+
 (** Rewrite using a term, simplifying it first. *)
 Tactic Notation "srewrite" uconstr(F) :=
   let H := fresh "H" in pose proof F as H; cbn in H; rewrite H; clear H.

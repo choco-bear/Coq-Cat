@@ -47,10 +47,10 @@ End ZeroObject.
 #[export] Existing Instance zero_terminal.
 #[export] Existing Instance zero_initial.
 
-Notation "'0'" := zero : object_scope.
+Notation "'0'" := zero (only parsing) : object_scope.
 Notation "'0[' C ']'" := (@zero C%category _)
-  (at level 0, only parsing) : object_scope.
+  (at level 9, format "0[ C ]") : object_scope.
 
-Notation "'0'" := zero_morphism : morphism_scope.
+Notation "'0'" := zero_morphism (only parsing) : morphism_scope.
 Notation "'0{' x '~>' y '}'" := (@zero_morphism _ _ x y) 
-  (only parsing) : morphism_scope.
+  (format "0{ x ~> y }") : morphism_scope.

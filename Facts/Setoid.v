@@ -3,7 +3,8 @@ Require Import Category.Axioms.
 From Category.Theory Require Import
   Category
   Morphisms
-  Terminal.
+  Terminal
+  Initial.
 Require Import Category.Instance.Sets.
 
 Generalizable All Variables.
@@ -45,10 +46,12 @@ Next Obligation.
   now destruct (HCHOICE x0) as [<- _].
 Defined.
 
-Program Instance initial_void : Initial (void_setoid : Sets).
-Next Obligation. construct; intuition. Defined.
-Next Obligation. intuition. Qed.
-
-Program Instance terminal_unit : Terminal (unit_setoid : Sets).
+Program Instance Sets_Terminal : @Terminal Sets :=
+  {| terminal_obj := unit_setoid : Sets |}.
 Next Obligation. construct; intuition. Defined.
 Next Obligation. now destruct (f a), (g a). Qed.
+
+Program Instance Sets_Initial : @Initial Sets :=
+  {| terminal_obj := void_setoid : Sets |}.
+Next Obligation. construct; intuition. Defined.
+Next Obligation. intuition. Qed.

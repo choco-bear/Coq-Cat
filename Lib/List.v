@@ -254,15 +254,13 @@ Section Last.
     now apply IHxs.
   Qed.
 
-  (** TODO : Define [Forall] without using [Prop] universe, and comment out the below. *)
-  (* Lemma last_Forall A (x y : A) l P : last l x = y → Forall P l → P x → P y.
+  Lemma last_Forall `{Property A P} (x y : A) l
+    : last l x ≡ y → Forall P l → P x → P y.
   Proof.
-    generalize dependent x.
-    destruct l using rev_ind; simpl; intros.
-      now subst.
-    rewrite last_rcons in H; subst.
-    apply Forall_app in H0.
-    destruct H0.
-    now inversion H0.
-  Qed. *)
+    revert x. destruct l using rev_rect; ss.
+    - now rewrite <-X.
+    - rewrite last_rcons in X.
+      apply Forall_app in X0 as [X0 X2].
+      rewrite <-X. now inversion X2.
+  Qed.
 End Last.

@@ -146,13 +146,3 @@ Qed. *)
     apply Acc_symprod2; auto with sets.
   Defined.
 End Symmetric_Product2. *)
-
-#[global]
-Program Instance fun_setoid {A : Type} `{Setoid B} : Setoid (A → B) :=
-  { equiv := fun f g => ∀ x, f x ≡ g x }.
-Next Obligation.
-  equivalence.
-  now rewrite X, X0.
-Qed.
-
-Arguments fun_setoid A B {_}.

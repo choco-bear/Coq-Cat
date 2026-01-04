@@ -284,3 +284,10 @@ Section Group.
     |}.
 End Group.
 Coercion of_group : Group >-> Category.
+
+Section _Set.
+  Class IsSet (C : Category) :=
+    { aut_single : ∀ x : C, Singleton (homset x x)
+    ; is_set : ∀ x y : C, x ≠ y → Empty (homset x y)
+    }.
+End _Set.

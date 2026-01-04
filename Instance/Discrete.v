@@ -16,3 +16,10 @@ Program Definition DiscreteCat (A : Type) : Category :=
    ; id := λ x, eq_refl x
    ; compose := λ x y z (f : y = z) (g : x = y), eq_ind_r (λ t, t = z) f g
   |}.
+
+Notation "'Cat[' A ']'" := (DiscreteCat A%type)
+  (at level 9, format "Cat[ A ]") : category_scope.
+
+#[export]
+Instance Discrete_IsSet (A : Type) : IsSet Cat[A].
+Proof. by split; construct. Qed.

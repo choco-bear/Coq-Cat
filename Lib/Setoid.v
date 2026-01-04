@@ -53,14 +53,13 @@ Definition eq_Setoid (A : Type) : Setoid A :=
   Build_Setoid A (λ f g, eq f g) eq_equivalence.
 
 #[export]
-Program Instance funext_Setoid
-  {T : Type} (t : T → Type) (a b : T) {SETOID : Setoid (t b)}
-  : Setoid (t a → t b) | 9 :=
+Program Instance funext_Setoid (A : Type) (B : A → Type) {SETOID : ∀ a, Setoid (B a)}
+  : Setoid (∀ a, B a) | 9 :=
     {| equiv        := λ f g, ∀ x, f x ≡ g x
-     ; setoid_equiv := @Build_Equivalence (t a → t b) _
-                       (λ f x, @Equivalence_Reflexive (t b) _ _ (f x))
-                       (λ f g Heq x, @Equivalence_Symmetric (t b) _ _ (f x) (g x) (Heq x))
-                       (λ f g h Hfg Hgh x, @Equivalence_Transitive (t b) _ _ (f x) (g x) (h x) (Hfg x) (Hgh x))
+     ; setoid_equiv := @Build_Equivalence (∀ a, B a) _
+                       (λ f x, @Equivalence_Reflexive (B x) _ _ (f x))
+                       (λ f g Heq x, @Equivalence_Symmetric (B x) _ _ (f x) (g x) (Heq x))
+                       (λ f g h Hfg Hgh x, @Equivalence_Transitive (B x) _ _ (f x) (g x) (h x) (Hfg x) (Hgh x))
     |}.
 
 #[export]

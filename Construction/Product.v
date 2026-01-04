@@ -173,15 +173,7 @@ Ltac bimap_right :=
 Program Definition ProductCategory [I : Type] (C : I → Category) : Category :=
   {|  obj := ∀ i, C i
     ; hom := λ x y, ∀ i, (x i) ~{C i}~> (y i)
-    ; homset := λ x y,
-        {|  equiv        := λ f g, ∀ i, f i ≡[C i] g i
-          ; setoid_equiv :=
-              {|  Equivalence_Reflexive  := λ f i, Equivalence_Reflexive (f i)
-                ; Equivalence_Symmetric  := λ f g H i, Equivalence_Symmetric (f i) (g i) (H i)
-                ; Equivalence_Transitive := λ f g h Hfg Hgh i,
-                    Equivalence_Transitive (f i) (g i) (h i) (Hfg i) (Hgh i)
-              |}
-        |}
+    ; homset := λ x y, funext_Setoid I (λ i, (x i) ~{C i}~> (y i))
 
     ; id := λ x i, id
     ; compose := λ x y z f g i, f i ∘ g i
@@ -247,5 +239,5 @@ Section ProductFunctor.
     - cat.
     - cat.
   Defined.
-  Next Obligation. by pose (`2 (HProj i)). Defined.
+  Next Obligation. by pose (`2 (HProj x0)). Defined.
 End ProductFunctor.

@@ -97,6 +97,8 @@ Definition singleton_unique `{S : Setoid A} {SINGLE : Singleton S} (P : A → Ty
             ; uniqueness := λ v _, is_singleton v
           |}.
 
+Class Empty `(S : Setoid A) := { empty : ¬ A }.
+
 Program Definition subset `(S : Setoid A) (Φ : A → Type)
   : Setoid (∃ a : A, Φ a) :=
     {| equiv := λ x y, `1 x ≡ `1 y |}.
@@ -111,6 +113,11 @@ Class Injective
 Class Surjective
   {A : Type} {B : Type} `{Setoid B} (f : A -> B) :=
   { surj {y} : { x & f x ≡ y} }.
+
+Definition Bijective
+  {A : Type} `{Setoid A}
+  {B : Type} `{Setoid B} (f : A -> B) :=
+  Injective f ∧ Surjective f.
 
 Class Operation A `{Setoid A} :=
   { op        : A → A → A

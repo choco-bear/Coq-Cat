@@ -31,7 +31,7 @@ Notation "C '^op'" := (Opposite C%category)
   (at level 0, format "C '^op'") : category_scope.
 
 Lemma op_invol {C : Category} : (C^op)^op = C.
-Proof. unfold Opposite; destruct C; simpl. f_equal. Qed.
+Proof. reflexivity. Qed.
 
 Definition op   {C : Category} {x y} (f : y ~{C}~> x) : x ~{C^op}~> y := f.
 Definition unop {C : Category} {x y} (f : x ~{C^op}~> y) : y ~{C}~> x := f.

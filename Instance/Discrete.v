@@ -12,7 +12,7 @@ Program Definition DiscreteCat (A : Type) : Category :=
    ; hom := λ x y, x = y
    ; homset := (* Since there can be at most one morphism between any two objects,
                 * multiple morphisms of the same type are equal. *)
-        λ x y, {| equiv := λ _ _, True |}
+        λ x y, {| equiv := λ _ _, poly_unit |}
    ; id := λ x, eq_refl x
    ; compose := λ x y z (f : y = z) (g : x = y), eq_ind_r (λ t, t = z) f g
   |}.

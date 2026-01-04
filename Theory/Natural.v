@@ -23,9 +23,7 @@ Section NaturalTransform.
   #[export]
   Program Instance NaturalTransform_Setoid
     : Setoid (NaturalTransform) :=
-      {| equiv := λ η μ,
-          ∀ x : C, @component η x ≡ @component μ x
-      |}.
+      {| equiv := λ η μ, ∀ x : C, @component η x ≡ @component μ x |}.
   Next Obligation. equivalence. now rewrites. Defined.
 End NaturalTransform.
 
@@ -65,7 +63,7 @@ Section Composition.
   Context {F G H : C ⟶ D}.
   Program Definition NaturalTransform_compose
     (η : G ⟹ H) (μ : F ⟹ G) : F ⟹ H :=
-    {| component := λ x, η x ∘ μ x
+    {|  component := λ x, η x ∘ μ x
       ; naturality := λ x y f, _
     |}.
   Next Obligation.

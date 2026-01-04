@@ -29,7 +29,7 @@ Program Definition Fun
          comp_assoc_sym (η x) (μ x) (ν x)
     |}.
 
-Notation "Fun[ C , D ]" := (Fun C%category D%category)
+Notation "'Fun[' C ',' D ']'" := (Fun C%category D%category)
   (at level 0, format "Fun[ C , D ]") : category_scope.
 
 (** If every component of a natural transformation is an isomorphism, then the

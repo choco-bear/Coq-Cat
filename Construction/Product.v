@@ -173,12 +173,32 @@ Ltac bimap_right :=
 Program Definition ProductCategory [I : Type] (C : I → Category) : Category :=
   {|  obj := ∀ i, C i
     ; hom := λ x y, ∀ i, (x i) ~{C i}~> (y i)
-    ; homset := λ x y, {| equiv := λ f g, ∀ i, f i ≡[C i] g i |}
+    ; homset := λ x y,
+        {|  equiv        := λ f g, ∀ i, f i ≡[C i] g i
+          ; setoid_equiv :=
+              {|  Equivalence_Reflexive  := λ f i, Equivalence_Reflexive (f i)
+                ; Equivalence_Symmetric  := λ f g H i, Equivalence_Symmetric (f i) (g i) (H i)
+                ; Equivalence_Transitive := λ f g h Hfg Hgh i,
+                    Equivalence_Transitive (f i) (g i) (h i) (Hfg i) (Hgh i)
+              |}
+        |}
 
     ; id := λ x i, id
     ; compose := λ x y z f g i, f i ∘ g i
+
+    ; compose_respects := λ x y z f g fg h i hi,
+        λ j, compose_respects (f j) (g j) (fg j) (h j) (i j) (hi j)
+
+    ; id_left := λ x y f,
+        λ j, id_left (f j)
+    ; id_right := λ x y f,
+        λ j, id_right (f j)
+
+    ; comp_assoc := λ x y z w f g h,
+        λ j, comp_assoc (f j) (g j) (h j)
+    ; comp_assoc_sym := λ x y z w f g h,
+        λ j, comp_assoc_sym (f j) (g j) (h j)
   |}.
-Next Obligation. now equivalence; rewrite X, X0. Defined.
 
 Notation "∏ C" := (ProductCategory (C%category))
   (at level 41, right associativity) : category_scope.
@@ -199,10 +219,9 @@ End ProductCategoryProjection.
 #[export] Hint Rewrite @project_comp : categories normalize.
 
 (** The opposite category of [∏ C] is [∏ (fun i => (C i)^op)]. *)
-(* TODO : Resolve the assymetry of the definition. *)
-(* Lemma ProductCategory_Opposite {I : Type} (C : I → Category)
+Lemma ProductCategory_Opposite {I : Type} (C : I → Category)
   : (∏ C)^op = ∏ (fun i => (C i)^op).
-Proof. Admitted. *)
+Proof. reflexivity. Qed.
 
 Section ProductFunctor.
   Program Definition ProductFunctor [I : Type] `(F : ∀ i : I, D ⟶ C i) : D ⟶ ∏ C :=

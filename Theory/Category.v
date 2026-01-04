@@ -43,6 +43,10 @@ Class Category : Type := {
   id_left  {x y} (f : x ~> y) : id ∘ f ≡ f;
   id_right {x y} (f : x ~> y) : f ∘ id ≡ f;
 
+  (** To make the opposite category functor be involutive, we need both directions
+    * of the associativity law. So, if user wants to construct a general way of
+    * making category with others, they need to provide both directions, carefully.
+    *)
   comp_assoc {x y z w} (f : z ~> w) (g : y ~> z) (h : x ~> y) :
     f ∘ (g ∘ h) ≡ (f ∘ g) ∘ h;
   comp_assoc_sym {x y z w} (f : z ~> w) (g : y ~> z) (h : x ~> y) :

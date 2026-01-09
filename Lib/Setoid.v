@@ -137,6 +137,25 @@ Instance property_proper `{Property A P} : Proper (equiv ==> iffT) P.
 Proof. now split; apply property_respects. Qed.
 
 #[export]
+Instance not_Property `{Property A P} : Property (λ x, ¬ P x).
+Proof. now split; repeat intro; rewrite X in X0. Qed.
+
+#[export]
+Instance and_Property `{S : Setoid A} `{@Property A S P} `{@Property A S Q}
+  : Property (λ x, P x ∧ Q x).
+Proof. now split; repeat intro; rewrite <-X. Qed.
+
+#[export]
+Instance or_Property `{S : Setoid A} `{@Property A S P} `{@Property A S Q}
+  : Property (λ x, P x ∨ Q x).
+Proof. now split; repeat intro; rewrite <-X. Qed.
+
+#[export]
+Instance to_Property `{S : Setoid A} `{@Property A S P} `{@Property A S Q}
+  : Property (λ x, P x → Q x).
+Proof. split; repeat intro; rewrite X in X0; auto. Qed.
+
+#[export]
 Instance proper_nat_iter `{Setoid A} n
   : Proper ((equiv ==> equiv) ==> equiv ==> equiv) (@Nat.iter n A).
 Proof. now induction n; repeat intro; simpl; try apply X, IHn. Qed.

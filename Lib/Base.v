@@ -70,7 +70,7 @@ Notation "x → y" := (x -> y)
 Notation "x ↔ y" := (iffT x y)
   (at level 95, no associativity) : category_theory_scope.
 Notation "¬ x" := (notT x)
-  (at level 85, right associativity) : category_theory_scope.
+  (at level 75, right associativity) : category_theory_scope.
 Notation "x ≠ y" := (¬ (x = y)) (at level 70) : category_theory_scope.
 
 Infix "∧" := prod (at level 80, right associativity) : category_theory_scope.

@@ -55,6 +55,36 @@ Section ListSetoid.
   Qed.
 End ListSetoid.
 
+Section rect.
+  Definition rev_list_rect (A : Type) (P : list A → Type) (H : P [])
+    (H0 : ∀ (a : A) (l : list A), P (rev l) → P (rev (a :: l))) (l : list A)
+    : P (rev l) :=
+      list_rect (λ l0 : list A, P (rev l0)) H
+        (λ (a : A) (l0 : list A) (IHl : P (rev l0)), H0 a l0 IHl) l.
+
+  Definition rev_rect (A : Type) (P : list A → Type)
+    (H : P []) (H0 : ∀ (x : A) (l : list A), P l → P (l ++ [x])) (l : list A)
+    : P l :=
+      (λ E : rev (rev l) = l,
+        eq_rect (rev (rev l)) (λ l0 : list A, P l0)
+          (rev_list_rect A P H
+            (λ (a : A) (l0 : list A) (H1 : P (rev l0)), H0 a (rev l0) H1)
+            (rev l)) l E) (rev_involutive l).
+
+  Definition list_rect2 (A : Type) (P : list A → list A → Type)
+    (H : P [] []) (H0 : ∀ (a : A) (l1 : list A), P l1 [] → P (a :: l1) [])
+    (H1 : ∀ (b : A) (l2 : list A), P [] l2 → P [] (b :: l2))
+    (H2 : ∀ (a b : A) (l1 l2 : list A), P l1 l2 → P (a :: l1) (b :: l2))
+    (l1 l2 : list A)
+    : P l1 l2.
+  Proof.
+    intros.
+    generalize dependent l2.
+    induction l1; simpl in *; intros;
+    induction l2; auto.
+  Defined.
+End rect.
+
 Inductive Forall [A : Type] (P : A → Type) : list A → Type :=
   | Forall_nil : Forall P []
   | Forall_cons : ∀ x l, P x → Forall P l → Forall P (x :: l)
@@ -70,7 +100,12 @@ Inductive In `{Setoid A} (a : A) : list A → Type :=
   | In_skip : ∀ x l, In a l → In a (x :: l)
   .
 
-#[export] Hint Constructors Forall Exist In : core.
+Inductive NoDup `{Setoid A} : list A → Type :=
+  | NoDup_nil : NoDup []
+  | NoDup_cons : ∀ x l, ¬ In x l → NoDup l → NoDup (x :: l)
+  .
+
+#[export] Hint Constructors Forall Exist In NoDup : core.
 
 Section In.
   Context `{Setoid A}.
@@ -98,9 +133,12 @@ Section In.
   Qed.
     
   #[export]
-  Program Instance In_respects
-    : Proper (equiv ==> equiv ==> iffT) In.
-  Next Obligation. now split; apply In_respects_helper. Qed.
+  Instance In_respects : Proper (equiv ==> equiv ==> iffT) In.
+  Proof. now split; apply In_respects_helper. Qed.
+
+  #[export]
+  Instance In_property (l : list A) : Property (λ x, In x l).
+  Proof. now construct; proper; rewrite <-X. Qed.
 
   Lemma In_or_app (a : A) (l l' : list A)
     : In a l ∨ In a l' → In a (l ++ l').
@@ -115,6 +153,10 @@ Section In.
     simpl; inversion 1; auto.
     apply IHl in X0 as []; auto.
   Qed.
+
+  Lemma In_app_or_iff (a : A) (l l' : list A)
+    : In a (l ++ l') ↔ In a l ∨ In a l'.
+  Proof. split; [apply In_app_or|apply In_or_app]. Qed.
 
   Context `{Setoid B}.
   Lemma In_map (a : A) (l : list A) (f : A → B)
@@ -175,33 +217,56 @@ Section Exist.
   Proof. inversion 1; subst; auto. Qed.
 End Exist.
 
-Definition rev_list_rect (A : Type) (P : list A → Type) (H : P [])
-  (H0 : ∀ (a : A) (l : list A), P (rev l) → P (rev (a :: l))) (l : list A)
-  : P (rev l) :=
-    list_rect (λ l0 : list A, P (rev l0)) H
-      (λ (a : A) (l0 : list A) (IHl : P (rev l0)), H0 a l0 IHl) l.
+Section NoDup.
+  Context `{Setoid A}.
 
-Definition rev_rect (A : Type) (P : list A → Type)
-  (H : P []) (H0 : ∀ (x : A) (l : list A), P l → P (l ++ [x])) (l : list A)
-  : P l :=
-    (λ E : rev (rev l) = l,
-      eq_rect (rev (rev l)) (λ l0 : list A, P l0)
-        (rev_list_rect A P H
-          (λ (a : A) (l0 : list A) (H1 : P (rev l0)), H0 a (rev l0) H1)
-          (rev l)) l E) (rev_involutive l).
+  Lemma NoDup_inv (l : list A)
+    : NoDup l
+    → match l with
+      | [] => poly_unit
+      | x :: l' => ¬ In x l' ∧ NoDup l'
+      end.
+  Proof. destruct l; inversion 1; auto. Qed.
 
-Definition list_rect2 (A : Type) (P : list A → list A → Type)
-  (H : P [] []) (H0 : ∀ (a : A) (l1 : list A), P l1 [] → P (a :: l1) [])
-  (H1 : ∀ (b : A) (l2 : list A), P [] l2 → P [] (b :: l2))
-  (H2 : ∀ (a b : A) (l1 l2 : list A), P l1 l2 → P (a :: l1) (b :: l2))
-  (l1 l2 : list A)
-  : P l1 l2.
-Proof.
-  intros.
-  generalize dependent l2.
-  induction l1; simpl in *; intros;
-  induction l2; auto.
-Defined.
+  Lemma NoDup_app_remove_r (l1 l2 : list A)
+    : NoDup (l1 ++ l2) → NoDup l1.
+  Proof.
+    induction l1; auto.
+    inversion 1; subst.
+    econs; auto. rewrite In_app_or_iff in X0.
+    intro; apply X0. now left.
+  Qed.
+
+  Lemma NoDup_app_remove_l (l1 l2 : list A)
+    : NoDup (l1 ++ l2) → NoDup l2.
+  Proof. induction l1; auto. inversion 1; auto. Qed.
+
+  Lemma NoDup_rcons (a : A) (l : list A)
+    : NoDup (l ++ [a]) → ¬ In a l.
+  Proof.
+    induction l; s.
+    - ii. inversion X0.
+    - inversion 1; subst. ii.
+      apply In_cons_or in X2.
+      destruct X2; intuition.
+      rewrite <-e in X0. apply X0, In_or_app.
+      right. now econs.
+  Qed.
+
+  Lemma NoDup_app (l1 l2 : list A)
+    : (∀ a, In a l1 → ¬ In a l2)
+    → NoDup l1 → NoDup l2 → NoDup (l1 ++ l2).
+  Proof.
+    revert l2. induction l1 using rev_rect; auto.
+    i. rewrite <- app_assoc.
+    apply IHl1; [| now apply NoDup_app_remove_r in X0
+                 | econs; auto; now apply X, In_or_app; right; econs
+                 ].
+    ii. apply In_cons_or in X3.
+    destruct X3; [|apply (X a); [apply In_or_app|]]; auto.
+    apply NoDup_rcons in X0; apply X0. now rewrite <-e.
+  Qed.
+End NoDup.
 
 Section Last.
   Lemma last_rcons A (x y : A) l : last (l ++ [x]) y = x.

@@ -101,7 +101,7 @@ Notation "f '∘[' C ']' g" :=
 
 Notation "f '≡[' C ']' g" :=
   (@equiv _ (@homset C%category _%object _%object) f%morphism g%morphism)
-  (at level 79, only parsing) : category_theory_scope.
+  (at level 74, only parsing) : category_theory_scope.
 
 Notation "f '<<' A '~~>' B '>>' g" :=
   (@equiv (A%object ~> B%object)%homset _ f%morphism g%morphism)

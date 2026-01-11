@@ -9,3 +9,4 @@
 
 Require Export Category.Lib.Datatypes.
 Require Export Category.Lib.Algebra.
+Require Export Category.Lib.Finite.

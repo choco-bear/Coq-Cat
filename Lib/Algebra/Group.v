@@ -43,7 +43,6 @@ Record GroupHomomorphism {G : Group} {G' : Group} :=
 #[export] Existing Instance grp_map_respects.
 Arguments grp_map_op {G G' φ} (g h)%_group_type_scope : rename.
 Arguments GroupHomomorphism (G G') : clear implicits.
-#[export] Hint Rewrite @grp_map_op : grp_simplify.
 
 #[export] Program Instance group_hom_setoid {G : Group} {G' : Group}
   : Setoid (GroupHomomorphism G G') := {| equiv := λ φ ψ, ∀ g, φ g ≡ ψ g |}.
@@ -112,11 +111,11 @@ Module BasicGrpTactics.
   Tactic Notation "__grp_simplify" "in" hyp(H) := autorewrite with grp_simplify in H.
   Tactic Notation "__grp_simplify" "in" "*" := autorewrite with grp_simplify in *.
 
-  Tactic Notation "grp_simplify" := repeat rewrite <-grp_assoc; __grp_simplify.
+  Tactic Notation "grp_simplify" := repeat rewrite <-grp_assoc; repeat rewrite grp_map_op; __grp_simplify.
   Tactic Notation "grp_simplify" "in" hyp(H) :=
-    repeat rewrite <-grp_assoc in H; __grp_simplify in H.
+    repeat rewrite <-grp_assoc in H; repeat rewrite grp_map_op in H; __grp_simplify in H.
   Tactic Notation "grp_simplify" "in" "*" :=
-    repeat rewrite <-grp_assoc in *; __grp_simplify in *.
+    repeat rewrite <-grp_assoc in *; repeat rewrite grp_map_op in *; __grp_simplify in *.
 End BasicGrpTactics.
 Export BasicGrpTactics.
 

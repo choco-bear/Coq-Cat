@@ -43,6 +43,7 @@ Record GroupHomomorphism {G : Group} {G' : Group} :=
 #[export] Existing Instance grp_map_respects.
 Arguments grp_map_op {G G' φ} (g h)%_group_type_scope : rename.
 Arguments GroupHomomorphism (G G') : clear implicits.
+#[export] Hint Rewrite @grp_map_op : grp_simplify.
 
 #[export] Program Instance group_hom_setoid {G : Group} {G' : Group}
   : Setoid (GroupHomomorphism G G') := {| equiv := λ φ ψ, ∀ g, φ g ≡ ψ g |}.

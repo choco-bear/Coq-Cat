@@ -329,3 +329,15 @@ Section Last.
       rewrite <-X. now inversion X2.
   Qed.
 End Last.
+
+Section Decidable.
+  Context `{EqDec : @Decidable A SET}.
+
+  Lemma In_Dec x l : In x l ∨ ¬ In x l.
+  Proof.
+    induction l; [right; inversion 1|].
+    destruct IHl as [? | IHl]; eauto.
+    destruct (dec_equiv a x) as [-> | ne]; [now left; econs|].
+    right; inversion 1; eauto.
+  Qed.
+End Decidable.

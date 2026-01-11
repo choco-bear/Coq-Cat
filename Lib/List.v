@@ -1,4 +1,4 @@
-Require Import Coq.Lists.List.
+Require Export Coq.Lists.List.
 
 Require Export Category.Lib.Tactics.
 
@@ -117,7 +117,7 @@ Section In.
   Proof. now inversion 1; subst. Qed.
 
   Lemma In_cons_or (a x : A) (l : list A)
-    : In a (x :: l) → a ≡ x ∨ In a l.
+    : In a (x :: l) → x ≡ a ∨ In a l.
   Proof. now inversion 1; subst; [left|right]. Qed.
 
   Lemma In_or_cons (a x : A) (l : list A)
@@ -176,7 +176,7 @@ Section Forall.
   Proof.
     split.
     - induction 1; [now intros ??%In_nil_absurd|].
-      intros ? []%In_cons_or; rewrite ?e; auto.
+      intros ? []%In_cons_or; rewrite <- ?e; auto.
     - induction l; intuition.
   Qed.
 
@@ -264,7 +264,7 @@ Section NoDup.
                  ].
     ii. apply In_cons_or in X3.
     destruct X3; [|apply (X a); [apply In_or_app|]]; auto.
-    apply NoDup_rcons in X0; apply X0. now rewrite <-e.
+    apply NoDup_rcons in X0; apply X0. now rewrite e.
   Qed.
 End NoDup.
 

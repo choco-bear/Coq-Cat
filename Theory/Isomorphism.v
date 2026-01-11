@@ -120,6 +120,10 @@ Section Isomorphism.
     now rewrite !comp_assoc, iso_from_to, X, iso_from_to.
   Qed.
 
+  #[export]
+  Instance proper_to {x y : C} : Proper (equiv ==> equiv) (@to x y).
+  Proof. proper. Qed.
+
   (* Example of Use of Iso_Proper *)
   Goal ∀ {F G K} (f : G ≅ K) (g : F ≅ G), F ≅ K.
   Proof. intros. now rewrite g. Qed.

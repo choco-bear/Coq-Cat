@@ -16,6 +16,8 @@ Class Finite `(S : Setoid A) :=
   ; cover_all : CoverAll cover
   }.
 
+Definition FinType X := @Finite X (eq_Setoid X).
+
 Fixpoint Fin_cover n : list (Fin.t n) :=
   match n as n0 return list (Fin.t n0) with
   | O => []
@@ -77,12 +79,21 @@ Fixpoint _reduce_aux
 Definition reduce `{FIN : @Finite A SET} {EqDec : Decidable SET} (l : list A) (COVER : CoverAll l)
   : list A := _reduce_aux [] l COVER.
 
+Lemma reduce_aux_cover
+  `{FIN : @Finite A SET} {EqDec : Decidable SET}
+  (l : list A) (acc : list A) (COVER : CoverAll (acc ++ l))
+  : CoverAll (_reduce_aux acc l COVER).
+Proof.
+  revert acc COVER.
+  induction l; i.
+  - now s; rewrite app_nil_r in COVER.
+  - s. destruct (In_Dec a l); apply IHl.
+Qed.
+
 Lemma reduce_cover
   `{FIN : @Finite A SET} {EqDec : Decidable SET} (l : list A) (COVER : CoverAll l)
   : CoverAll (reduce l COVER).
-Proof.
-  (* TODO *)
-Admitted.
+Proof. unfold reduce. apply reduce_aux_cover. Qed.
 
 Definition cardinality `(FIN : @Finite A SET) {EqDec : Decidable SET} : nat :=
   length (reduce cover cover_all).

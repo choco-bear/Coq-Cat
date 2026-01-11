@@ -1,5 +1,5 @@
 From Coq Require Import PeanoNat ZArith Lia.
-Require Export Category.Lib.List.
+Require Export Category.Lib.Finite.
 
 Generalizable All Variables.
 Set Primitive Projections.

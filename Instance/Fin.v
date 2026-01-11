@@ -1,7 +1,5 @@
 Require Import Category.Lib.
-Require Import Category.Axioms.ExcludedMiddle.
 Require Import Category.Theory.Category.
-Require Import Category.Theory.Isomorphism.
 Require Import Category.Instance.Sets.
 
 Generalizable All Variables.
@@ -30,10 +28,3 @@ Program Definition Fin : Category :=
     ; compose := @SetoidMorphism_compose
     ; compose_respects := @SetoidMorphism_compose_respects
   |}.
-
-#[export]
-Program Instance isomorphism_preserves_cardinality `{ExcludedMiddle}
-  : Proper (Isomorphism ==> eq) (λ X : Fin, cardinality X).
-Next Obligation.
-  (* TODO *)
-Admitted.

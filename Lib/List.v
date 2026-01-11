@@ -1,4 +1,4 @@
-Require Export Coq.Lists.List.
+Require Import Coq.Lists.List.
 
 Require Export Category.Lib.Tactics.
 

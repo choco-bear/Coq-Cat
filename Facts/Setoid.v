@@ -3,11 +3,12 @@ Require Import Category.Axioms.
 From Category.Theory Require Import
   Category
   Morphisms
+  Isomorphism
   Terminal
   Initial
   Functor.
 Require Import Category.Construction.Opposite.
-Require Import Category.Instance.Sets.
+From Category.Instance Require Import Sets Fin.
 
 Generalizable All Variables.
 
@@ -71,3 +72,15 @@ Section Powerset.
   Defined.
 End Powerset.
 Notation 𝒫 := Powerset.
+
+Section Isomorphism.
+End Isomorphism.
+
+Section Finite.
+  #[export]
+  Program Instance isomorphism_preserves_cardinality `{ExcludedMiddle}
+    : Proper (Isomorphism ==> eq) (λ X : Fin, cardinality X).
+  Next Obligation.
+    (* TODO *)
+  Admitted.
+End Finite.

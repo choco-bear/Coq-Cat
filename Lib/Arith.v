@@ -37,6 +37,34 @@ Proof. exists n; nia. Qed.
 Lemma divide_add n m p : (n | m) → (n | p) → (n | m + p).
 Proof. intros [x ?] [y ?]. exists (x + y); nia. Qed.
 
+Lemma divide_decidable n m : (n | m) ∨ ¬ (n | m).
+Proof.
+  destruct (Z.eq_dec n 0).
+  - destruct (Z.eq_dec m 0); subst.
+    + left. exists 0. nia.
+    + right. inversion 1. nia.
+  - destruct (Z.eq_dec (m mod n) 0).
+    + left. exists (m / n). replace (m / n * n) with (m / n * n + 0) by nia.
+      now rewrite <- e, Z.mul_comm, <- Z_div_mod_eq_full.
+    + right. inversion 1. refine (match _ : False with end).
+      apply n1. now rewrite H0, Z_mod_mult.
+Qed.
+
 #[export] Program Instance divide_preorder : PreOrder divide.
 Next Obligation. exists 1; nia. Qed.
 Next Obligation. intros x y z [n ?] [m ?]. exists (n * m); nia. Qed.
+
+#[export] Instance dec_nat_setoid : Decidable nat_setoid.
+Proof.
+  econs. ii. destruct (Nat.eq_dec x y); eauto.
+  right. ii. destruct (n H).
+Qed.
+
+#[export] Instance dec_Z_setoid : Decidable Z_setoid.
+Proof.
+  econs. ii. destruct (Z.eq_dec x y); eauto.
+  right. ii. destruct (n H).
+Qed.
+
+#[export] Instance dec_Z_mod_setoid z : Decidable (Z_mod_setoid z).
+Proof. econs; ii; apply divide_decidable. Qed.

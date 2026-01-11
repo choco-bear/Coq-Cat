@@ -1,6 +1,6 @@
 Require Import Category.Lib.
 Require Import Category.Theory.Category.
-Require Import Category.Instance.Sets.
+Require Export Category.Instance.Sets.
 
 Generalizable All Variables.
 Set Universe Polymorphism.

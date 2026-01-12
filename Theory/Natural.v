@@ -98,3 +98,36 @@ End HorizontalComposition.
 
 Notation "τ' ▪ τ" := (NaturalTransform_horizontal_compose τ' τ)
   (at level 40, left associativity) : natural_scope.
+
+(** Simplication lemmas *)
+Section simpl.
+  Context {C : Category} {D : Category}.
+
+  Lemma naturality_simpl
+    {S T : C ⟶ D} (τ : S ⟹ T) `(f : x ~{C}~> y) `(g : T y ~> z)
+    : g ∘ τ y ∘ fmap[S] f ≡ g ∘ fmap[T] f ∘ τ x.
+  Proof. now rewrite <-!comp_assoc, naturality. Qed.
+
+  Lemma NaturalTransform_vertical_compose_id_left {S T : C ⟶ D} (τ : S ⟹ T)
+    : NaturalTransform_id ⋅ τ ≡ τ.
+  Proof. by ss. Qed.
+
+  Lemma NaturalTransform_vertical_compose_id_right {S T : C ⟶ D} (τ : S ⟹ T)
+    : τ ⋅ NaturalTransform_id ≡ τ.
+  Proof. by ss. Qed.
+
+  Lemma NaturalTransform_vertical_compose_assoc
+    {T1 T2 T3 T4 : C ⟶ D} (τ1 : T2 ⟹ T1) (τ2 : T3 ⟹ T2) (τ3 : T4 ⟹ T3)
+    : τ1 ⋅ (τ2 ⋅ τ3) ≡ τ1 ⋅ τ2 ⋅ τ3.
+  Proof. cat. Qed.
+
+  Lemma NaturalTransform_interchange_law {B : Category} {R S T : D ⟶ C} {R' S' T' : C ⟶ B}
+    (σ : R ⟹ S) (τ : S ⟹ T) (σ' : R' ⟹ S') (τ' : S' ⟹ T')
+    : (τ' ⋅ σ') ▪ (τ ⋅ σ) ≡ (τ' ▪ τ) ⋅ (σ' ▪ σ).
+  Proof. ss; normalize. comp_left. comp_right. now normalize. Qed.
+End simpl.
+#[export]
+Hint Rewrite @naturality_simpl @NaturalTransform_vertical_compose_id_left
+             @NaturalTransform_vertical_compose_id_right
+             @NaturalTransform_vertical_compose_assoc
+             @NaturalTransform_interchange_law : normalize.

@@ -16,9 +16,9 @@ Program Definition Fun
      ; hom := λ F G, F ⟹ G
      ; homset := λ F G, NaturalTransform_Setoid
      ; id := @NaturalTransform_id _ _
-     ; compose := @NaturalTransform_compose _ _
+     ; compose := @NaturalTransform_vertical_compose _ _
 
-     ; compose_respects := @NaturalTransform_compose_respects _ _
+     ; compose_respects := @NaturalTransform_vertical_compose_respects _ _
 
      ; id_left := λ F G η x, id_left (η x)
      ; id_right := λ F G η x, id_right (η x)

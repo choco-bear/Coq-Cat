@@ -56,24 +56,45 @@ Ltac natural_transform := unshelve (refine {| component := _ |}; simpl; intros).
 Program Definition NaturalTransform_id `{F : C ⟶ D} : F ⟹ F :=
   {| component := λ x, id[F x] |}.
 
-(** Composing natural transformations *)
-Section Composition.
-  Context {C : Category}.
-  Context {D : Category}.
+(** Vertical Composition of Natural Transformations *)
+Section VerticalComposition.
+  Context {C : Category} {D : Category}.
   Context {F G H : C ⟶ D}.
-  Program Definition NaturalTransform_compose
-    (η : G ⟹ H) (μ : F ⟹ G) : F ⟹ H :=
-    {|  component := λ x, η x ∘ μ x
-      ; naturality := λ x y f, _
-    |}.
+
+  Program Definition NaturalTransform_vertical_compose
+    (η : G ⟹ H) (μ : F ⟹ G) : F ⟹ H := {| component := λ x, η x ∘ μ x |}.
   Next Obligation.
     rewrite <- comp_assoc, naturality.
     by rewrite comp_assoc, naturality.
   Qed.
 
-  Program Instance NaturalTransform_compose_respects
-    : Proper (equiv ==> equiv ==> equiv) NaturalTransform_compose.
-End Composition.
+  #[export]
+  Program Instance NaturalTransform_vertical_compose_respects
+    : Proper (equiv ==> equiv ==> equiv) NaturalTransform_vertical_compose.
+End VerticalComposition.
 
-Notation "η ⋅ μ" := (NaturalTransform_compose η μ)
+Notation "η ⋅ μ" := (NaturalTransform_vertical_compose η μ)
+  (at level 40, left associativity) : natural_scope.
+
+(** Horizontal Composition of Natural Transformations *)
+Section HorizontalComposition.
+  Context {A : Category} {B : Category} {C : Category}.
+  Context {S T : C ⟶ B} {S' T' : B ⟶ A}.
+
+  Program Definition NaturalTransform_horizontal_compose
+    (τ' : S' ⟹ T') (τ : S ⟹ T) : S' ◯ S ⟹ T' ◯ T :=
+      {| component := λ c, fmap[T'] (τ c) ∘ τ' (S c) |}.
+  Next Obligation.
+    rewrite <-comp_assoc, naturality, !comp_assoc. comp_right.
+    assert (τ y ∘ fmap[S] f ≡ fmap[T] f ∘ τ x) by now normalize.
+    now rewrite <-!fmap_comp; rewrites.
+  Qed.
+
+  #[export]
+  Program Instance NaturalTransform_horizontal_compose_respects
+    : Proper (equiv ==> equiv ==> equiv) NaturalTransform_horizontal_compose.
+  Next Obligation. now proper; rewrites. Qed.
+End HorizontalComposition.
+
+Notation "τ' ▪ τ" := (NaturalTransform_horizontal_compose τ' τ)
   (at level 40, left associativity) : natural_scope.

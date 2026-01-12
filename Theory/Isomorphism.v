@@ -26,7 +26,7 @@ Section Isomorphism.
   Arguments iso_to_from {x y} _.
   Arguments iso_from_to {x y} _.
 
-  Local Infix "≅" := Isomorphism (at level 91).
+  Local Infix "≅" := Isomorphism (at level 74).
 
   (** A morphism [f] between two objects [x] and [y] in a category [C] is said to be
     * an isomorphism if there exists a morphism [g : y ~> x] such that
@@ -145,9 +145,9 @@ Delimit Scope isomorphism_scope with isomorphism.
 Open Scope isomorphism_scope.
 
 Notation "x ≅ y" := (@Isomorphism _%category x%object y%object)
-  (at level 91) : isomorphism_scope.
+  (at level 74) : isomorphism_scope.
 Notation "x ≅[ C ] y" := (@Isomorphism C%category x%object y%object)
-  (at level 91, only parsing) : isomorphism_scope.
+  (at level 74, only parsing) : isomorphism_scope.
 
 Notation "f ○ g" := (iso_compose f g)
   (at level 40, left associativity) : isomorphism_scope.

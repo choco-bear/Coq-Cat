@@ -7,10 +7,12 @@ Set Universe Polymorphism.
 Module Defs.
   (** A setoid object is a type equipped with an equivalence relation. *)
   Record SetoidObject : Type :=
-    { carrier :> Type
-    ; is_setoid :> Setoid carrier
+    { carrier : Type
+    ; is_setoid : Setoid carrier
     }.
   #[export] Existing Instance is_setoid.
+  #[export] Coercion carrier : SetoidObject >-> Sortclass.
+  #[export] Coercion is_setoid : SetoidObject >-> Setoid.
 
   Program Definition of_setoid `(S : Setoid A)
     : SetoidObject := {| is_setoid := S |}.

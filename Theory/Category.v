@@ -195,7 +195,14 @@ Tactic Notation "right" uconstr(f) := refine (f ∘ _).
 
 Tactic Notation "comp_left" :=
   try rewrite <- !comp_assoc;
-  apply compose_respects; [reflexivity|].
+  match goal with
+  | [ |- _ ∘ _ ≡ _ ∘ _ ] =>
+    apply compose_respects; [reflexivity|]
+  | [ |- ?x ∘ ?y ≡ ?x ] =>
+    sufficient (y ≡ id) by cat
+  | [ |- ?x ≡ ?x ∘ ?y ] =>
+    sufficient (y ≡ id) by cat
+  end.
 
 Tactic Notation "comp_left" uconstr(p) "in" hyp(H) :=
   match type of H with
@@ -204,7 +211,14 @@ Tactic Notation "comp_left" uconstr(p) "in" hyp(H) :=
 
 Tactic Notation "comp_right" :=
   try rewrite !comp_assoc;
-  apply compose_respects; [|reflexivity].
+  match goal with
+  | [ |- _ ∘ _ ≡ _ ∘ _ ] =>
+    apply compose_respects; [|reflexivity]
+  | [ |- ?y ∘ ?x ≡ ?x ] =>
+    sufficient (y ≡ id) by cat
+  | [ |- ?x ≡ ?y ∘ ?x ] =>
+    sufficient (y ≡ id) by cat
+  end.
 
 Tactic Notation "comp_right" uconstr(p) "in" hyp(H) :=
   match type of H with

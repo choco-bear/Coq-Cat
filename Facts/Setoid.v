@@ -57,7 +57,6 @@ Next Obligation. now destruct (f a), (g a). Qed.
 Program Instance Sets_Initial : @Initial Sets :=
   {| terminal_obj := void_setoid : Sets |}.
 Next Obligation. construct; intuition. Defined.
-Next Obligation. intuition. Qed.
 
 Section Powerset.
   #[local] Obligation Tactic := proper; ss; rewrites; try done.

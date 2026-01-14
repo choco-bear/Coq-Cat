@@ -92,3 +92,9 @@ Proof. intros X Y []; split; intuition. Qed.
 Notation "'λ'  x .. y , t" := (fun x => .. (fun y => t) ..)
   (at level 10, x binder, y binder, t at level 200, right associativity) :
   category_theory_scope.
+Notation "'λ`' p , t" := (fun x => let p := x in t)
+  (at level 10, p pattern, t at level 200, right associativity)
+  : category_theory_scope.
+Notation "'λ`' p : tp , t" := (fun x : tp => let p := x in t)
+  (at level 10, p pattern, t at level 200, right associativity)
+  : category_theory_scope.

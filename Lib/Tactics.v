@@ -1,5 +1,3 @@
-Require Import Coq.Bool.Bool.
-
 Require Export Category.Lib.Setoid.
 
 Generalizable All Variables.
@@ -18,11 +16,6 @@ Ltac simplify :=
 
      | [ H : poly_unit |- _ ] => destruct H
      | [ |- poly_unit ] => exact ttt
-
-     | [ H : (_ &&& _) = true |- _ ] => rewrite <- andb_lazy_alt in H
-     | [ |- (_ &&& _) = true ]       => rewrite <- andb_lazy_alt
-     | [ H : (_ && _) = true |- _ ]  => apply andb_true_iff in H
-     | [ |- (_ && _) = true ]        => apply andb_true_iff; split
 
      | [ H : _ ∧ _ |- _ ] =>
        let H' := fresh "H" in destruct H as [H H']
@@ -50,7 +43,7 @@ Ltac simplify :=
        destruct H as [x e]
      | [ |- { _ : _ & _ } ] =>
        unshelve (refine (existT _ _ _))
-     end; intros).
+     end; repeat intro).
 
 (** [cat] tactic is like [set_solver] in coq-stdpp. But much weaker and faster. *)
 Ltac cat :=

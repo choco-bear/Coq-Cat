@@ -67,8 +67,7 @@ Program Definition Parallel : Category :=
                 | ParB => (true; ParIdB)
                 end
    |}.
-Next Obligation. parallel_solver. Qed.
-Next Obligation. parallel_solver. Defined.
+Next Obligation. parallel_solver. (* SLOW *) Defined.
 Next Obligation. parallel_solver. Qed.
 Next Obligation. parallel_solver. Qed.
 Next Obligation. destruct f; parallel_solver. Qed.

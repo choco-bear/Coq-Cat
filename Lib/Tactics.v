@@ -7,6 +7,10 @@ Unset Transparent Obligations.
 
 Open Scope lazy_bool_scope.
 
+Lemma pair_injection [A B : Type] (a1 a2 : A) (b1 b2 : B)
+  : (a1, b1) = (a2, b2) → a1 = a2 ∧ b1 = b2.
+Proof. inversion 1; eauto. Qed.
+
 (** Basic tactics for category theory proofs *)
 Ltac simplify :=
   simpl in *; repeat
@@ -29,7 +33,9 @@ Ltac simplify :=
        let H' := fresh "H" in destruct H as [H H']
      | [ |- _ ↔ _ ] => split
 
-     | [ H : (_, _) = (_, _) |- _ ] => inversion_clear H
+     | [ H : (_, _) = (_, _) |- _ ] =>
+       first [ apply pair_injection in H
+             | inversion H; subst; assert (H = eq_refl) as -> by apply proof_irrelevance ]
 
      | [ H : _ * _ |- _ ] =>
        let x := fresh "x" in
@@ -43,7 +49,10 @@ Ltac simplify :=
        destruct H as [x e]
      | [ |- { _ : _ & _ } ] =>
        unshelve (refine (existT _ _ _))
-     end; repeat intro).
+
+     | [ |- context[eq_rect_r] ] => unfold eq_rect_r, eq_rect, eq_sym, eq_trans
+     | [ |- context[eq_rect] ] => unfold eq_rect, eq_sym, eq_trans
+     end; repeat intro); subst.
 
 
 (** [repeat] guranteeing termination *)

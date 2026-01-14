@@ -44,8 +44,9 @@ Local Ltac parallel_solver :=
                  | [ x : ParObj |- _ ] => destruct x
                  | [ H : ParB = ParA |- _ ] => inversion H
                  | [ H : ParA = ParB |- _ ] => inversion H
-                 | [ |- Equivalence _ ] => equivalence
+                 | [ b : bool |- _ ] => destruct b
                  end; cat_simpl; eauto with parallel_laws.
+#[local] Obligation Tactic := cat_simpl; parallel_solver.
 
 (** This is the category with two objects and two parallel morphisms between them
   * (and two identity morphisms):
@@ -56,20 +57,30 @@ Local Ltac parallel_solver :=
   *
   *)
 Program Definition Parallel : Category :=
-  {| obj := ParObj
-   ; hom := λ x y, ∃ b, ParHom b x y
-   ; homset := λ X Y,
-      {| equiv := λ f g, `1 f = `1 g
-       ; setoid_equiv := _
-      |}
-   ; id := λ x, match x with
-                | ParA => (true; ParIdA)
-                | ParB => (true; ParIdB)
-                end
-   |}.
-Next Obligation. parallel_solver. (* SLOW *) Defined.
-Next Obligation. parallel_solver. Qed.
-Next Obligation. parallel_solver. Qed.
-Next Obligation. destruct f; parallel_solver. Qed.
-Next Obligation. parallel_solver. Qed.
-Next Obligation. parallel_solver. Qed.
+  {|  obj := ParObj
+    ; hom := λ x y, ∃ b, ParHom b x y
+    ; homset := λ X Y, {| equiv := λ f g, `1 f = `1 g |}
+    ; id := λ x, match x with
+                 | ParA => (true; ParIdA)
+                 | ParB => (true; ParIdB)
+                 end
+    ; compose := λ x y z : ParObj,
+        match x, y, z with
+        | ParA, ParA, ParA => λ _ _, (true; ParIdA)
+        | ParA, ParA, ParB => λ f _, f
+        | ParA, ParB, ParA => λ f _, poly_void_rect
+                                        (λ _, ∃ b, ParHom b ParA ParA)
+                                        (ParHom_B_A_absurd (`1 f) (`2 f))
+        | ParB, ParB, ParA => λ f _, poly_void_rect
+                                        (λ _, ∃ b, ParHom b ParB ParA)
+                                        (ParHom_B_A_absurd (`1 f) (`2 f))
+        | ParA, ParB, ParB => λ _ g, g
+        | ParB, ParA, ParA => λ _ g, poly_void_rect
+                                        (λ _, ∃ b, ParHom b ParB ParA)
+                                        (ParHom_B_A_absurd (`1 g) (`2 g))
+        | ParB, ParA, ParB => λ _ g, poly_void_rect
+                                        (λ _, ∃ b, ParHom b ParB ParB)
+                                        (ParHom_B_A_absurd (`1 g) (`2 g))
+        | ParB, ParB, ParB =>  λ _ _, (true; ParIdB)
+        end
+  |}.

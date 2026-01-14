@@ -83,7 +83,6 @@ Section BinaryProductFunctor.
     {|  fobj := λ d, (T d, R d) : B × C
       ; fmap := λ x y f, (fmap[T] f, fmap[R] f)
     |}.
-  Next Obligation. now proper; rewrites. Defined.
 
   Notation "F × G" := (BinaryProductFunctor F%functor G%functor)
     (at level 40, left associativity) : functor_scope.
@@ -220,7 +219,6 @@ Section ProductFunctor.
     {|  fobj := λ x i, F i x
       ; fmap := λ x y f i, fmap[F i] f
     |}.
-  Next Obligation. now proper; rewrites. Defined.
 
   Notation "'Π' F" := (ProductFunctor F%functor)
     (at level 41, right associativity) : functor_scope.

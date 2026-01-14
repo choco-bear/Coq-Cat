@@ -44,7 +44,6 @@ Module Defs.
   Program Instance SetoidMorphism_Setoid {x y : SetoidObject}
     : Setoid (SetoidMorphism x y) :=
       {| equiv := SetoidMorphism_equiv |}.
-  Next Obligation. equivalence. now transitivity (y0 a). Qed.
   
   #[export]
   Instance morphism_is_proper (x y : SetoidObject)
@@ -60,7 +59,6 @@ Module Defs.
   Program Definition SetoidMorphism_compose
     {x y z : SetoidObject} (f : SetoidMorphism y z) (g : SetoidMorphism x y)
     : SetoidMorphism x z := {| morphism := λ a, f (g a) |}.
-  Next Obligation. proper. now do 2 apply proper_morphism. Qed.
   #[export] Hint Unfold SetoidMorphism_compose : core.
 
   #[export]

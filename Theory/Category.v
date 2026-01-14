@@ -221,51 +221,6 @@ Tactic Notation "comp_right" uconstr(p) "in" hyp(H) :=
 #[export] Hint Extern 10 (?X ∘ (?Y ∘ ?Z) ≡ ?W) =>
   apply comp_assoc : category_laws.
 
-Ltac rewrites :=
-  repeat match goal with
-  | [ H : ?X ≡ ?Y                      |- context[?X] ] => rewrite !H; clear H
-  | [ H : ?X ≡ ?Y                      |- context[?X] ] => srewrite H; clear H
-  | [ H : ∀ _, ?X ≡ ?Y                 |- context[?X] ] => rewrite !H; clear H
-  | [ H : ∀ _, ?X ≡ ?Y                 |- context[?X] ] => srewrite H; clear H
-  | [ H : ∀ _, ?X _ ≡ ?Y _             |- context[?X] ] => rewrite !H; clear H
-  | [ H : ∀ _, ?X _ ≡ ?Y _             |- context[?X] ] => srewrite H; clear H
-  | [ H : ∀ _ _, ?X ≡ ?Y               |- context[?X] ] => rewrite !H; clear H
-  | [ H : ∀ _ _, ?X ≡ ?Y               |- context[?X] ] => srewrite H; clear H
-  | [ H : ∀ _ _, ?X _ ≡ ?Y _           |- context[?X] ] => rewrite !H; clear H
-  | [ H : ∀ _ _, ?X _ ≡ ?Y _           |- context[?X] ] => srewrite H; clear H
-  | [ H : ∀ _ _, ?X _ _ ≡ ?Y _ _       |- context[?X] ] => rewrite !H; clear H
-  | [ H : ∀ _ _, ?X _ _ ≡ ?Y _ _       |- context[?X] ] => srewrite H; clear H
-  | [ H : ∀ _ _ _, ?X ≡ ?Y             |- context[?X] ] => rewrite !H; clear H
-  | [ H : ∀ _ _ _, ?X ≡ ?Y             |- context[?X] ] => srewrite H; clear H
-  | [ H : ∀ _ _ _, ?X _ ≡ ?Y _         |- context[?X] ] => rewrite !H; clear H
-  | [ H : ∀ _ _ _, ?X _ ≡ ?Y _         |- context[?X] ] => srewrite H; clear H
-  | [ H : ∀ _ _ _, ?X _ _ ≡ ?Y _ _     |- context[?X] ] => rewrite !H; clear H
-  | [ H : ∀ _ _ _, ?X _ _ ≡ ?Y _ _     |- context[?X] ] => srewrite H; clear H
-  | [ H : ∀ _ _ _, ?X _ _ _ ≡ ?Y _ _ _ |- context[?X] ] => rewrite !H; clear H
-  | [ H : ∀ _ _ _, ?X _ _ _ ≡ ?Y _ _ _ |- context[?X] ] => srewrite H; clear H
-
-  | [ H : ?X ≡ ?Y                      |- context[?Y] ] => rewrite <- !H; clear H
-  | [ H : ?X ≡ ?Y                      |- context[?Y] ] => srewrite <- H; clear H
-  | [ H : ∀ _, ?X ≡ ?Y                 |- context[?Y] ] => rewrite <- !H; clear H
-  | [ H : ∀ _, ?X ≡ ?Y                 |- context[?Y] ] => srewrite <- H; clear H
-  | [ H : ∀ _, ?X _ ≡ ?Y _             |- context[?Y] ] => rewrite <- !H; clear H
-  | [ H : ∀ _, ?X _ ≡ ?Y _             |- context[?Y] ] => srewrite <- H; clear H
-  | [ H : ∀ _ _, ?X ≡ ?Y               |- context[?Y] ] => rewrite <- !H; clear H
-  | [ H : ∀ _ _, ?X ≡ ?Y               |- context[?Y] ] => srewrite <- H; clear H
-  | [ H : ∀ _ _, ?X _ ≡ ?Y _           |- context[?Y] ] => rewrite <- !H; clear H
-  | [ H : ∀ _ _, ?X _ ≡ ?Y _           |- context[?Y] ] => srewrite <- H; clear H
-  | [ H : ∀ _ _, ?X _ _ ≡ ?Y _ _       |- context[?Y] ] => rewrite <- !H; clear H
-  | [ H : ∀ _ _, ?X _ _ ≡ ?Y _ _       |- context[?Y] ] => srewrite <- H; clear H
-  | [ H : ∀ _ _ _, ?X ≡ ?Y             |- context[?Y] ] => rewrite <- !H; clear H
-  | [ H : ∀ _ _ _, ?X ≡ ?Y             |- context[?Y] ] => srewrite <- H; clear H
-  | [ H : ∀ _ _ _, ?X _ ≡ ?Y _         |- context[?Y] ] => rewrite <- !H; clear H
-  | [ H : ∀ _ _ _, ?X _ ≡ ?Y _         |- context[?Y] ] => srewrite <- H; clear H
-  | [ H : ∀ _ _ _, ?X _ _ ≡ ?Y _ _     |- context[?Y] ] => rewrite <- !H; clear H
-  | [ H : ∀ _ _ _, ?X _ _ ≡ ?Y _ _     |- context[?Y] ] => srewrite <- H; clear H
-  | [ H : ∀ _ _ _, ?X _ _ _ ≡ ?Y _ _ _ |- context[?Y] ] => rewrite <- !H; clear H
-  | [ H : ∀ _ _ _, ?X _ _ _ ≡ ?Y _ _ _ |- context[?Y] ] => srewrite <- H; clear H
-  end.
-
 Section Group.
   Local Open Scope group_scope.
 

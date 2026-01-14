@@ -24,7 +24,6 @@ Section NaturalTransform.
   Program Instance NaturalTransform_Setoid
     : Setoid (NaturalTransform) :=
       {| equiv := λ η μ, ∀ x : C, @component η x ≡ @component μ x |}.
-  Next Obligation. equivalence. now rewrites. Defined.
 End NaturalTransform.
 
 Arguments component {_ _ _ _} _ _.
@@ -41,14 +40,14 @@ Delimit Scope natural_type_scope with natural_type.
 Open Scope natural_scope.
 Open Scope natural_type_scope.
 
-Notation "F ⟹ G" := (@NaturalTransform _ _ F%functor_scope G%functor_scope)
+Notation "F ⟹ G" := (@NaturalTransform _ _ F%functor G%functor)
   (at level 90, right associativity) : natural_type_scope.
 Coercion component : NaturalTransform >-> Funclass.
 
 Notation "'component[' F '⟹' G ']'" :=
-  (@component _ _ F%functor_scope G%functor_scope) (at level 0, only parsing) : natural_scope.
+  (@component _ _ F%functor G%functor) (at level 0, only parsing) : natural_scope.
 Notation "'naturality[' F '⟹' G ']'" :=
-  (@naturality _ _ F%functor_scope G%functor_scope) (at level 0, only parsing) : natural_scope.
+  (@naturality _ _ F%functor G%functor) (at level 0, only parsing) : natural_scope.
 
 (** Tactic for creating natural transformations *)
 Ltac natural_transform := unshelve (refine {| component := _ |}; simpl; intros).
@@ -93,7 +92,6 @@ Section HorizontalComposition.
   #[export]
   Program Instance NaturalTransform_horizontal_compose_respects
     : Proper (equiv ==> equiv ==> equiv) NaturalTransform_horizontal_compose.
-  Next Obligation. now proper; rewrites. Qed.
 End HorizontalComposition.
 
 Notation "τ' ▪ τ" := (NaturalTransform_horizontal_compose τ' τ)

@@ -239,6 +239,52 @@ Tactic Notation "srewrite" "->" uconstr(F) "in" "*" :=
 Tactic Notation "srewrite" "<-" uconstr(F) "in" "*" :=
   let H := fresh "H" in pose proof F as H; cbn in H; rewrite <- H in *; clear H.
 
+(** The setoid version of the tactic [subst] *)
+Ltac rewrites :=
+  repeat match goal with
+  | [ H : ?X ≡ ?Y                      |- context[?X] ] => rewrite !H; clear H
+  | [ H : ?X ≡ ?Y                      |- context[?X] ] => srewrite H; clear H
+  | [ H : ∀ _, ?X ≡ ?Y                 |- context[?X] ] => rewrite !H; clear H
+  | [ H : ∀ _, ?X ≡ ?Y                 |- context[?X] ] => srewrite H; clear H
+  | [ H : ∀ _, ?X _ ≡ ?Y _             |- context[?X] ] => rewrite !H; clear H
+  | [ H : ∀ _, ?X _ ≡ ?Y _             |- context[?X] ] => srewrite H; clear H
+  | [ H : ∀ _ _, ?X ≡ ?Y               |- context[?X] ] => rewrite !H; clear H
+  | [ H : ∀ _ _, ?X ≡ ?Y               |- context[?X] ] => srewrite H; clear H
+  | [ H : ∀ _ _, ?X _ ≡ ?Y _           |- context[?X] ] => rewrite !H; clear H
+  | [ H : ∀ _ _, ?X _ ≡ ?Y _           |- context[?X] ] => srewrite H; clear H
+  | [ H : ∀ _ _, ?X _ _ ≡ ?Y _ _       |- context[?X] ] => rewrite !H; clear H
+  | [ H : ∀ _ _, ?X _ _ ≡ ?Y _ _       |- context[?X] ] => srewrite H; clear H
+  | [ H : ∀ _ _ _, ?X ≡ ?Y             |- context[?X] ] => rewrite !H; clear H
+  | [ H : ∀ _ _ _, ?X ≡ ?Y             |- context[?X] ] => srewrite H; clear H
+  | [ H : ∀ _ _ _, ?X _ ≡ ?Y _         |- context[?X] ] => rewrite !H; clear H
+  | [ H : ∀ _ _ _, ?X _ ≡ ?Y _         |- context[?X] ] => srewrite H; clear H
+  | [ H : ∀ _ _ _, ?X _ _ ≡ ?Y _ _     |- context[?X] ] => rewrite !H; clear H
+  | [ H : ∀ _ _ _, ?X _ _ ≡ ?Y _ _     |- context[?X] ] => srewrite H; clear H
+  | [ H : ∀ _ _ _, ?X _ _ _ ≡ ?Y _ _ _ |- context[?X] ] => rewrite !H; clear H
+  | [ H : ∀ _ _ _, ?X _ _ _ ≡ ?Y _ _ _ |- context[?X] ] => srewrite H; clear H
+
+  | [ H : ?X ≡ ?Y                      |- context[?Y] ] => rewrite <- !H; clear H
+  | [ H : ?X ≡ ?Y                      |- context[?Y] ] => srewrite <- H; clear H
+  | [ H : ∀ _, ?X ≡ ?Y                 |- context[?Y] ] => rewrite <- !H; clear H
+  | [ H : ∀ _, ?X ≡ ?Y                 |- context[?Y] ] => srewrite <- H; clear H
+  | [ H : ∀ _, ?X _ ≡ ?Y _             |- context[?Y] ] => rewrite <- !H; clear H
+  | [ H : ∀ _, ?X _ ≡ ?Y _             |- context[?Y] ] => srewrite <- H; clear H
+  | [ H : ∀ _ _, ?X ≡ ?Y               |- context[?Y] ] => rewrite <- !H; clear H
+  | [ H : ∀ _ _, ?X ≡ ?Y               |- context[?Y] ] => srewrite <- H; clear H
+  | [ H : ∀ _ _, ?X _ ≡ ?Y _           |- context[?Y] ] => rewrite <- !H; clear H
+  | [ H : ∀ _ _, ?X _ ≡ ?Y _           |- context[?Y] ] => srewrite <- H; clear H
+  | [ H : ∀ _ _, ?X _ _ ≡ ?Y _ _       |- context[?Y] ] => rewrite <- !H; clear H
+  | [ H : ∀ _ _, ?X _ _ ≡ ?Y _ _       |- context[?Y] ] => srewrite <- H; clear H
+  | [ H : ∀ _ _ _, ?X ≡ ?Y             |- context[?Y] ] => rewrite <- !H; clear H
+  | [ H : ∀ _ _ _, ?X ≡ ?Y             |- context[?Y] ] => srewrite <- H; clear H
+  | [ H : ∀ _ _ _, ?X _ ≡ ?Y _         |- context[?Y] ] => rewrite <- !H; clear H
+  | [ H : ∀ _ _ _, ?X _ ≡ ?Y _         |- context[?Y] ] => srewrite <- H; clear H
+  | [ H : ∀ _ _ _, ?X _ _ ≡ ?Y _ _     |- context[?Y] ] => rewrite <- !H; clear H
+  | [ H : ∀ _ _ _, ?X _ _ ≡ ?Y _ _     |- context[?Y] ] => srewrite <- H; clear H
+  | [ H : ∀ _ _ _, ?X _ _ _ ≡ ?Y _ _ _ |- context[?Y] ] => rewrite <- !H; clear H
+  | [ H : ∀ _ _ _, ?X _ _ _ ≡ ?Y _ _ _ |- context[?Y] ] => srewrite <- H; clear H
+  end.
+
 (** Apply a term, simplifying it first. *)
 Tactic Notation "sapply" uconstr(F) :=
   let H := fresh "H" in pose proof F as H; cbn in H; apply H; clear H.
@@ -257,7 +303,7 @@ Ltac cat_simpl :=
     program_simpl; autounfold in *;
     simpl in *; intros; simplify;
     simpl in *; cat; try apply _;
-    try now normalize];
+    rewrites; try now normalize];
   simpl in *; try now idtac.
 #[global] Obligation Tactic := cat_simpl.
 

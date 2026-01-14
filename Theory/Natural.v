@@ -41,14 +41,14 @@ Delimit Scope natural_type_scope with natural_type.
 Open Scope natural_scope.
 Open Scope natural_type_scope.
 
-Notation "F ⟹ G" := (@NaturalTransform _ _ F G)
+Notation "F ⟹ G" := (@NaturalTransform _ _ F%functor_scope G%functor_scope)
   (at level 90, right associativity) : natural_type_scope.
 Coercion component : NaturalTransform >-> Funclass.
 
 Notation "'component[' F '⟹' G ']'" :=
-  (@component _ _ F G) (at level 0, only parsing) : natural_scope.
+  (@component _ _ F%functor_scope G%functor_scope) (at level 0, only parsing) : natural_scope.
 Notation "'naturality[' F '⟹' G ']'" :=
-  (@naturality _ _ F G) (at level 0, only parsing) : natural_scope.
+  (@naturality _ _ F%functor_scope G%functor_scope) (at level 0, only parsing) : natural_scope.
 
 (** Tactic for creating natural transformations *)
 Ltac natural_transform := unshelve (refine {| component := _ |}; simpl; intros).

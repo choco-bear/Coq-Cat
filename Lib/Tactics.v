@@ -45,6 +45,128 @@ Ltac simplify :=
        unshelve (refine (existT _ _ _))
      end; repeat intro).
 
+
+(** [repeat] guranteeing termination *)
+Tactic Notation "hrepeat_or_fail" tactic(tac) :=
+  tryif tac then (
+  tryif tac then (
+  tryif tac then (
+  tryif tac then (
+  tryif tac then (
+  tryif tac then (
+  tryif tac then (
+  tryif tac then (
+  tryif tac then (
+  tryif tac then (
+  tryif tac then (
+  tryif tac then (
+  tryif tac then (
+  tryif tac then (
+  tryif tac then (
+  tryif tac then (
+  tryif tac then (
+  tryif tac then (
+  tryif tac then (
+  tryif tac then (
+  tryif tac then (
+  tryif tac then (
+  tryif tac then (
+  tryif tac then (
+  tryif tac then (
+  tryif tac then (
+  tryif tac then (
+  tryif tac then (
+  tryif tac then (
+  tryif tac then (
+  tryif tac then (
+  tryif tac then (
+  tryif tac then (
+  tryif tac then (
+  tryif tac then (
+  tryif tac then (
+  tryif tac then (
+  tryif tac then (
+  tryif tac then (
+  tryif tac then (
+  tryif tac then (
+  tryif tac then (
+  tryif tac then (
+  tryif tac then (
+  tryif tac then (
+  tryif tac then (
+  tryif tac then (
+  tryif tac then (
+  tryif tac then (
+  tryif tac then (
+      fail 10
+  ) else idtac
+  ) else idtac
+  ) else idtac
+  ) else idtac
+  ) else idtac
+  ) else idtac
+  ) else idtac
+  ) else idtac
+  ) else idtac
+  ) else idtac
+  ) else idtac
+  ) else idtac
+  ) else idtac
+  ) else idtac
+  ) else idtac
+  ) else idtac
+  ) else idtac
+  ) else idtac
+  ) else idtac
+  ) else idtac
+  ) else idtac
+  ) else idtac
+  ) else idtac
+  ) else idtac
+  ) else idtac
+  ) else idtac
+  ) else idtac
+  ) else idtac
+  ) else idtac
+  ) else idtac
+  ) else idtac
+  ) else idtac
+  ) else idtac
+  ) else idtac
+  ) else idtac
+  ) else idtac
+  ) else idtac
+  ) else idtac
+  ) else idtac
+  ) else idtac
+  ) else idtac
+  ) else idtac
+  ) else idtac
+  ) else idtac
+  ) else idtac
+  ) else idtac
+  ) else idtac
+  ) else idtac
+  ) else idtac
+  ) else fail
+.
+Tactic Notation "hrepeat" tactic(tac) := try (hrepeat_or_fail tac).
+
+(** Short for common tactics *)
+Tactic Notation "econs" := econstructor.
+Tactic Notation "econs" int_or_var(x) := econstructor x.
+Tactic Notation "i" := intros.
+Tactic Notation "ii" := hrepeat do 1 intro.
+Tactic Notation "s" := simpl.
+Tactic Notation "s" ident(a) := simpl a.
+Tactic Notation "s" constr(t) := simpl t.
+Tactic Notation "s" "in" hyp(H) := simpl in H.
+Tactic Notation "ss" := ii; simpl in *; try now idtac.
+Tactic Notation "r" := red.
+Tactic Notation "r" "in" hyp(H) := red in H.
+Tactic Notation "rr" := hrepeat do 1 red.
+Tactic Notation "rr" "in" hyp(H) := hrepeat do 1 red in H.
+
 (** [cat] tactic is like [set_solver] in coq-stdpp. But much weaker and faster. *)
 Ltac cat :=
   simplify;
@@ -91,6 +213,10 @@ Ltac proper := repeat intro; simpl; try cat; intuition.
 (** Useful when dealing with [Property] instances. *)
 Ltac property := constructor; repeat intro; simpl; try cat intuition.
 
+(** Normalize the categorical expressions *)
+Tactic Notation "normalize" := autorewrite with normalize.
+Tactic Notation "normalize" "in" hyp(H) := autorewrite with normalize in H.
+
 (** Rewrite using a term, simplifying it first. *)
 Tactic Notation "srewrite" uconstr(F) :=
   let H := fresh "H" in pose proof F as H; cbn in H; rewrite H; clear H.
@@ -130,8 +256,9 @@ Ltac cat_simpl :=
     end;
     program_simpl; autounfold in *;
     simpl in *; intros; simplify;
-    simpl in *; cat; try apply _];
-  simpl in *.
+    simpl in *; cat; try apply _;
+    try now normalize];
+  simpl in *; try now idtac.
 #[global] Obligation Tactic := cat_simpl.
 
 (** General form of [equivalence] or of [proper]. *)
@@ -263,10 +390,6 @@ Tactic Notation "snrapply" uconstr(term)
 Tactic Notation "snrapply'" uconstr(term)
   := do_with_holes' ltac:(fun x => snrefine x) term.
 
-(** Normalize the categorical expressions *)
-Tactic Notation "normalize" := autorewrite with normalize.
-Tactic Notation "normalize" "in" hyp(H) := autorewrite with normalize in H.
-
 (** Very fast [done] tactic. *)
 Ltac done := now idtac.
 Tactic Notation "nby" tactic(t) := now (t; normalize).
@@ -297,127 +420,6 @@ Ltac revert_until id :=
       | id => idtac
       | _ => revert id' ; revert_until id
     end).
-
-(** [repeat] guranteeing termination *)
-Tactic Notation "hrepeat_or_fail" tactic(tac) :=
-  tryif tac then (
-  tryif tac then (
-  tryif tac then (
-  tryif tac then (
-  tryif tac then (
-  tryif tac then (
-  tryif tac then (
-  tryif tac then (
-  tryif tac then (
-  tryif tac then (
-  tryif tac then (
-  tryif tac then (
-  tryif tac then (
-  tryif tac then (
-  tryif tac then (
-  tryif tac then (
-  tryif tac then (
-  tryif tac then (
-  tryif tac then (
-  tryif tac then (
-  tryif tac then (
-  tryif tac then (
-  tryif tac then (
-  tryif tac then (
-  tryif tac then (
-  tryif tac then (
-  tryif tac then (
-  tryif tac then (
-  tryif tac then (
-  tryif tac then (
-  tryif tac then (
-  tryif tac then (
-  tryif tac then (
-  tryif tac then (
-  tryif tac then (
-  tryif tac then (
-  tryif tac then (
-  tryif tac then (
-  tryif tac then (
-  tryif tac then (
-  tryif tac then (
-  tryif tac then (
-  tryif tac then (
-  tryif tac then (
-  tryif tac then (
-  tryif tac then (
-  tryif tac then (
-  tryif tac then (
-  tryif tac then (
-  tryif tac then (
-      fail 10
-  ) else idtac
-  ) else idtac
-  ) else idtac
-  ) else idtac
-  ) else idtac
-  ) else idtac
-  ) else idtac
-  ) else idtac
-  ) else idtac
-  ) else idtac
-  ) else idtac
-  ) else idtac
-  ) else idtac
-  ) else idtac
-  ) else idtac
-  ) else idtac
-  ) else idtac
-  ) else idtac
-  ) else idtac
-  ) else idtac
-  ) else idtac
-  ) else idtac
-  ) else idtac
-  ) else idtac
-  ) else idtac
-  ) else idtac
-  ) else idtac
-  ) else idtac
-  ) else idtac
-  ) else idtac
-  ) else idtac
-  ) else idtac
-  ) else idtac
-  ) else idtac
-  ) else idtac
-  ) else idtac
-  ) else idtac
-  ) else idtac
-  ) else idtac
-  ) else idtac
-  ) else idtac
-  ) else idtac
-  ) else idtac
-  ) else idtac
-  ) else idtac
-  ) else idtac
-  ) else idtac
-  ) else idtac
-  ) else idtac
-  ) else fail
-.
-Tactic Notation "hrepeat" tactic(tac) := try (hrepeat_or_fail tac).
-
-(** Short for common tactics *)
-Tactic Notation "econs" := econstructor.
-Tactic Notation "econs" int_or_var(x) := econstructor x.
-Tactic Notation "i" := intros.
-Tactic Notation "ii" := hrepeat do 1 intro.
-Tactic Notation "s" := simpl.
-Tactic Notation "s" ident(a) := simpl a.
-Tactic Notation "s" constr(t) := simpl t.
-Tactic Notation "s" "in" hyp(H) := simpl in H.
-Tactic Notation "ss" := ii; simpl in *; try done.
-Tactic Notation "r" := red.
-Tactic Notation "r" "in" hyp(H) := red in H.
-Tactic Notation "rr" := hrepeat do 1 red.
-Tactic Notation "rr" "in" hyp(H) := hrepeat do 1 red in H.
 
 (** Exploit a lemma *)
 Lemma mp : forall P Q : Type, P -> (P -> Q) -> Q.

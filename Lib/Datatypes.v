@@ -85,8 +85,6 @@ Program Instance option_setoid `{Setoid A} : Setoid (option A) :=
                         | _, _ => poly_void
                         end
   }.
-Next Obligation. intuition; discriminate. Qed.
-Next Obligation. intuition; discriminate. Qed.
 Next Obligation.
   equivalence.
   - destruct x; reflexivity.

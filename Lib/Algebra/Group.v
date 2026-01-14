@@ -46,13 +46,10 @@ Arguments GroupHomomorphism (G G') : clear implicits.
 
 #[export] Program Instance group_hom_setoid {G : Group} {G' : Group}
   : Setoid (GroupHomomorphism G G') := {| equiv := λ φ ψ, ∀ g, φ g ≡ ψ g |}.
-Next Obligation.
-  now equivalence; transitivity (y g).
-Qed.
+Next Obligation. now equivalence; transitivity (y g). Defined.
 
 Program Definition grp_id_map (G : Group) :=
   {| grp_map := Datatypes.id |}.
-Next Obligation. done. Qed.
 
 Program Definition grp_hom_comp {G : Group} {G' : Group} {G'' : Group}
   (φ : GroupHomomorphism G' G'') (ψ : GroupHomomorphism G G')

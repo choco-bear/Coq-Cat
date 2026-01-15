@@ -169,6 +169,9 @@ Ltac isomorphism :=
 Definition from_compose_natural `(f : y ≅[C] z) `(g : x ≅[C] y)
   : (f ○ g)⁻¹ = g⁻¹ ∘ f⁻¹ := eq_refl.
 
+#[export] Hint Rewrite @from_compose_natural : normalize.
+#[export] Hint Rewrite <- @from_compose_natural : categories.
+
 (** Lemmas related to the [Category.Theory.Morphisms] module. *)
 Section Morphisms.
   Context {C : Category}.

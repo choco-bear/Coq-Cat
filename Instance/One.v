@@ -22,8 +22,7 @@ Program Definition _1 : Category :=
 Notation "1" := _1 : category_scope.
 
 (** The unique functor to one category from any other category. *)
-#[export]
-Program Instance Erase `(C : Category) : C ⟶ 1 :=
+Program Definition Erase `(C : Category) : C ⟶ 1 :=
   {| fobj := fun _ => ttt
    ; fmap := fun _ _ _ => id
   |}.

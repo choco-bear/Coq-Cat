@@ -48,14 +48,12 @@ Notation "C × D" := (BinaryProductCategory C%category D%category)
 Section Projection.
   Context {C D : Category}.
 
-  #[export]
-  Program Instance Fst : C × D ⟶ C :=
+  Program Definition Fst : C × D ⟶ C :=
     {| fobj := λ x, fst x
      ; fmap := λ _ _ f, fst f
     |}.
 
-  #[export]
-  Program Instance Snd : C × D ⟶ D :=
+  Program Definition Snd : C × D ⟶ D :=
     {| fobj := λ x, snd x
      ; fmap := λ _ _ f, snd f
     |}.
@@ -197,8 +195,7 @@ Notation "∏ C" := (ProductCategory (C%category))
 Section ProductCategoryProjection.
   Context {I : Type} {C : I → Category}.
 
-  #[export]
-  Program Instance Project (j : I) : ∏ C ⟶ (C j) :=
+  Program Definition Project (j : I) : ∏ C ⟶ (C j) :=
     {|  fobj := λ x, x j
       ; fmap := λ x y f, f j
     |}.

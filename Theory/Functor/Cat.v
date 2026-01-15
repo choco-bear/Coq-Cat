@@ -32,17 +32,13 @@ Program Definition FunBiFunctor : Cat^op × Cat ⟶ Cat :=
         λ`(A,B) : obj[Cat^op × Cat],
         λ`(A',B') : obj[Cat^op × Cat],
         λ`(F,G) : (A,B) ~{Cat^op × Cat}~> (A',B'),
-          {|  fobj := λ T : Fun[A,B], G ◯ T ◯ F : Fun[A',B']
-            ; fmap :=
-                λ (T S : Fun[A,B]) (τ : T ~{Fun[A,B]}~> S),
-                  {|  component :=
-                        λ a : A',
-                          fmap[G] (τ (F a)) : (G ◯ T ◯ F) a ~> (G ◯ S ◯ F) a 
-                    ; naturality :=
-                        λ x y f, _
-                  |}
-          |}
+          {| fobj := λ T : Fun[A,B], G ◯ T ◯ F : Fun[A',B'] |}
   |}.
+Next Obligation.
+  natural_transform; ss.
+  - now apply fmap, component.
+  - cat. by rewrite naturality.
+Defined.
 Next Obligation.
   proper; ss.
   - isomorphism; ss.

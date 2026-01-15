@@ -40,6 +40,9 @@ Next Obligation.
   - cat. by rewrite naturality.
 Defined.
 Next Obligation.
+  (** TODO : If we have any lemmas constructing isomorphisms by the fact that two functors are
+    *        equivalent, this proof may be shorter and the compilation time would be reduced.
+    *)
   proper; ss.
   - isomorphism; ss.
     + natural_transform; ss.

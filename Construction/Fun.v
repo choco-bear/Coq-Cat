@@ -68,3 +68,9 @@ Program Definition NatIso_Component_Iso
     |}.
 #[export]
 Hint Resolve NatIso_Component_Iso : category_laws.
+
+Lemma interchange_law {B : Category} {C : Category} {D : Category}
+  {R S T : Fun[D,C]} {R' S' T' : Fun[C,B]}
+  (σ : R ~> S) (τ : S ~> T) (σ' : R' ~> S') (τ' : S' ~> T')
+  : (τ' ∘ σ') ▪ (τ ∘ σ) ≡[Fun[D,B]] (τ' ▪ τ) ∘[Fun[D,B]] (σ' ▪ σ).
+Proof. unfold Fun, compose. apply NaturalTransform_interchange_law. Qed.

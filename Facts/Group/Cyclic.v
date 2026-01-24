@@ -3,6 +3,8 @@ Require Import Category.Lib.
 
 Generalizable All Variables.
 
+#[local] Hint Unfold Z_mod_setoid equiv : core.
+
 Class IsCyclic (G : Group) :=
   { generator : G
   ; is_cyclic : ∀ g, ∃ n, g ≡ (generator^n)%group

@@ -51,8 +51,8 @@ Next Obligation.
   rewrite !comp_assoc, is_left_inverse, id_left in EQ.
   by rewrite <- !comp_assoc, is_right_inverse, id_right in EQ.
 Qed.
-Next Obligation. by rewrite is_right_inverse. Qed.
-Next Obligation. by rewrite is_left_inverse. Qed.
+Next Obligation. cat; ss. now rewrite is_right_inverse. Qed.
+Next Obligation. cat; ss. now rewrite is_left_inverse. Qed.
 
 (** Conversely, if a natural transformation is an isomorphism in the functor
   * category, then each of its components is an isomorphism in the target

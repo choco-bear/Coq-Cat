@@ -21,6 +21,11 @@ Program Instance prod_setoid {A B} `{Setoid A} `{Setoid B}
   : Setoid (A * B) :=
     { equiv := fun x y => (fst x ≡ fst y) * (snd x ≡ snd y) }.
 
+Lemma prod_setoid_equiv_simpl {A B} `{Setoid A} `{Setoid B} (a a' : A) (b b' : B)
+  : ((a, b) ≡ (a', b')) = ((a ≡ a') ∧ (b ≡ b')).
+Proof. unfold prod_setoid, equiv; ss. Qed.
+#[global] Hint Rewrite @prod_setoid_equiv_simpl : core categories.
+
 #[global]
 Program Instance pair_respects {A B} `{Setoid A} `{Setoid B}
   : Proper (equiv ==> equiv ==> equiv) (@pair A B).

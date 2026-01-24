@@ -11,7 +11,7 @@ Set Transparent Obligations.
   * [C × D], which has objects that are pairs of objects in [C] and objects in [D],
   * and morphisms that are pairs of morphisms.
   *)
-Program Definition BinaryProductCategory (C D : Category) : Category :=
+Program Definition BinaryProductCategory (C : Category) (D : Category) : Category :=
   {| obj := obj[C] * obj[D]
    ; hom := λ x y, (hom (fst x) (fst y)) * (hom (snd x) (snd y))
    ; homset := λ x y, prod_setoid
@@ -39,6 +39,16 @@ Program Definition BinaryProductCategory (C D : Category) : Category :=
 
 Notation "C × D" := (BinaryProductCategory C%category D%category)
   (at level 40, left associativity) : category_scope.
+  
+Lemma id_binary_product_simpl {C : Category} {D : Category} (p : C × D)
+  : id[p] = (id[fst p], id[snd p]).
+Proof. ss. Qed.
+#[export] Hint Rewrite @id_binary_product_simpl : categories.
+
+Lemma compose_binary_product_simpl {C : Category} {D : Category} `{f : y ~{C × D}~> z} `{g : x ~> y}
+  : f ∘[C × D] g = (fst f ∘ fst g, snd f ∘ snd g).
+Proof. ss. Qed.
+#[export] Hint Rewrite @compose_binary_product_simpl : categories.
 
 (** The projection functors [Fst : C × D ⟶ C] and [Snd : C × D ⟶ D] map each object
   * [(c, d)] in [C × D] to the object [c] in [C] and to the object [d] in [D],
@@ -94,12 +104,18 @@ Section BinaryProductFunctor.
     (F' : D ⟶ B × C) (HProj1 : Fst ◯ F' ≡ T) (HProj2 : Snd ◯ F' ≡ R)
     : F' ≡ T × R := (_; _).
   Next Obligation.
+    destruct HProj1 as [HProj1 EQ1].
+    destruct HProj2 as [HProj2 EQ2].
     isomorphism.
     - exact (HProj1 x : fst (F' x) ~> T x, HProj2 x : snd (F' x) ~> R x).
     - exact ((HProj1 x)⁻¹, (HProj2 x)⁻¹).
-    - cat.
-    - cat.
+    - by cat; ss.
+    - by cat; ss.
   Defined.
+  Next Obligation.
+    destruct HProj1 as [HProj1 EQ1]. destruct HProj2 as [HProj2 EQ2].
+    unfold BinaryProductFunctor_Unique_obligation_1; ss.
+  Qed.
 End BinaryProductFunctor.
 
 Notation "F × G" := (BinaryProductFunctor F%functor G%functor)
@@ -231,5 +247,5 @@ Section ProductFunctor.
     - cat.
     - cat.
   Defined.
-  Next Obligation. by pose (`2 (HProj x0)). Defined.
+  Next Obligation. by ii; pose (`2 (HProj x0)). Defined.
 End ProductFunctor.

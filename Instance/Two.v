@@ -38,7 +38,7 @@ Local Ltac two_solver :=
                  | [ x : TwoObj |- _ ] => destruct x
                  | [ H : TwoB = TwoA |- _ ] => inversion H
                  | [ H : TwoA = TwoB |- _ ] => inversion H
-                 end; auto with two_laws.
+                 end; auto with two_laws; cat.
 
 (** The category 2 has two objects, their identity morphisms, and one morphism from
   * the first object to the second object.
@@ -53,9 +53,9 @@ Program Definition _2 : Category :=
                     end
   |}.
 Next Obligation. two_solver. Defined.
-Next Obligation. two_solver. Qed.
-Next Obligation. two_solver. Qed.
-Next Obligation. two_solver. Qed.
-Next Obligation. two_solver. Qed.
+Next Obligation. unfold _2_obligation_1; two_solver. Qed.
+Next Obligation. unfold _2_obligation_1; two_solver. Qed.
+Next Obligation. unfold _2_obligation_1; two_solver. Qed.
+Next Obligation. unfold _2_obligation_1; two_solver. Qed.
 
 Notation "2" := _2 : category_scope.

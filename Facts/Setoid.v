@@ -18,9 +18,9 @@ Proof.
     { (* epimorphism *)
       construct.
       + now exists (f X0); rewrite <-idempotent at 1.
-      + now proper; rewrites.
+      + cat_simpl.
     }
-    all: by try construct.
+  all: ss; by try construct.
 Qed.
 
 Program Definition from_nonempty_is_regular `{Choice}
@@ -44,6 +44,7 @@ Next Obligation.
     } all: now exfalso; apply n; eexists; rewrites.
 Defined.
 Next Obligation.
+  unfold from_nonempty_is_regular_obligation_1; ss.
   classic; [|now exfalso; apply n; eexists].
   remember (AC_fun_repr _) as s; destruct s as [CHOICE HCHOICE]; clear Heqs.
   now destruct (HCHOICE x0) as [<- _].
@@ -52,7 +53,7 @@ Defined.
 Program Instance Sets_Terminal : @Terminal Sets :=
   {| terminal_obj := unit_setoid : Sets |}.
 Next Obligation. construct; intuition. Defined.
-Next Obligation. now destruct (f a), (g a). Qed.
+Next Obligation. now ii; destruct (f a), (g a). Qed.
 
 Program Instance Sets_Initial : @Initial Sets :=
   {| terminal_obj := void_setoid : Sets |}.

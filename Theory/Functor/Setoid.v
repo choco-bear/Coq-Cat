@@ -23,6 +23,11 @@ Section Functor_Setoid.
     }.
 
   #[export]
+  Instance iso_of {C : Category} {D : Category} {F G : C ⟶ D} (E : F ≡ G)
+    : F ≅[Fun[C,D]] G.
+  Proof. now unfold Functor_Setoid, equiv in E. Qed.
+
+  #[export]
   Instance Functor_Compose_respects
     {C : Category} {D : Category} {E : Category}
     : Proper (equiv ==> equiv ==> equiv) (@Functor_Compose C D E).
@@ -73,4 +78,5 @@ Section Functor_Setoid.
   Proof. by rewrite <-comp_assoc, nat_iso_from_to. Qed.
 End Functor_Setoid.
 #[export] Hint Rewrite @nat_iso_to_from @nat_iso_from_to @nat_iso_simpl_1 @nat_iso_simpl_2
-                       : categories normalize.
+                       @Functor_Compose_Id_left @Functor_Compose_Id_right
+                       @Functor_Compose_Assoc : categories normalize.

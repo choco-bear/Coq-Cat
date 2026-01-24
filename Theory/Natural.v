@@ -58,7 +58,8 @@ Notation "'naturality[' F '⟹' G ']'" :=
 (** Tactic for creating natural transformations *)
 Ltac natural_transform := unshelve (refine {| component := _ |}; simpl; intros).
 
-Program Definition NaturalTransform_id `{F : C ⟶ D} : F ⟹ F :=
+#[export]
+Program Instance NaturalTransform_id `{F : C ⟶ D} : F ⟹ F :=
   {| component := λ x, id[F x] |}.
 
 (** Vertical Composition of Natural Transformations *)

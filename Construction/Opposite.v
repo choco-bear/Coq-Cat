@@ -39,7 +39,7 @@ Definition unop {C : Category} {x y} (f : x ~{C^op}~> y) : y ~{C}~> x := f.
 Instance iso_op `(x ≅[C] y) : x ≅[C^op] y.
 Proof. inversion H; construct; eauto. Defined.
 #[export] Hint Resolve @iso_op : category_laws.
-#[export] Hint Rewrite @iso_op : categories normalize.
+(* #[export] Hint Rewrite @iso_op : categories normalize. *)
 
 Definition iso_op' `{x ≅[C^op] y} : x ≅[C] y.
 Proof. now apply iso_op in H. Qed.

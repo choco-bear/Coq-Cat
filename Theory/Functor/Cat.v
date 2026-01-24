@@ -1,10 +1,8 @@
 Require Import Category.Lib.
 Require Import Category.Theory.Category.
-Require Import Category.Theory.Functor.
-Require Import Category.Theory.Isomorphism.
-Require Import Category.Theory.Natural.
+Require Import Category.Theory.Functor.Setoid.
 Require Import Category.Instance.Cat.
-From Category.Construction Require Import Fun Product Opposite.
+From Category.Construction Require Import Product Opposite.
 
 Generalizable All Variables.
 
@@ -19,9 +17,11 @@ Program Definition OppositeFunctor : Cat ⟶ Cat :=
             ; fmap := λ (x y : C^op) (f : x ~{C^op}~> y), fmap[T] f
           |}
   |}.
-Next Obligation. proper. destruct X. econs. ss. cat. now normalize. Qed.
-Next Obligation. by unshelve econs; ss. Qed.
-Next Obligation. by unshelve econs; ss. Qed.
+Next Obligation. proper; construct;
+  first [now natural_transform; ss; try apply component, X; cat; normalize|cat_simpl].
+Qed.
+Next Obligation. by functor_equiv_solver. Qed.
+Next Obligation. by functor_equiv_solver. Qed.
 
 Notation "'(-)^op'" := OppositeFunctor : functor_scope.
 

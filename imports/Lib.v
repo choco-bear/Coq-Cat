@@ -8,4 +8,3 @@
 #[export] Unset Universe Minimization ToSet.
 
 Require Export Category.Lib.Datatypes.
-Require Export Category.Lib.Algebra.

@@ -1,5 +1,6 @@
 From Coq Require Export PeanoNat ZArith Lia.
 Require Import Category.Lib.
+Require Import Category.Algebra.
 
 Generalizable All Variables.
 

@@ -28,6 +28,7 @@ Makefile.coq: Makefile $(COQTHEORIES)
 	 echo "-R imports Category"; \
 	 echo "-R Axioms Category.Axioms"; \
 	 echo "-R Lib Category.Lib"; \
+	 echo "-R Algebra Category.Algebra"; \
 	 echo "-R Theory Category.Theory"; \
 	 echo "-R Instance Category.Instance"; \
 	 echo "-R Construction Category.Construction"; \

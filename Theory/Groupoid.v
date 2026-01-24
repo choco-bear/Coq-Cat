@@ -28,6 +28,7 @@ Section Lemmas.
   Qed.
 End Lemmas.
 
+Require Import Category.Algebra.
 #[export]
 Program Instance groupoid_of_group (G : Group) : Groupoid (of_group G).
 Next Obligation. construct; [|apply grp_inv_r|apply grp_inv_l]. Qed.

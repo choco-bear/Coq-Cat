@@ -14,7 +14,6 @@ Class Setoid (A : Type) : Type :=
   ; setoid_equiv : Equivalence equiv
   }.
 #[export] Existing Instance setoid_equiv.
-Arguments equiv {A} {SET} _ _ : rename, simpl never.
 
 Coercion setoid_equiv : Setoid >-> Equivalence.
 

@@ -71,6 +71,9 @@ Delimit Scope morphism_scope with morphism.
 
 Arguments dom {_%_category _%_object _%_object} _%_morphism.
 Arguments cod {_%_category _%_object _%_object} _%_morphism.
+Arguments id {C} {x} : rename, simpl never.
+Arguments compose {C} {x y z} f g : rename, simpl never.
+(* Arguments hom {C} x y : rename, simpl never. *)
 
 Notation "obj[ C ]" := (@obj C%category)
   (at level 0, only parsing) : type_scope.
@@ -90,6 +93,8 @@ Notation "x <~{ C }~ y" := (@hom C%category y%object x%object)
 Notation "'id[' x ']'" := (@id _%category x%object)
   (at level 0, format "id[ x ]") : morphism_scope.
 Notation "'id{' C '}'" := (@id C%category _%object)
+  (at level 0, only parsing) : morphism_scope.
+Notation "'id{' C '}[' x ']'" := (@id C%category x%object)
   (at level 0, only parsing) : morphism_scope.
 
 Notation "f ∘ g" :=

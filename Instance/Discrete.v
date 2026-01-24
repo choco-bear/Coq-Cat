@@ -25,16 +25,17 @@ Notation "'Cat[' A ']'" := (DiscreteCat A%type)
 Instance Discrete_IsSet (A : Type) : IsSet Cat[A].
 Proof. by split; construct. Qed.
 
-Local Obligation Tactic := ss.
-Program Definition Functor_from_function
-  `{C : Category} `(F : X → C) : Cat[X] ⟶ C :=
-    {|  fobj := λ x : obj[Cat[X]], F x
-      ; fmap := λ x y (f : x ~> y), _
-    |}.
-Next Obligation. subst; exact id. Defined.
-Next Obligation.
-  unfold Functor_from_function_obligation_1; subst.
-  assert (y0 = eq_refl) as -> by apply proof_irrelevance; ss.
-Qed.
-Next Obligation. by unfold Functor_from_function_obligation_1; subst. Qed.
-Local Obligation Tactic := cat_simpl.
+Section Functor_from_function.
+  Local Obligation Tactic := ss.
+  Program Definition Functor_from_function
+    `{C : Category} `(F : X → C) : Cat[X] ⟶ C :=
+      {|  fobj := λ x : obj[Cat[X]], F x
+        ; fmap := λ x y (f : x ~> y), _
+      |}. 
+  Next Obligation. subst; exact id. Defined.
+  Next Obligation.
+    unfold Functor_from_function_obligation_1; subst.
+    assert (y0 = eq_refl) as -> by apply proof_irrelevance; ss.
+  Qed.
+  Next Obligation. by unfold Functor_from_function_obligation_1; subst. Qed.
+End Functor_from_function.

@@ -71,10 +71,7 @@ End Projection.
 (** The opposite category of [C × D] is [C^op × D^op]. *)
 Lemma BinaryProductCategory_Opposite (C D : Category)
   : (C × D)^op = C^op × D^op.
-Proof.
-  unfold Opposite, BinaryProductCategory; simpl.
-  destruct C, D; simpl. f_equal.
-(* SLOW *) Qed.
+Proof. now unfold Opposite, BinaryProductCategory. Qed.
 
 Section BinaryProductFunctor.
   Program Definition BinaryProductFunctor `(T : D ⟶ B) `(R : D ⟶ C) : D ⟶ B × C :=

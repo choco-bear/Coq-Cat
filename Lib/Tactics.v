@@ -225,6 +225,7 @@ Ltac property := constructor; repeat intro; simpl; try cat intuition.
 (** Normalize the categorical expressions *)
 Tactic Notation "normalize" := autorewrite with normalize.
 Tactic Notation "normalize" "in" hyp(H) := autorewrite with normalize in H.
+Tactic Notation "normalize" "in" "*" := autorewrite with normalize in *.
 
 (** Rewrite using a term, simplifying it first. *)
 Tactic Notation "srewrite" uconstr(F) :=
@@ -312,7 +313,8 @@ Ltac cat_simpl :=
     program_simpl; autounfold in *;
     simpl in *; intros; simplify;
     simpl in *; cat; try apply _;
-    rewrites; try now normalize];
+    rewrites; (try now normalize);
+    try now normalize in *];
   simpl in *; try now idtac.
 #[global] Obligation Tactic := cat_simpl.
 

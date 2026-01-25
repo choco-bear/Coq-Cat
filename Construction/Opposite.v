@@ -45,12 +45,10 @@ Definition iso_op' `{x ≅[C^op] y} : x ≅[C] y.
 Proof. now apply iso_op in H. Qed.
 
 Section Simpls.
-  Lemma id_opposite_simpl {C : Category} {x : C}
-    : id{C^op}[x] = id{C}[x].
-  Proof. ss. Qed.
+  Definition id_opposite_simpl {C : Category} {x : C}
+    : id{C^op}[x] = id{C}[x] := eq_refl.
   
-  Lemma compose_opposite_simpl {C : Category} `{f : y ~{C}~> z} `{g : x ~{C}~> y}
-    : (g ∘[C^op] f) = (f ∘[C] g).
-  Proof. ss. Qed.
+  Definition compose_opposite_simpl {C : Category} `{f : y ~{C}~> z} `{g : x ~{C}~> y}
+    : (g ∘[C^op] f) = (f ∘[C] g) := eq_refl.
 End Simpls.
 #[export] Hint Rewrite @id_opposite_simpl @compose_opposite_simpl : categories normalize.

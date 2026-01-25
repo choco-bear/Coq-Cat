@@ -5,7 +5,9 @@ Require Export Category.Construction.Fun.
 
 Generalizable Variables All.
 
-Ltac functor_equiv_solver := construct; unshelve by first [natural_transform|ss].
+Tactic Notation "functor_equiv_solver" natural(n) :=
+  construct; ss; do n (try natural_transform; ss); cat.
+Tactic Notation "functor_equiv_solver" := functor_equiv_solver 3.
 
 (** Setoid Structure for functors. *)
 Section Functor_Setoid.

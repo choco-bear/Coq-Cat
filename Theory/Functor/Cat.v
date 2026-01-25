@@ -55,8 +55,8 @@ Section FunBiFunctor.
     - by ss; normalize.
     - by ss; normalize.
   Qed.
-  Next Obligation. by ss; cat; construct; ss; do 2 (try natural_transform; ss). Qed.
-  Next Obligation. by ss; cat; construct; ss; do 2 (try natural_transform; ss). Qed.
+  Next Obligation. by ss; cat; functor_equiv_solver. Qed.
+  Next Obligation. by ss; cat; functor_equiv_solver. Qed.
 End FunBiFunctor.
 Notation "'Fun[-,-]'" := FunBiFunctor : functor_scope.
 Notation "'Fun[' C ',-]'" :=
@@ -88,8 +88,8 @@ Section BinaryProductBiFunctor.
     proper; ss; construct; ss; try now natural_transform; ss; do 2 cat; ss; rewrite naturality.
     all: do 2 cat.
   Qed.
-  Next Obligation. by ss; cat; construct; ss; try natural_transform; ss; cat. Qed.
-  Next Obligation. by ss; cat; construct; ss; try natural_transform; ss; cat. Qed.
+  Next Obligation. by ss; cat; functor_equiv_solver. Qed.
+  Next Obligation. by ss; cat; functor_equiv_solver. Qed.
 End BinaryProductBiFunctor.
 Notation "'(-×-)'" := BinaryProductBiFunctor : functor_scope.
 Notation "'(-×' C ')'" := (BinaryProductBiFunctor ◯ (Id × Const C)) : functor_scope.

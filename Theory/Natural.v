@@ -82,6 +82,13 @@ End VerticalComposition.
 Notation "η ⋅ μ" := (NaturalTransform_vertical_compose η μ)
   (at level 40, left associativity) : natural_scope.
 
+#[export]
+Instance NaturalTransform_PreOrder {C : Category} {D : Category}
+  : PreOrder (@NaturalTransform C D) :=
+    {|  PreOrder_Reflexive := @NaturalTransform_id C D
+      ; PreOrder_Transitive := λ F G H η μ, μ ⋅ η
+    |}.
+
 (** Horizontal Composition of Natural Transformations *)
 Section HorizontalComposition.
   Context {A : Category} {B : Category} {C : Category}.

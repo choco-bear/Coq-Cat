@@ -1,7 +1,10 @@
 From Coq Require Export PeanoNat ZArith Lia.
 Require Import Category.Lib.
+Require Import Category.Algebra.
 
 Generalizable All Variables.
+
+#[local] Hint Unfold Z_mod_setoid equiv : core.
 
 Class IsCyclic (G : Group) :=
   { generator : G

@@ -179,7 +179,7 @@ Tactic Notation "rr" "in" hyp(H) := hrepeat do 1 red in H.
 (** [cat] tactic is like [set_solver] in coq-stdpp. But much weaker and faster. *)
 Ltac cat :=
   simplify;
-  autorewrite with categories in *;
+  timeout 10 (autorewrite with categories in *);
   auto with category_laws;
   try reflexivity.
 
@@ -311,8 +311,7 @@ Ltac cat_simpl :=
     | [ |- respectful _ _ _ _ ] => proper
     end;
     program_simpl; autounfold in *;
-    simpl in *; intros; simplify;
-    simpl in *; cat; try apply _;
+    ss; simplify; cat; ss; cat; try apply _;
     rewrites; (try now normalize);
     try now normalize in *];
   simpl in *; try now idtac.
@@ -482,3 +481,16 @@ Ltac revert_until id :=
 Lemma mp : forall P Q : Type, P -> (P -> Q) -> Q.
 Proof. intuition. Defined.
 Ltac exploit x := eapply mp; [eapply x|].
+
+
+Tactic Notation "given" "(" ident(H) ":" lconstr(type) ")" tactic(t) :=
+  unshelve (refine (let H := (_ : type) in _)); [..|t].
+
+Tactic Notation "given" "(" ident(H) ":" lconstr(type) ")" :=
+ given (H : type) idtac.
+
+Tactic Notation "sufficient" lconstr(type) "by" tactic(t) :=
+  let GOAL := fresh "GOAL" in given (GOAL : type) (solve [t]).
+
+Tactic Notation "sufficient" lconstr(type) :=
+  sufficient type by (solve [intuition|auto|eauto|cat|cat_simpl]).

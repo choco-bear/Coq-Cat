@@ -1,5 +1,6 @@
 Require Import Category.Lib.
 Require Import Category.Theory.Category.
+Require Import Category.Theory.Isomorphism.
 Require Import Category.Theory.Functor.
 
 Reserved Infix "⟹" (at level 90, right associativity).
@@ -24,12 +25,17 @@ Section NaturalTransform.
   Program Instance NaturalTransform_Setoid
     : Setoid (NaturalTransform) :=
       {| equiv := λ η μ, ∀ x : C, @component η x ≡ @component μ x |}.
+
+  Lemma NaturalTransform_Setoid_equiv_simpl η μ 
+    : (η ≡ μ) = (∀ x, @component η x ≡ @component μ x).
+  Proof. ss. Qed.
 End NaturalTransform.
 
 Arguments component {_ _ _ _} _ _.
 Arguments naturality {_ _ _ _} _ {_ _} _.
 
 #[export] Hint Rewrite @naturality : normalize.
+#[export] Hint Rewrite @NaturalTransform_Setoid_equiv_simpl : categories.
 
 Declare Scope natural_scope.
 Declare Scope natural_type_scope.
@@ -52,7 +58,8 @@ Notation "'naturality[' F '⟹' G ']'" :=
 (** Tactic for creating natural transformations *)
 Ltac natural_transform := unshelve (refine {| component := _ |}; simpl; intros).
 
-Program Definition NaturalTransform_id `{F : C ⟶ D} : F ⟹ F :=
+#[export]
+Program Instance NaturalTransform_id `{F : C ⟶ D} : F ⟹ F :=
   {| component := λ x, id[F x] |}.
 
 (** Vertical Composition of Natural Transformations *)
@@ -74,6 +81,13 @@ End VerticalComposition.
 
 Notation "η ⋅ μ" := (NaturalTransform_vertical_compose η μ)
   (at level 40, left associativity) : natural_scope.
+
+#[export]
+Instance NaturalTransform_PreOrder {C : Category} {D : Category}
+  : PreOrder (@NaturalTransform C D) :=
+    {|  PreOrder_Reflexive := @NaturalTransform_id C D
+      ; PreOrder_Transitive := λ F G H η μ, μ ⋅ η
+    |}.
 
 (** Horizontal Composition of Natural Transformations *)
 Section HorizontalComposition.
@@ -117,7 +131,7 @@ Section simpl.
   Lemma NaturalTransform_vertical_compose_assoc
     {T1 T2 T3 T4 : C ⟶ D} (τ1 : T2 ⟹ T1) (τ2 : T3 ⟹ T2) (τ3 : T4 ⟹ T3)
     : τ1 ⋅ (τ2 ⋅ τ3) ≡ τ1 ⋅ τ2 ⋅ τ3.
-  Proof. cat. Qed.
+  Proof. by ss. Qed.
 
   Lemma NaturalTransform_interchange_law {B : Category} {R S T : D ⟶ C} {R' S' T' : C ⟶ B}
     (σ : R ⟹ S) (τ : S ⟹ T) (σ' : R' ⟹ S') (τ' : S' ⟹ T')

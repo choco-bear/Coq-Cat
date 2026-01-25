@@ -51,7 +51,7 @@ Local Ltac three_solver :=
                  | [ H : ThreeA = ThreeB |- _ ] => inversion H
                  | [ H : ThreeA = ThreeC |- _ ] => inversion H
                  | [ H : ThreeB = ThreeC |- _ ] => inversion H
-                 end; auto with three_laws.
+                 end; auto with three_laws; cat.
 
 (** The category 3 has three objects, their identity morphisms, and morphisms from
   * the first object to the second and third objects, and from the second object to
@@ -68,9 +68,9 @@ Program Definition _3 : Category :=
                 end
   |}.
 Next Obligation. three_solver. Defined.
-Next Obligation. three_solver. Qed.
-Next Obligation. three_solver. Qed.
-Next Obligation. three_solver. Qed.
-Next Obligation. three_solver. Qed.
+Next Obligation. unfold _3_obligation_1; three_solver. Qed.
+Next Obligation. unfold _3_obligation_1; three_solver. Qed.
+Next Obligation. unfold _3_obligation_1; three_solver. Qed.
+Next Obligation. unfold _3_obligation_1; three_solver. Qed.
 
 Notation "3" := _3 : category_scope.

@@ -19,18 +19,6 @@ Notation "`1 x" := (@projT1 _ _ x) (at level 0) : category_theory_scope.
 Notation "`2 x" := (@projT2 _ _ x) (at level 0) : category_theory_scope.
 Notation "`3 x" := (@projT3 _ _ x) (at level 0) : category_theory_scope.
 
-Tactic Notation "given" "(" ident(H) ":" lconstr(type) ")" tactic(t) :=
-  unshelve (refine (let H := (_ : type) in _)); [..|t].
-
-Tactic Notation "given" "(" ident(H) ":" lconstr(type) ")" :=
- given (H : type) idtac.
-
-Tactic Notation "sufficient" lconstr(type) "by" tactic(t) :=
-  let GOAL := fresh "GOAL" in given (GOAL : type) (solve [t]).
-
-Tactic Notation "sufficient" lconstr(type) :=
-  sufficient type by (solve [intuition|auto|eauto]).
-
 #[export] Hint Unfold Basics.compose : core.
 #[export] Hint Unfold Basics.arrow : core.
 #[export] Hint Unfold Datatypes.id : core.

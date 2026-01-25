@@ -106,6 +106,11 @@ Program Definition subset `(S : Setoid A) (Φ : A → Type)
 Next Obligation. now constructor; intuition; repeat intro; transitivity (`1 y). Qed.
 Notation "'{' S '&' Φ '}'" := (subset S Φ) : category_theory_scope.
 
+Lemma subset_equiv_simpl `(SET : Setoid A) (φ : A → Type) x y
+  : (@equiv _ {SET & φ} x y) = (`1 x ≡ `1 y).
+Proof. now unfold subset, equiv. Qed.
+#[export] Hint Rewrite @subset_equiv_simpl : categories.
+
 Class Injective
   {A : Type} `{Setoid A}
   {B : Type} `{Setoid B} (f : A -> B) :=
@@ -202,3 +207,8 @@ Next Obligation.
   - symmetry. now apply X.
   - now etransitivity; [apply X|apply X0].
 Qed.
+
+Lemma property_setoid_equiv_simpl `{SET : Setoid A} X Y
+  : (@equiv _ (property_setoid SET) X Y) = (∀ a b, a ≡ b → (`1 X a ↔ `1 Y b)).
+Proof. now unfold property_setoid, equiv. Qed.
+#[export] Hint Rewrite @property_setoid_equiv_simpl : categories.

@@ -38,6 +38,9 @@ This project is organized using Coq's logical path system, which is configured b
 * **`Axioms/`** (Mapped to `Category.Axioms`) \
     This directory contains the axioms that underpin the formalization of category theory in this project.
 
+* **`Algebra/`** (Mapped to `Category.Algebra`) \
+    This directory contains algebraic structures and concepts that are relevant to category theory.
+
 * **`Theory/`** (Mapped to `Category.Theory`) \
     This directory holds the formalization of category theory concepts.
 

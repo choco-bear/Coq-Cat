@@ -1,6 +1,7 @@
 Require Import Coq.Vectors.Fin.
 Require Import Coq.Lists.List.
 Require Import Category.Lib.
+Require Import Category.Algebra.
 Require Import Category.Theory.Isomorphism.
 Require Import Category.Instance.Sets.
 Require Import Category.Facts.Group.Automorphism.

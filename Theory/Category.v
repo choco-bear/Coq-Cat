@@ -240,6 +240,7 @@ Tactic Notation "comp_right" uconstr(p) "in" hyp(H) :=
 #[export] Hint Extern 10 (?X ∘ (?Y ∘ ?Z) ≡ ?W) =>
   apply comp_assoc : category_laws.
 
+Require Import Category.Algebra.
 Section Group.
   Local Open Scope group_scope.
 

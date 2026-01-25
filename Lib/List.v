@@ -48,10 +48,8 @@ Section ListSetoid.
   Next Obligation.
     proper.
     generalize dependent y.
-    induction x, y; simpl; intros; auto.
-    - contradiction.
-    - contradiction.
-    - simplify; auto.
+    induction x; induction y; ss.
+    inversion X. apply IHx in X2. ss.
   Qed.
 End ListSetoid.
 

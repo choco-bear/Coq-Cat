@@ -53,7 +53,7 @@ Program Definition grp_id_map (G : Group) :=
 
 Program Definition grp_hom_comp {G : Group} {G' : Group} {G'' : Group}
   (φ : GroupHomomorphism G' G'') (ψ : GroupHomomorphism G G')
-  : GroupHomomorphism G G'' := {|  grp_map := λ g, φ (ψ g) |}.
+  : GroupHomomorphism G G'' := {| grp_map := λ g, φ (ψ g) |}.
 Next Obligation. now proper; rewrite X. Qed.
 Next Obligation. now rewrite !grp_map_op. Qed.
 
@@ -244,7 +244,7 @@ End homomorphism.
   {G : Group} {G' : Group} {G'' : Group}
   : Proper (equiv ==> equiv ==> equiv) (@grp_hom_comp G G' G'') :=
     λ φ ψ Hφψ φ' ψ' Hφψ', _.
-Next Obligation. now rewrite Hφψ', Hφψ. Qed.
+Next Obligation. ss; etransitivity; try apply grp_map_respects; auto. Qed.
 
 (** Abelian Group *)
 Record AbGroup :=
@@ -259,7 +259,8 @@ Record IsSubGroupProperty {G : Group} (P : G → Type) :=
   ; inv_closed x  : P x → P (x⁻¹)
   }.
 
-Local Obligation Tactic := cat_simpl; grp_simplify; simpl; try done.
+#[local] Hint Unfold subset equiv : core.
+Local Obligation Tactic := try proper; ss; rewrites; grp_simplify; simpl; try done.
 Program Definition mk_subgroup {G : Group} (P : G → Type)
   : IsSubGroupProperty P → Group := λ SGP,
     {|  grp_setoid := {grp_setoid G & P}
@@ -268,10 +269,9 @@ Program Definition mk_subgroup {G : Group} (P : G → Type)
       ; grp_id := (ε; nonempty P SGP)
       ; grp_inv := λ X, ((`1 X)⁻¹; inv_closed P SGP _ (`2 X))
     |}.
-Next Obligation. now proper; rewrite X, X0. Qed.
 
 Program Definition center (G : Group) : AbGroup :=
   {| ab_grp := mk_subgroup (λ g : G, ∀ h, g ⋅ h ≡ h ⋅ g) {| nonempty := _ |} |}.
 Next Obligation. now rewrite <-X, !grp_assoc, X0. Qed.
 Next Obligation. now specialize (X (x⁻¹ ⋅ h ⋅ x⁻¹)); grp_simplify in X. Qed.
-Next Obligation. now construct; destruct x, y. Qed.
+Next Obligation. construct; destruct x, y; autounfold; ss. Qed.

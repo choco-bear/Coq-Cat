@@ -112,21 +112,31 @@ Section Isomorphism.
     - now transitivity y; [|transitivity y0; [|symmetry]].
   Qed.
 
-  #[export]
-  Instance proper_from {x y : C} : Proper (equiv ==> equiv) (@from x y).
-  Proof.
-    proper. rename x0 into f. rename y0 into g. unfold iso_equiv in X.
-    rewrite <-id_right, <-(id_right (from g)), <-(iso_to_from f).
-    now rewrite !comp_assoc, iso_from_to, X, iso_from_to.
-  Qed.
+  (* Example of Use of Iso_Proper *)
+  Goal ∀ {F G K} (f : G ≅ K) (g : F ≅ G), F ≅ K.
+  Proof. intros. now rewrite g. Qed.
 
   #[export]
   Instance proper_to {x y : C} : Proper (equiv ==> equiv) (@to x y).
   Proof. proper. Qed.
 
-  (* Example of Use of Iso_Proper *)
-  Goal ∀ {F G K} (f : G ≅ K) (g : F ≅ G), F ≅ K.
-  Proof. intros. now rewrite g. Qed.
+  #[export]
+  Instance proper_from {x y : C} : Proper (equiv ==> equiv) (@from x y).
+  Proof.
+    proper. rename x0 into f. rename y0 into g.
+    unfold iso_setoid, equiv, iso_equiv in X.
+    rewrite <-id_right, <-(id_right (from g)), <-(iso_to_from f).
+    now rewrite !comp_assoc, iso_from_to, X, iso_from_to.
+  Qed.
+
+  Lemma iso_equiv_simpl {x y} (f g : x ≅ y)
+    : (f ≡ g) = (to f ≡ to g).
+  Proof. ss. Qed.
+  #[local] Hint Rewrite @iso_equiv_simpl : categories normalize.
+
+  #[export]
+  Program Instance iso_compose_respects {x y z}
+    : Proper (equiv ==> equiv ==> equiv) (@iso_compose x y z).
 
   Lemma iso_simpl_1 {x y z : C} (f : y ~> z) (g : x ≅ y)
     : f ∘ to g ∘ from g ≡ f.
@@ -135,8 +145,10 @@ Section Isomorphism.
   Lemma iso_simpl_2 {x y z : C} (f : y ~> z) (g : y ≅ x)
     : f ∘ from g ∘ to g ≡ f.
   Proof. by rewrite <-comp_assoc, iso_from_to. Qed.
+
 End Isomorphism.
 #[export] Hint Resolve @to @from : category_laws.
+#[export] Hint Rewrite @iso_equiv_simpl : categories.
 #[export] Hint Rewrite @iso_to_from @iso_from_to @iso_simpl_1 @iso_simpl_2
                        : categories normalize.
 

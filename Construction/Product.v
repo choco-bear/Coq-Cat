@@ -1,7 +1,6 @@
 Require Import Category.Lib.
 Require Import Category.Theory.Category.
-Require Import Category.Theory.Isomorphism.
-Require Import Category.Theory.Functor.
+Require Import Category.Theory.Functor.Setoid.
 Require Import Category.Construction.Opposite.
 
 Generalizable All Variables.
@@ -11,7 +10,7 @@ Set Transparent Obligations.
   * [C × D], which has objects that are pairs of objects in [C] and objects in [D],
   * and morphisms that are pairs of morphisms.
   *)
-Program Definition BinaryProductCategory (C D : Category) : Category :=
+Program Definition BinaryProductCategory (C : Category) (D : Category) : Category :=
   {| obj := obj[C] * obj[D]
    ; hom := λ x y, (hom (fst x) (fst y)) * (hom (snd x) (snd y))
    ; homset := λ x y, prod_setoid
@@ -39,6 +38,16 @@ Program Definition BinaryProductCategory (C D : Category) : Category :=
 
 Notation "C × D" := (BinaryProductCategory C%category D%category)
   (at level 40, left associativity) : category_scope.
+  
+Lemma id_binary_product_simpl {C : Category} {D : Category} (p : C × D)
+  : id[p] = (id[fst p], id[snd p]).
+Proof. ss. Qed.
+#[export] Hint Rewrite @id_binary_product_simpl : categories.
+
+Lemma compose_binary_product_simpl {C : Category} {D : Category} `{f : y ~{C × D}~> z} `{g : x ~> y}
+  : f ∘[C × D] g = (fst f ∘ fst g, snd f ∘ snd g).
+Proof. ss. Qed.
+#[export] Hint Rewrite @compose_binary_product_simpl : categories.
 
 (** The projection functors [Fst : C × D ⟶ C] and [Snd : C × D ⟶ D] map each object
   * [(c, d)] in [C × D] to the object [c] in [C] and to the object [d] in [D],
@@ -66,7 +75,7 @@ Section Projection.
     : snd (f ∘ g) ≡ snd f ∘ snd g.
   Proof. reflexivity. Qed.
 End Projection.
-#[export] Hint Rewrite @fst_comp @snd_comp : categories normalize.
+#[export] Hint Rewrite @fst_comp @snd_comp : normalize.
 
 (** The opposite category of [C × D] is [C^op × D^op]. *)
 Lemma BinaryProductCategory_Opposite (C D : Category)
@@ -84,22 +93,26 @@ Section BinaryProductFunctor.
 
   Lemma BinaryProductFunctor_Fst `(T : D ⟶ B) `(R : D ⟶ C)
     : Fst ◯ (T × R) ≡ T.
-  Proof. by construct. Qed.
+  Proof. by functor_equiv_solver. Qed.
 
   Lemma BinaryProductFunctor_Snd `(T : D ⟶ B) `(R : D ⟶ C)
     : Snd ◯ (T × R) ≡ R.
-  Proof. by construct. Qed.
+  Proof. by functor_equiv_solver. Qed.
 
-  Program Definition BinaryProductFunctor_Unique `(T : D ⟶ B) `(R : D ⟶ C)
+  Lemma BinaryProductFunctor_Unique `(T : D ⟶ B) `(R : D ⟶ C)
     (F' : D ⟶ B × C) (HProj1 : Fst ◯ F' ≡ T) (HProj2 : Snd ◯ F' ≡ R)
-    : F' ≡ T × R := (_; _).
-  Next Obligation.
-    isomorphism.
-    - exact (HProj1 x : fst (F' x) ~> T x, HProj2 x : snd (F' x) ~> R x).
-    - exact ((HProj1 x)⁻¹, (HProj2 x)⁻¹).
-    - cat.
-    - cat.
-  Defined.
+    : F' ≡ T × R.
+  Proof.
+    construct.
+    - natural_transform; cat.
+      + ss; cat; match goal with [H : _ |- _] => exact (to H x) end.
+      + by cat; match goal with [H : _ |- _] => rewrite <-(naturality (to H) f) end.
+    - natural_transform; cat.
+      + ss; cat; match goal with [H : _ |- _] => exact (from H x) end.
+      + by cat; match goal with [H : _ |- _] => rewrite (naturality (from H) f) end.
+    - ss; cat; cat; match goal with [H : _ |- _] => by transitivity ((H ∘ H⁻¹) x); try by rewrite (iso_to_from H x) end.
+    - ss; cat; cat; match goal with [H : _ |- _] => by transitivity ((H⁻¹ ∘ H) x); try by rewrite (iso_from_to H x) end.
+  Qed.
 End BinaryProductFunctor.
 
 Notation "F × G" := (BinaryProductFunctor F%functor G%functor)
@@ -219,17 +232,12 @@ Section ProductFunctor.
 
   Lemma ProductFunctor_Project [I : Type]
     `(F : ∀ i : I, D ⟶ C i) (j : I) : Project j ◯ (Π F) ≡ F j.
-  Proof. by construct. Qed.
+  Proof. by functor_equiv_solver. Qed.
 
-  Program Definition ProductFunctor_Unique [I : Type]
+  Lemma ProductFunctor_Unique [I : Type]
     `(F : ∀ i : I, D ⟶ C i) (F' : D ⟶ ∏ C)
-    (HProj : ∀ j : I, Project j ◯ F' ≡ F j) : F' ≡ Π F := (_; _).
-  Next Obligation.
-    isomorphism.
-    - exact (λ i, `1 (HProj i) x).
-    - exact (λ i, (`1 (HProj i) x)⁻¹).
-    - cat.
-    - cat.
-  Defined.
-  Next Obligation. by pose (`2 (HProj x0)). Defined.
+    (HProj : ∀ j : I, Project j ◯ F' ≡ F j) : F' ≡ Π F.
+  Proof.
+    construct.
+  Admitted.
 End ProductFunctor.

@@ -51,8 +51,8 @@ Next Obligation.
   rewrite !comp_assoc, is_left_inverse, id_left in EQ.
   by rewrite <- !comp_assoc, is_right_inverse, id_right in EQ.
 Qed.
-Next Obligation. by rewrite is_right_inverse. Qed.
-Next Obligation. by rewrite is_left_inverse. Qed.
+Next Obligation. cat; ss. now rewrite is_right_inverse. Qed.
+Next Obligation. cat; ss. now rewrite is_left_inverse. Qed.
 
 (** Conversely, if a natural transformation is an isomorphism in the functor
   * category, then each of its components is an isomorphism in the target
@@ -68,3 +68,9 @@ Program Definition NatIso_Component_Iso
     |}.
 #[export]
 Hint Resolve NatIso_Component_Iso : category_laws.
+
+Lemma interchange_law {B : Category} {C : Category} {D : Category}
+  {R S T : Fun[D,C]} {R' S' T' : Fun[C,B]}
+  (σ : R ~> S) (τ : S ~> T) (σ' : R' ~> S') (τ' : S' ~> T')
+  : (τ' ∘ σ') ▪ (τ ∘ σ) ≡[Fun[D,B]] (τ' ▪ τ) ∘[Fun[D,B]] (σ' ▪ σ).
+Proof. unfold Fun, compose. apply NaturalTransform_interchange_law. Qed.

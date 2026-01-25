@@ -24,8 +24,7 @@ Section Functor_Setoid.
 
   #[export]
   Instance iso_of {C : Category} {D : Category} {F G : C ⟶ D} (E : F ≡ G)
-    : F ≅[Fun[C,D]] G.
-  Proof. now unfold Functor_Setoid, equiv in E. Qed.
+    : F ≅[Fun[C,D]] G := E.
 
   #[export]
   Instance Functor_Compose_respects

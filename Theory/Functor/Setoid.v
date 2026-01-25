@@ -38,6 +38,15 @@ Section Functor_Setoid.
     - rewrite <-interchange_law, !iso_from_to. by ss.
   Qed.
 
+  #[export]
+  Instance NaturalTransform_respects {C : Category} {D : Category}
+    : Proper (equiv ==> equiv ==> iffT) (@NaturalTransform C D).
+  Proof.
+    proper.
+    - exact (to (iso_of X0) ⋅ _ ⋅ (iso_of X)⁻¹).
+    - exact ((iso_of X0)⁻¹ ⋅ _ ⋅ to (iso_of X)).
+  Qed.
+
   Definition Functor_Compose_Id_left
     {C : Category} {D : Category} (F : C ⟶ D) : Id[D] ◯ F ≡ F.
   Proof. by functor_equiv_solver. Defined.

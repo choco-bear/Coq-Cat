@@ -36,7 +36,7 @@ Program Definition BinaryProductCategory (C : Category) (D : Category) : Categor
         , comp_assoc_sym (snd f) (snd g) (snd h) )
   |}.
 
-Notation "C × D" := (BinaryProductCategory C%category D%category)
+#[export] Notation "C × D" := (BinaryProductCategory C%category D%category)
   (at level 40, left associativity) : category_scope.
   
 Lemma id_binary_product_simpl {C : Category} {D : Category} (p : C × D)
@@ -62,10 +62,18 @@ Section Projection.
      ; fmap := λ _ _ f, fst f
     |}.
 
+  Definition fobj_Fst x : Fst x = fst x := eq_refl.
+
+  Definition fmap_Fst `(f : x ~{C × D}~> y) : fmap[Fst] f = fst f := eq_refl.
+
   Program Definition Snd : C × D ⟶ D :=
     {| fobj := λ x, snd x
      ; fmap := λ _ _ f, snd f
     |}.
+
+  Definition fobj_Snd x : Snd x = snd x := eq_refl.
+
+  Definition fmap_Snd `(f : x ~{C × D}~> y) : fmap[Snd] f = snd f := eq_refl.
 
   Corollary fst_comp {x y z} (f : y ~{C × D}~> z) (g : x ~{C × D}~> y)
     : fst (f ∘ g) ≡ fst f ∘ fst g.
@@ -75,6 +83,9 @@ Section Projection.
     : snd (f ∘ g) ≡ snd f ∘ snd g.
   Proof. reflexivity. Qed.
 End Projection.
+#[export] Arguments Fst {C D}%_category : simpl never.
+#[export] Arguments Snd {C D}%_category : simpl never.
+#[export] Hint Rewrite @fobj_Fst @fmap_Fst @fobj_Snd @fmap_Snd : categories normalize.
 #[export] Hint Rewrite @fst_comp @snd_comp : normalize.
 
 (** The opposite category of [C × D] is [C^op × D^op]. *)
@@ -83,25 +94,25 @@ Lemma BinaryProductCategory_Opposite (C D : Category)
 Proof. now unfold Opposite, BinaryProductCategory. Qed.
 
 Section BinaryProductFunctor.
-  Program Definition BinaryProductFunctor `(T : D ⟶ B) `(R : D ⟶ C) : D ⟶ B × C :=
+  Context `(T : D ⟶ B) `(R : D ⟶ C).
+  Program Definition BinaryProductFunctor : D ⟶ B × C :=
     {|  fobj := λ d, (T d, R d) : B × C
       ; fmap := λ x y f, (fmap[T] f, fmap[R] f)
     |}.
 
-  Notation "F × G" := (BinaryProductFunctor F%functor G%functor)
-    (at level 40, left associativity) : functor_scope.
+  Definition fobj_BinaryProductFunctor x : BinaryProductFunctor x = (T x, R x) := eq_refl.
 
-  Lemma BinaryProductFunctor_Fst `(T : D ⟶ B) `(R : D ⟶ C)
-    : Fst ◯ (T × R) ≡ T.
+  Definition fmap_BinaryProductFunctor `(f : x ~{D}~> y) : fmap[BinaryProductFunctor] f = (fmap[T] f, fmap[R] f) := eq_refl.
+
+  Lemma BinaryProductFunctor_Fst : Fst ◯ BinaryProductFunctor ≡ T.
   Proof. by functor_equiv_solver. Qed.
 
-  Lemma BinaryProductFunctor_Snd `(T : D ⟶ B) `(R : D ⟶ C)
-    : Snd ◯ (T × R) ≡ R.
+  Lemma BinaryProductFunctor_Snd : Snd ◯ BinaryProductFunctor ≡ R.
   Proof. by functor_equiv_solver. Qed.
 
-  Lemma BinaryProductFunctor_Unique `(T : D ⟶ B) `(R : D ⟶ C)
+  Lemma BinaryProductFunctor_Unique
     (F' : D ⟶ B × C) (HProj1 : Fst ◯ F' ≡ T) (HProj2 : Snd ◯ F' ≡ R)
-    : F' ≡ T × R.
+    : F' ≡ BinaryProductFunctor.
   Proof.
     construct.
     - natural_transform; cat.
@@ -114,8 +125,12 @@ Section BinaryProductFunctor.
     - ss; cat; cat; match goal with [H : _ |- _] => by transitivity ((H⁻¹ ∘ H) x); try by rewrite (iso_from_to H x) end.
   Qed.
 End BinaryProductFunctor.
+#[export] Arguments BinaryProductFunctor {D B}%_category (T)%_functor {C}%_category (R)%_functor : simpl never.
+#[export] Hint Rewrite @fobj_BinaryProductFunctor @fmap_BinaryProductFunctor
+                       @BinaryProductFunctor_Fst @BinaryProductFunctor_Snd
+                       : categories normalize.
 
-Notation "F × G" := (BinaryProductFunctor F%functor G%functor)
+#[export] Notation "F × G" := (BinaryProductFunctor F%functor G%functor)
   (at level 40, left associativity) : functor_scope.
 
 (** A bifunctor is any functor from product of two categories, to another category;

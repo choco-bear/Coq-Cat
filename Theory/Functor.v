@@ -120,6 +120,20 @@ Definition Functor_Compose {C : Category} {D : Category} {E : Category}
     ; fmap_id   := λ x, transitivity (fmap_respects _ _ _ _ fmap_id) fmap_id
     ; fmap_comp := λ x y z f g, transitivity (fmap_respects _ _ _ _ (fmap_comp f g)) (fmap_comp _ _)
   |}.
+  
+Notation "F '◯' G" := (Functor_Compose F G)
+  (at level 40, left associativity) : functor_scope.
+
+Section Compose.
+  Context {C : Category} {D : Category} {E : Category}.
+  Context (F : D ⟶ E) (G : C ⟶ D).
+
+  Definition fobj_compose x : (F ◯ G) x = F (G x) := eq_refl.
+
+  Definition fmap_compose `(f : x~{C}~>y) : fmap[F ◯ G] f = fmap[F] (fmap[G] f) := eq_refl.
+End Compose.
+#[export] Arguments Functor_Compose {C D E}%_category (F G)%_functor : simpl never. 
+#[export] Hint Rewrite @fobj_compose @fmap_compose : categories normalize.
 
 Definition Functor_Identity {C : Category} : C ⟶ C :=
   {|  fobj := Datatypes.id
@@ -131,12 +145,19 @@ Definition Functor_Identity {C : Category} : C ⟶ C :=
     ; fmap_comp := λ x y z f g, @Equivalence_Reflexive _ equiv setoid_equiv _
   |}.
 
-Notation "F '◯' G" := (Functor_Compose F G)
-  (at level 40, left associativity) : functor_scope.
-
 Notation "'Id'" := Functor_Identity (only parsing) : functor_scope.
 Notation "'Id[' C ']'" := (@Functor_Identity C)
   (at level 0, format "Id[ C ]") : functor_scope.
+
+Section Identity.
+  Context {C : Category}.
+
+  Definition fobj_identity x : Id x = x := eq_refl.
+
+  Definition fmap_identity `(f : x ~> y) : fmap[Id] f = f := eq_refl.
+End Identity.
+#[export] Arguments Functor_Identity {C}%_category : simpl never.
+#[export] Hint Rewrite @fobj_identity @fmap_identity : categories normalize.
 
 Definition constant_Functor {C : Category} {D : Category} (v : D) : C ⟶ D :=
   {|  fobj := λ _, v
@@ -152,6 +173,16 @@ Notation "'Const' v" := (constant_Functor v)
   (at level 0,  right associativity, only parsing) : functor_scope.
 Notation "'Const[' C ']' v" := (@constant_Functor C _ v)
   (at level 0, format "Const[ C ]  v") : functor_scope.
+
+Section Const.
+  Context {C : Category} {D : Category} (v : D).
+
+  Definition fobj_const x : Const v x = v := eq_refl.
+
+  Definition fmap_const `(f : x ~{C}~> y) : fmap[Const v] f = id := eq_refl.
+End Const.
+#[export] Arguments constant_Functor {C D}%_category (v)%_object : simpl never.
+#[export] Hint Rewrite @fobj_const @fmap_const : categories normalize.
 
 (** A functor [F] is said to be faithful if it is injective on the morphism
   * level, i.e., for any two morphisms [f, g : x ~> y] in [C], if

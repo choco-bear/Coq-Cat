@@ -68,7 +68,7 @@ Notation "fmap[ F ]" := (@fmap _ _ F%functor _ _)
 #[export] Hint Resolve fmap : category_laws.
 
 Definition fmap_simpl {C : Category} {D : Category} `(f : x ~{C}~> y) fobj fmap fmap_respects fmap_id fmap_comp
-  : fmap[{| fobj := fobj; fmap := fmap; fmap_respects := fmap_respects; fmap_id := fmap_id; fmap_comp := fmap_comp |}] f = fmap _ _ f := eq_refl.
+  : fmap[Build_Functor C D fobj fmap fmap_respects fmap_id fmap_comp] f = fmap _ _ f := eq_refl.
 #[export] Hint Rewrite @fmap_simpl : categories normalize.
 
 (** [AFunctor] allows the object mapping to be stated explicitly. *)

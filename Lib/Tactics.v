@@ -22,15 +22,15 @@ Ltac simplify :=
      | [ |- poly_unit ] => exact ttt
 
      | [ H : _ ∧ _ |- _ ] =>
-       let H' := fresh "H" in destruct H as [H H']
+       let H' := fresh H in destruct H as [H H']
      | [ |- _ ∧ _ ] => split
 
      | [ H : _ /\ _ |- _ ] =>
-       let H' := fresh "H" in destruct H as [H H']
+       let H' := fresh H in destruct H as [H H']
      | [ |- _ /\ _ ] => split
 
      | [ H : _ ↔ _ |- _ ] =>
-       let H' := fresh "H" in destruct H as [H H']
+       let H' := fresh H in destruct H as [H H']
      | [ |- _ ↔ _ ] => split
 
      | [ H : (_, _) = (_, _) |- _ ] =>

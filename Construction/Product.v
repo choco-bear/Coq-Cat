@@ -115,12 +115,14 @@ Section BinaryProductFunctor.
     : F' ≡ BinaryProductFunctor.
   Proof.
     construct.
-    - natural_transform; cat.
-      + ss; cat; match goal with [H : _ |- _] => exact (to H x) end.
-      + by cat; match goal with [H : _ |- _] => rewrite <-(naturality (to H) f) end.
-    - natural_transform; cat.
-      + ss; cat; match goal with [H : _ |- _] => exact (from H x) end.
-      + by cat; match goal with [H : _ |- _] => rewrite (naturality (from H) f) end.
+    - natural_transform; cat
+      ; solve [ ss; cat; match goal with [H : _ |- _] => exact (to H x) end
+              | by cat; match goal with [H : _ |- _] => rewrite <-(naturality (to H) f) end
+              ].
+    - natural_transform; cat
+      ; solve [ ss; cat; match goal with [H : _ |- _] => exact (from H x) end
+              | by cat; match goal with [H : _ |- _] => rewrite (naturality (from H) f) end
+              ].
     - ss; cat; cat; match goal with [H : _ |- _] => by transitivity ((H ∘ H⁻¹) x); try by rewrite (iso_to_from H x) end.
     - ss; cat; cat; match goal with [H : _ |- _] => by transitivity ((H⁻¹ ∘ H) x); try by rewrite (iso_from_to H x) end.
   Qed.

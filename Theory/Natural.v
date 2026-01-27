@@ -56,7 +56,7 @@ Notation "'naturality[' F '⟹' G ']'" :=
   (@naturality _ _ F%functor G%functor) (at level 0, only parsing) : natural_scope.
 
 (** Tactic for creating natural transformations *)
-Ltac natural_transform := unshelve (refine {| component := _ |}; ii; cbn).
+Ltac natural_transform := unshelve refine {| component := _ |}; ii; cbn.
 
 #[export]
 Program Instance NaturalTransform_id `{F : C ⟶ D} : F ⟹ F :=

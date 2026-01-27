@@ -20,6 +20,7 @@ Section OppositeFunctor.
 
   Definition fmap_OppositeTranslate {B : Category} {C : Category} (T : B ⟶ C) `(f : x ~{B^op}~> y)
     : fmap[OppositeTranslate T] f = fmap[T] f := eq_refl.
+  Hint Rewrite @fmap_OppositeTranslate : categories normalize.
 
   Program Definition OppositeFunctor : Cat ⟶ Cat :=
     {|  fobj := λ C : Cat, C^op : Cat
@@ -37,8 +38,8 @@ Section OppositeFunctor.
 
   Definition fmap_OppositeFunctor `(f : x ~> y) : fmap[OppositeFunctor] f = OppositeTranslate f := eq_refl.
 End OppositeFunctor.
-#[export] Arguments OppositeTranslate {B C}%_category (T)%_functor : simpl never.
-#[export] Arguments OppositeFunctor : simpl never.
+(* #[export] Arguments OppositeTranslate {B C}%_category (T)%_functor : simpl never. *)
+(* #[export] Arguments OppositeFunctor : simpl never. *)
 #[export] Hint Rewrite @fobj_OppositeTranslate @fmap_OppositeTranslate
                        @fobj_OppositeFunctor @fmap_OppositeFunctor
                        : categories normalize.
@@ -62,13 +63,14 @@ Section FunBiFunctor.
     do 2 cat. srapply FromAFunctor; try exact (λ X, f0 ◯ X ◯ f).
     construct; [exact (_ ▪ f1 ▪ _)|proper; rewrites|..]; by ss.
   Defined.
-  #[export] Arguments FunBiFunctor_fmap : simpl never.
+  Arguments FunBiFunctor_fmap : simpl never.
 
   Definition fobj_FunBiFunctor_fmap `(F1 : C1 ~{Cat^op}~> D1) `(F2 : C2 ~{Cat}~> D2) T
     : FunBiFunctor_fmap ((F1, F2) : (C1, C2) ~{U}~> (D1, D2)) T = F2 ◯ T ◯ F1 := eq_refl.
 
   Definition fmap_FunBiFunctor_fmap `(F1 : C1 ~{Cat^op}~> D1) `(F2 : C2 ~{Cat}~> D2) `(τ : T1 ⟹ T2)
     : fmap[FunBiFunctor_fmap ((F1, F2) : (C1, C2) ~{U}~> (D1, D2))] τ = NaturalTransform_id ▪ τ ▪ NaturalTransform_id := eq_refl.
+  Hint Rewrite @fmap_FunBiFunctor_fmap : categories normalize.
 
   Local Obligation Tactic := idtac.
   Program Definition FunBiFunctor : U ⟶ Cat :=
@@ -86,7 +88,7 @@ Section FunBiFunctor.
   Qed.
   Next Obligation. by ss; cat; functor_equiv_solver. Qed.
   Next Obligation. by ss; cat; functor_equiv_solver. Qed.
-  #[export] Arguments FunBiFunctor : simpl never.
+  (* #[export] Arguments FunBiFunctor : simpl never. *)
 
   Definition fobj_FunBiFunctor C D : FunBiFunctor (C,D) = Fun[C,D] := eq_refl.
 
@@ -115,7 +117,7 @@ Section BinaryProductBiFunctor.
     do 2 cat. srapply FromAFunctor; try exact (λ`(a,b), (f a, f0 b)).
     construct; first [by cat|proper; rewrites]; done.
   Defined.
-  #[export] Arguments BinaryProductBiFunctor_fmap : simpl never.
+  Arguments BinaryProductBiFunctor_fmap : simpl never.
 
   Definition fobj_BinaryProductBiFunctor_fmap `(F1 : C1 ⟶ D1) `(F2 : C2 ⟶ D2) (x1 : C1) (x2 : C2)
     : BinaryProductBiFunctor_fmap ((F1, F2) : (C1, C2) ~{Cat × Cat}~> (D1, D2)) (x1, x2) = (F1 x1, F2 x2) := eq_refl.
@@ -134,7 +136,7 @@ Section BinaryProductBiFunctor.
   Qed.
   Next Obligation. by ss; cat; functor_equiv_solver. Qed.
   Next Obligation. by ss; cat; functor_equiv_solver. Qed.
-  #[export] Arguments BinaryProductBiFunctor : simpl never.
+  (* #[export] Arguments BinaryProductBiFunctor : simpl never. *)
 
   Definition fobj_BinaryProductBiFunctor x y : BinaryProductBiFunctor (x,y) = (x × y)%category := eq_refl.
 

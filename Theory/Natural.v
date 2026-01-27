@@ -98,7 +98,7 @@ Section HorizontalComposition.
     (τ' : S' ⟹ T') (τ : S ⟹ T) : S' ◯ S ⟹ T' ◯ T :=
       {| component := λ c, fmap[T'] (τ c) ∘ τ' (S c) |}.
   Next Obligation.
-    rewrite <-comp_assoc, naturality, !comp_assoc. comp_right.
+    rewrite !fmap_compose, <-comp_assoc, naturality, !comp_assoc. comp_right.
     assert (τ y ∘ fmap[S] f ≡ fmap[T] f ∘ τ x) by now normalize.
     now rewrite <-!fmap_comp; rewrites.
   Qed.

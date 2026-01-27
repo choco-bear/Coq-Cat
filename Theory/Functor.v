@@ -41,8 +41,8 @@ Coercion fobj : Functor >-> Funclass.
 Notation "C ⟶ D" := (@Functor C%category D%category)
   (at level 90, right associativity) : functor_type_scope.
 
-Arguments fmap {C%_category D%_category Functor%_functor x%_object y%_object}
-  f%_morphism.
+Arguments fobj {C D}%_category {FUNCTOR}%_functor x%_object : rename.
+Arguments fmap {C D}%_category {FUNCTOR}%_functor {x y}%_object f%_morphism : rename, simpl never.
 
 Infix "<$>" := fmap
   (at level 29, left associativity, only parsing) : morphism_scope.
@@ -132,7 +132,6 @@ Section Compose.
 
   Definition fmap_compose `(f : x~{C}~>y) : fmap[F ◯ G] f = fmap[F] (fmap[G] f) := eq_refl.
 End Compose.
-#[export] Arguments Functor_Compose {C D E}%_category (F G)%_functor : simpl never. 
 #[export] Hint Rewrite @fobj_compose @fmap_compose : categories normalize.
 
 Definition Functor_Identity {C : Category} : C ⟶ C :=
@@ -156,7 +155,6 @@ Section Identity.
 
   Definition fmap_identity `(f : x ~> y) : fmap[Id] f = f := eq_refl.
 End Identity.
-#[export] Arguments Functor_Identity {C}%_category : simpl never.
 #[export] Hint Rewrite @fobj_identity @fmap_identity : categories normalize.
 
 Definition constant_Functor {C : Category} {D : Category} (v : D) : C ⟶ D :=
@@ -181,7 +179,6 @@ Section Const.
 
   Definition fmap_const `(f : x ~{C}~> y) : fmap[Const v] f = id := eq_refl.
 End Const.
-#[export] Arguments constant_Functor {C D}%_category (v)%_object : simpl never.
 #[export] Hint Rewrite @fobj_const @fmap_const : categories normalize.
 
 (** A functor [F] is said to be faithful if it is injective on the morphism

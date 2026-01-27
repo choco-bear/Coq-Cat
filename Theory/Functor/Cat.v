@@ -1,7 +1,6 @@
 Require Import Category.Lib.
 Require Import Category.Theory.Category.
 Require Import Category.Theory.Functor.Setoid.
-Require Import Category.Theory.Functor.Opposite.
 Require Import Category.Instance.Cat.
 From Category.Construction Require Import Product Opposite.
 

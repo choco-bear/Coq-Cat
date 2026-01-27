@@ -36,8 +36,8 @@ Section FunBiFunctor.
   Definition FunBiFunctor_fmap {x y : obj[Cat^op × Cat]} (f : x ~> y)
     : FunBiFunctor_fobj x ~> FunBiFunctor_fobj y.
   Proof.
-    do 2 cat. srapply FromAFunctor; try exact (λ X, H ◯ X ◯ f).
-    construct; [exact (_ ▪ f0 ▪ _)|proper; rewrites|..]; by ss.
+    do 2 cat. srapply FromAFunctor; try exact (λ X, f0 ◯ X ◯ f).
+    construct; [exact (_ ▪ f1 ▪ _)|proper; rewrites|..]; by ss.
   Defined.
   #[export] Arguments FunBiFunctor_fmap : simpl never.
 
@@ -74,7 +74,7 @@ Section BinaryProductBiFunctor.
   Definition BinaryProductBiFunctor_fmap {x y : obj[Cat × Cat]} (f : x ~> y)
     : BinaryProductBiFunctor_fobj x ~> BinaryProductBiFunctor_fobj y.
   Proof.
-    do 2 cat. srapply FromAFunctor; try exact (λ`(a,b), (f a, H b)).
+    do 2 cat. srapply FromAFunctor; try exact (λ`(a,b), (f a, f0 b)).
     construct; first [by cat|proper; rewrites]; done.
   Defined.
   #[export] Arguments BinaryProductBiFunctor_fmap : simpl never.

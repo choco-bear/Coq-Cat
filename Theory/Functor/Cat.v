@@ -115,7 +115,7 @@ Section BinaryProductBiFunctor.
     : BinaryProductBiFunctor_fobj x ~> BinaryProductBiFunctor_fobj y.
   Proof.
     do 2 cat. srapply FromAFunctor; try exact (λ`(a,b), (f a, f0 b)).
-    construct; first [by cat|proper; rewrites]; done.
+    construct; first [by cat|proper; ss; rewrites]; done.
   Defined.
   Arguments BinaryProductBiFunctor_fmap : simpl never.
 
@@ -134,8 +134,8 @@ Section BinaryProductBiFunctor.
     proper; ss; construct; ss; try now natural_transform; ss; do 2 cat; ss; rewrite naturality.
     all: do 2 cat.
   Qed.
-  Next Obligation. by ss; cat; functor_equiv_solver; normalize. Qed.
-  Next Obligation. by ss; cat; functor_equiv_solver; normalize. Qed.
+  Next Obligation. ss; cat; ss. construct; first [by natural_transform; cat|by ss; cat]. Qed.
+  Next Obligation. ss; cat; ss. construct; first [by natural_transform; cat|by ss; cat]. Qed.
   (* #[export] Arguments BinaryProductBiFunctor : simpl never. *)
 
   Definition fobj_BinaryProductBiFunctor x y : BinaryProductBiFunctor (x,y) = (x × y)%category := eq_refl.

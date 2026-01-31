@@ -86,8 +86,8 @@ Section FunBiFunctor.
     - by ss; normalize.
     - by ss; normalize.
   Qed.
-  Next Obligation. by ss; cat; functor_equiv_solver. Qed.
-  Next Obligation. by ss; cat; functor_equiv_solver. Qed.
+  Next Obligation. by ss; cat; functor_equiv_solver; normalize. Qed.
+  Next Obligation. by ss; cat; functor_equiv_solver; normalize. Qed.
   (* #[export] Arguments FunBiFunctor : simpl never. *)
 
   Definition fobj_FunBiFunctor C D : FunBiFunctor (C,D) = Fun[C,D] := eq_refl.
@@ -134,8 +134,8 @@ Section BinaryProductBiFunctor.
     proper; ss; construct; ss; try now natural_transform; ss; do 2 cat; ss; rewrite naturality.
     all: do 2 cat.
   Qed.
-  Next Obligation. by ss; cat; functor_equiv_solver. Qed.
-  Next Obligation. by ss; cat; ss; functor_equiv_solver. Qed.
+  Next Obligation. by ss; cat; functor_equiv_solver; normalize. Qed.
+  Next Obligation. by ss; cat; functor_equiv_solver; normalize. Qed.
   (* #[export] Arguments BinaryProductBiFunctor : simpl never. *)
 
   Definition fobj_BinaryProductBiFunctor x y : BinaryProductBiFunctor (x,y) = (x × y)%category := eq_refl.

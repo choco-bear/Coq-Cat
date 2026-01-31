@@ -135,7 +135,7 @@ Section BinaryProductBiFunctor.
     all: do 2 cat.
   Qed.
   Next Obligation. by ss; cat; functor_equiv_solver. Qed.
-  Next Obligation. by ss; cat; functor_equiv_solver. Qed.
+  Next Obligation. by ss; cat; ss; functor_equiv_solver. Qed.
   (* #[export] Arguments BinaryProductBiFunctor : simpl never. *)
 
   Definition fobj_BinaryProductBiFunctor x y : BinaryProductBiFunctor (x,y) = (x × y)%category := eq_refl.

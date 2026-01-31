@@ -19,11 +19,10 @@ Section Curry.
 
   Definition fmap_curry_fobj (T : A × B ⟶ C) (a : A) `(f : x ~{B}~> y)
     : fmap[curry_fobj T a] f = fmap[T] ((id, f) : (a, x) ~{A × B}~> (a, y)) := eq_refl.
-  Hint Rewrite @fmap_curry_fobj : categories normalize.
 
   Definition curry_fmap (T : A × B ⟶ C) {x y : A} (f : x ~> y)
     : curry_fobj T x ~> curry_fobj T y.
-  Proof. by cat; natural_transform; ss; try refine (fmap[T] _); cat. Defined.
+  Proof. cat; natural_transform; ss; try refine (fmap[T] _); cat. by rewrite ?fmap_curry_fobj. Defined.
   #[export] Arguments curry_fmap : simpl never.
 
   Program Definition curry (T : A × B ⟶ C) : A ⟶ Fun[B,C] :=

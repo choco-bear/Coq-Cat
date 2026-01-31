@@ -38,6 +38,10 @@ Program Instance fst_respects {A B} `{Setoid A} `{Setoid B}
 Program Instance snd_respects {A B} `{Setoid A} `{Setoid B}
   : Proper (equiv ==> equiv) (@snd A B).
 
+Definition fst_simpl {A B} (a : A) (b : B) : fst (a,b) = a := eq_refl.
+Definition snd_simpl {A B} (a : A) (b : B) : snd (a,b) = b := eq_refl.
+#[global] Hint Rewrite @fst_simpl @snd_simpl : core normalize categories.
+
 Corollary let_fst {x y} (A : x * y) `(f : x → z)
   : (let (x, _) := A in f x) = f (fst A).
 Proof. destruct A; auto. Qed.

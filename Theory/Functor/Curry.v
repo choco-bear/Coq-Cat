@@ -32,8 +32,21 @@ Section Curry.
 
   Definition fmap_curry (T : A × B ⟶ C) `(f : x ~{A}~> y) (c : B)
     : fmap[curry T] f c = curry_fmap T f c := eq_refl.
+
+  Definition CurryFunctor_fmap {T S : Fun[A×B,C]} (f : T ~> S)
+    : curry T ~{Fun[A,Fun[B,C]]}~> curry S.
+  Proof. natural_transform; simplify; [natural_transform|]; apply f. Defined.
+  #[export] Arguments CurryFunctor_fmap : simpl never.
+
+  Program Definition CurryFunctor : Fun[A×B,C] ⟶ Fun[A,Fun[B,C]] :=
+    {|  fobj := curry : (Fun[A×B,C] → Fun[A,Fun[B,C]])
+      ; fmap := @CurryFunctor_fmap
+    |}.
+
+  Definition fmap_CurryFunctor {T S : Fun[A×B,C]} (f : T ~> S)
+    : fmap[CurryFunctor] f = CurryFunctor_fmap f := eq_refl.
 End Curry.
-#[export] Hint Rewrite @fmap_curry_fobj @fmap_curry : categories normalize.
+#[export] Hint Rewrite @fmap_curry_fobj @fmap_curry @fmap_CurryFunctor : categories normalize.
 
 Section Uncurry.
   Context {A : Category} {B : Category} {C : Category}.

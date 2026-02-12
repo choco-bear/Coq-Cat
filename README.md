@@ -20,6 +20,7 @@ opam update
 4. Install the right version of the dependencies.
 ```
 opam install rocq-prover.9.0.0
+opam install coq-stdpp.1.12.0
 ```
 
 ## How to Compile

@@ -1,4 +1,4 @@
-Require Import Program Axioms sflib Category.
+Require Import Program Axioms sflib Category CommonTactics.
 From stdpp Require Import ssreflect.
 
 Lemma cat_ext_JMeq `(C : Category Obj) `(C' : Category Obj')

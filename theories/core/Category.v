@@ -1,5 +1,4 @@
-Require Import sflib.
-From stdpp Require Import ssreflect.
+Require Import CommonTactics.
 
 Class Category (Obj : Type) := mk_Category {
   Arrow : Obj → Obj → Type;
@@ -16,6 +15,7 @@ Class Category (Obj : Type) := mk_Category {
   cat_id_left {x y} (f : Arrow x y) : comp (cat_id y) f ≡ f;
   cat_id_right {x y} (f : Arrow x y) : comp f (cat_id x) ≡ f;
 }.
+Global Hint Rewrite @comp_assoc @cat_id_left @cat_id_right : normalize.
 
 Local Definition _obj [T : Type] : Category T → Type := λ _, T.
 
@@ -75,10 +75,6 @@ Program Definition Opposite `(C : Category Obj) : Category Obj :=
 
     cat_id := λ x, @cat_id Obj C x;
   |}.
-Next Obligation. ii. rewrite H H0 //. Qed.
-Next Obligation. ii. ss. rewrite comp_assoc //. Qed.
-Next Obligation. ii. ss. rewrite cat_id_right //. Qed.
-Next Obligation. ii. ss. rewrite cat_id_left //. Qed.
 
 Notation "C 'ᵒᵖ'" := (Opposite C%category) (at level 7, left associativity, format "C ᵒᵖ") : category_scope.
 Notation "'(ᵒᵖ)'" := (@Opposite _) (only parsing) : coqcat_scope.
@@ -93,10 +89,6 @@ Program Definition BinaryProduct `(C : Category ObjC) `(D : Category ObjD) : Cat
 
     cat_id := λ x, (id[x.1], id[x.2]);
   |}%type%morphism.
-Next Obligation. ii. rewrite H H0 //. Qed.
-Next Obligation. ii. ss. rewrite !comp_assoc //. Qed.
-Next Obligation. ii. ss. rewrite !cat_id_left //. Qed.
-Next Obligation. ii. ss. rewrite !cat_id_right //. Qed.
 
 Infix "*" := BinaryProduct : category_scope.
 Notation "(*)" := BinaryProduct (only parsing) : coqcat_scope.

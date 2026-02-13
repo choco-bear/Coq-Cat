@@ -7,6 +7,7 @@ Class Functor `{C : Category ObjC} `{D : Category ObjD} := mk_Functor {
   fmap_id x : fmap id[x] ≡ id%morphism;
   fmap_comp {x y z} (f : y ~> z) (g : x ~> y) : fmap (f ∘ g) ≡ (fmap f ∘ fmap g)%morphism;
 }.
+Global Hint Rewrite @fmap_id @fmap_comp : normalize.
 
 Declare Scope functor_scope.
 Delimit Scope functor_scope with functor.
@@ -31,16 +32,12 @@ Program Definition FunctorCompose
     fobj := F ∘ G;
     fmap := λ _ _ f, (F # G # f)%morphism
   |}.
-Next Obligation. ii. rewrite H //. Qed.
-Next Obligation. rewrite !fmap_id //. Qed.
-Next Obligation. rewrite !fmap_comp //. Qed.
 
 Program Definition ConstantFunctor `{C : Category ObjC} `{D : Category ObjD} (v : ObjD) : C ⟶ D :=
   {|
     fobj := λ _, v;
     fmap := λ _ _ _, id[v]%morphism
   |}.
-Next Obligation. rewrite cat_id_left //. Qed.
 
 Notation "'Id'" := (IdFunctor _) (only parsing) : functor_scope.
 Notation "'Id[' C ']'" := (IdFunctor C%category) (at level 7, no associativity) : functor_scope.

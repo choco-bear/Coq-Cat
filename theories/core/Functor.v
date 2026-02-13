@@ -1,0 +1,50 @@
+Require Import Common.
+
+Class Functor `{C : Category ObjC} `{D : Category ObjD} := mk_Functor {
+  #[export] fobj :> ObjC → ObjD;
+  fmap {x y} (f : x ~> y) : fobj x ~> fobj y;
+  #[export] fmap_proper {x y} :: Proper ((≡) ==> (≡)) (@fmap x y);
+  fmap_id x : fmap id[x] ≡ id%morphism;
+  fmap_comp {x y z} (f : y ~> z) (g : x ~> y) : fmap (f ∘ g) ≡ (fmap f ∘ fmap g)%morphism;
+}.
+
+Declare Scope functor_scope.
+Delimit Scope functor_scope with functor.
+Bind Scope functor_scope with Functor.
+
+Arguments Functor {_%_type_scope} C%_category_scope {_%_type_scope} D%_category_scope.
+Arguments fmap {_%_type_scope C%_category_scope _%_type_scope D%_category_scope} F%_functor_scope {x y}%_object_scope f%_morphism_scope : rename.
+Arguments fmap_proper {x y}%_object_scope (f g)%_morphism_scope EQ : rename.
+
+Notation "F # f" := (fmap F%functor f%morphism) (at level 30, right associativity) : morphism_scope.
+Infix "⟶" := Functor (at level 60, right associativity) : type_scope.
+
+Program Definition IdFunctor `(C : Category Obj) : C ⟶ C :=
+  {|
+    fobj := λ x, x;
+    fmap := λ _ _ f, f;
+  |}.
+
+Program Definition FunctorCompose
+  `(F : (C : Category ObjC) ⟶ (D : Category ObjD)) `(G : (B : Category ObjB) ⟶ C) : B ⟶ D :=
+  {|
+    fobj := F ∘ G;
+    fmap := λ _ _ f, (F # G # f)%morphism
+  |}.
+Next Obligation. ii. rewrite H //. Qed.
+Next Obligation. rewrite !fmap_id //. Qed.
+Next Obligation. rewrite !fmap_comp //. Qed.
+
+Program Definition ConstantFunctor `{C : Category ObjC} `{D : Category ObjD} (v : ObjD) : C ⟶ D :=
+  {|
+    fobj := λ _, v;
+    fmap := λ _ _ _, id[v]%morphism
+  |}.
+Next Obligation. rewrite cat_id_left //. Qed.
+
+Notation "'Id'" := (IdFunctor _) (only parsing) : functor_scope.
+Notation "'Id[' C ']'" := (IdFunctor C%category) (at level 7, no associativity) : functor_scope.
+
+Infix "∘" := FunctorCompose : functor_scope.
+
+Notation ".↦ v" := (ConstantFunctor v) (at level 8, right associativity) : functor_scope.

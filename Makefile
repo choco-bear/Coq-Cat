@@ -17,6 +17,7 @@ Makefile.coq: Makefile $(COQTHEORIES)
 	(echo "-arg -w -arg -deprecated-hint-without-locality"; \
 	 echo "-arg -w -arg -deprecated-instance-without-locality"; \
 	 echo "-arg -w -arg -deprecated-from-Coq"; \
+	 echo "-arg -w -arg -deprecated-missing-stdlib"; \
 	 echo "-arg -w -arg -notation-incompatible-prefix"; \
 	 echo "-arg -w -arg -notation-overriden"; \
 	 echo "-arg -w -arg -ambiguous-paths"; \

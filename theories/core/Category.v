@@ -1,4 +1,5 @@
-From stdpp Require Import prelude.
+Require Import sflib.
+From stdpp Require Import ssreflect.
 
 Class Category (Obj : Type) := mk_Category {
   Arrow : Obj → Obj → Type;
@@ -40,7 +41,7 @@ Arguments _obj [Obj%_type_scope] C%_category_scope : rename.
 Arguments Arrow {Obj%_type_scope C%_category_scope} (x y)%_object_scope : rename.
 Arguments _dom {Obj%_type_scope C%_category_scope x%_object_scope y%_object_scope} f%_morphism_scope : rename.
 Arguments _cod {Obj%_type_scope C%_category_scope x%_object_scope y%_object_scope} f%_morphism_scope : rename.
-Arguments comp_proper {_%_type_scope _%_category_scope} {_ _ _}%_object_scope (f f)%_morphism_scope _ (g g)%_morphism_scope _ : rename.
+Arguments comp_proper {_%_type_scope _%_category_scope} {_ _ _}%_object_scope (f f)%_morphism_scope EQ (g g)%_morphism_scope EQ : rename.
 Arguments comp {Obj%_type_scope C%_category_scope} {x y z}%_object_scope (f g)%_morphism_scope : rename, simpl never.
 Arguments cat_id {Obj%_type_scope C%_category_scope x%_object_scope} : rename, simpl never.
 
@@ -65,20 +66,39 @@ Notation "f '∘[' C ']' g" := (@comp _ C%category _ _ _ f%object g%object) (at 
 Notation "f '≡[' C ']' g" := (f%morphism ≡[hom[C%category] _ _] g%morphism)
   (at level 60, no associativity, only parsing) : coqcat_scope.
 
-Definition Opposite `(C : Category Obj) : Category Obj :=
+Program Definition Opposite `(C : Category Obj) : Category Obj :=
   {|
     Arrow := λ x y, Arrow y x;
     Arrow_equiv := λ x y, Arrow_equiv y x;
 
     comp := λ x y z f g, comp g f;
-    comp_proper := λ x y z f1 f2 feq g1 g2 geq, @comp_proper Obj C z y x g1 g2 geq f1 f2 feq;
-    comp_assoc := λ x y z w f g h, symmetry (@comp_assoc Obj C w z y x h g f);
 
     cat_id := λ x, @cat_id Obj C x;
-    cat_id_left := λ x y f, @cat_id_right Obj C y x f;
-    cat_id_right := λ x y f, @cat_id_left Obj C y x f
   |}.
+Next Obligation. ii. rewrite H H0 //. Qed.
+Next Obligation. ii. ss. rewrite comp_assoc //. Qed.
+Next Obligation. ii. ss. rewrite cat_id_right //. Qed.
+Next Obligation. ii. ss. rewrite cat_id_left //. Qed.
 
 Notation "C 'ᵒᵖ'" := (Opposite C%category) (at level 7, left associativity, format "C ᵒᵖ") : category_scope.
 Notation "'(ᵒᵖ)'" := (@Opposite _) (only parsing) : coqcat_scope.
 Notation "'(ᵒᵖ)@{' Obj '}'" := (@Opposite Obj%type) (at level 9, no associativity, only parsing) : coqcat_scope.
+
+Program Definition BinaryProduct `(C : Category ObjC) `(D : Category ObjD) : Category (ObjC * ObjD) :=
+  {|
+    Arrow := λ x y, (x.1 ~{C}~> y.1) * (x.2 ~{D}~> y.2);
+    Arrow_equiv := λ _ _, prod_equiv;
+
+    comp := λ x y z f g, (f.1 ∘ g.1, f.2 ∘ g.2);
+
+    cat_id := λ x, (id[x.1], id[x.2]);
+  |}%type%morphism.
+Next Obligation. ii. rewrite H H0 //. Qed.
+Next Obligation. ii. ss. rewrite !comp_assoc //. Qed.
+Next Obligation. ii. ss. rewrite !cat_id_left //. Qed.
+Next Obligation. ii. ss. rewrite !cat_id_right //. Qed.
+
+Infix "*" := BinaryProduct : category_scope.
+Notation "(*)" := BinaryProduct (only parsing) : coqcat_scope.
+Notation "( C *.)" := (BinaryProduct C%category) (only parsing) : coqcat_scope.
+Notation "(*. D *)" := (λ C, BinaryProduct C D%category) (only parsing) : coqcat_scope.

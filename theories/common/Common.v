@@ -1,5 +1,5 @@
 Require Export Program Axioms sflib.
-Require Import Permutation Orders String HexString ZArith.
+Require Export Permutation Orders String HexString ZArith.
 Require Import List.
 Export ListNotations.
 Require Export Category.

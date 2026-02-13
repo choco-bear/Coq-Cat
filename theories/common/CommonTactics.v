@@ -17,7 +17,10 @@ Ltac cat := eauto with coqcat.
 Ltac cat_simpl :=
   ii; ss; setoid_subst;
   try solve_proper;
-  normalize in *;
-  try by cat.
+  tryif (
+    solve [ normalize in *; try by cat]
+  ) then idtac else (
+    normalize; try by cat
+  ).
 
 Global Obligation Tactic := program_simpl; cat_simpl.

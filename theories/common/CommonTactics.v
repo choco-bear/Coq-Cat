@@ -16,6 +16,7 @@ Ltac cat := eauto with coqcat.
 
 Ltac cat_simpl :=
   ii; ss; setoid_subst;
+  try apply _;
   try solve_proper;
   tryif (
     solve [ normalize in *; try by cat]

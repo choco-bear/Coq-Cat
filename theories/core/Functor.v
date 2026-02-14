@@ -1,6 +1,6 @@
-Require Import Common.
+Require Import Category CommonTactics.
 
-Class Functor `{C : Category ObjC} `{D : Category ObjD} := mk_Functor {
+Structure Functor `{C : Category ObjC} `{D : Category ObjD} := mk_Functor {
   #[export] fobj :> ObjC → ObjD;
   fmap {x y} (f : x ~> y) : fobj x ~> fobj y;
   #[export] fmap_proper {x y} :: Proper ((≡) ==> (≡)) (@fmap x y);
@@ -18,7 +18,7 @@ Arguments fmap {_%_type_scope C%_category_scope _%_type_scope D%_category_scope}
 Arguments fmap_proper {x y}%_object_scope (f g)%_morphism_scope EQ : rename.
 
 Notation "F # f" := (fmap F%functor f%morphism) (at level 30, right associativity) : morphism_scope.
-Infix "⟶" := Functor (at level 60, right associativity) : type_scope.
+Notation "C ⟶ D" := (Functor C%category D%category) (at level 60, right associativity) : type_scope.
 
 Program Definition IdFunctor `(C : Category Obj) : C ⟶ C :=
   {|

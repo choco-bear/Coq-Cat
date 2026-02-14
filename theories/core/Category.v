@@ -66,6 +66,35 @@ Notation "f '∘[' C ']' g" := (@comp _ C%category _ _ _ f%object g%object) (at 
 Notation "f '≡[' C ']' g" := (f%morphism ≡[hom[C%category] _ _] g%morphism)
   (at level 60, no associativity, only parsing) : coqcat_scope.
 
+Lemma cat_ext_JMeq `(C : Category Obj) `(C' : Category Obj')
+  : Obj = Obj'
+  → JMeq hom[C] hom[C']
+  → JMeq (@Arrow_equiv _ C) (@Arrow_equiv _ C')
+  → JMeq (@comp _ C) (@comp _ C')
+  → JMeq (@cat_id _ C) (@cat_id _ C')
+  → JMeq C C'.
+Proof.
+  rewrite /Category.comp /Category.cat_id.
+  intros <- eqHom eqEquiv eqComp eqId. depdes C C'. ss.
+  apply JMeq_eq in eqHom as ->.
+  apply JMeq_eq in eqComp as ->.
+  apply JMeq_eq in eqEquiv as ->.
+  apply JMeq_eq in eqId as ->.
+  replace Arrow_equivalence0 with Arrow_equivalence1 by apply proof_irr.
+  replace comp_proper0 with comp_proper1 by apply proof_irr.
+  replace comp_assoc0 with comp_assoc1 by apply proof_irr.
+  replace cat_id_left0 with cat_id_left1 by apply proof_irr.
+  by replace cat_id_right0 with cat_id_right1 by apply proof_irr.
+Qed.
+
+Lemma cat_ext [Obj : Type] (C C' : Category Obj)
+  : JMeq hom[C] hom[C']
+  → JMeq (@Arrow_equiv _ C) (@Arrow_equiv _ C')
+  → JMeq (@comp _ C) (@comp _ C')
+  → JMeq (@cat_id _ C) (@cat_id _ C')
+  → C = C'.
+Proof. by i; apply JMeq_eq, cat_ext_JMeq. Qed.
+
 Program Definition Opposite `(C : Category Obj) : Category Obj :=
   {|
     Arrow := λ x y, Arrow y x;
@@ -79,6 +108,9 @@ Program Definition Opposite `(C : Category Obj) : Category Obj :=
 Notation "C 'ᵒᵖ'" := (Opposite C%category) (at level 7, left associativity, format "C ᵒᵖ") : category_scope.
 Notation "'(ᵒᵖ)'" := (@Opposite _) (only parsing) : coqcat_scope.
 Notation "'(ᵒᵖ)@{' Obj '}'" := (@Opposite Obj%type) (at level 9, no associativity, only parsing) : coqcat_scope.
+
+Global Instance opposite_involutive [Obj : Type] : Involutive eq (ᵒᵖ)@{Obj}.
+Proof. by ii; apply cat_ext. Qed.
 
 Program Definition BinaryProduct `(C : Category ObjC) `(D : Category ObjD) : Category (ObjC * ObjD) :=
   {|

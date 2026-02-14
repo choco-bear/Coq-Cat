@@ -1,1 +1,1 @@
-Require Export CommonTactics Category CategoryFacts.
+Require Export CommonTactics Category Functor.

@@ -13,6 +13,7 @@ Delimit Scope functor_scope with functor.
 Bind Scope functor_scope with Functor.
 
 Arguments Functor {_%_type_scope} C%_category_scope {_%_type_scope} D%_category_scope.
+Arguments mk_Functor {_%_type_scope _%_category_scope _%_type_scope _%_category_scope} (_ _ _ _)%_function_scope.
 Arguments fobj {_%_type_scope C%_category_scope _%_type_scope D%_category_scope} F%_functor_scope x%_object_scope : rename, simpl never.
 Arguments fmap {_%_type_scope C%_category_scope _%_type_scope D%_category_scope} F%_functor_scope {x y}%_object_scope f%_morphism_scope : rename, simpl never.
 
@@ -67,14 +68,27 @@ Section FunctorApplications.
 End FunctorApplications.
 Global Opaque IdFunctor ConstantFunctor FunctorCompose.
 
-Class Faithful `{C : Category ObjC} `{D : Category ObjD} (F : C ⟶ D) :=
-  { faithful {x y} (f g : x ~> y) : F # f =[D] F # g → f = g }.
+Section FunctorProperty.
+  Context `{C : Category ObjC} `{D : Category ObjD} (F : C ⟶ D).
 
-Class Full `{C : Category ObjC} `{D : Category ObjD} (F : C ⟶ D) :=
-  { full {x y} (h : F x ~> F y) : ∃ (f : x ~> y), F # f =[D] h }.
+  Class Faithful := faithful : ∀ {x y} (f g : x ~> y), F # f =[D] F # g → f = g.
 
-Class FullyFaithful `{C : Category ObjC} `{D : Category ObjD} (F : C ⟶ D) :=
-  {
-    #[export] fully_faithful_faithful :: Faithful F;
-    #[export] fully_faithful_full :: Full F;
-  }.
+  Class Full := full : ∀ {x y} (h : F x ~> F y), ∃ (f : x ~> y), F # f =[D] h.
+
+  Class FullyFaithful :=
+    {
+      #[export] fully_faithful_faithful :: Faithful;
+      #[export] fully_faithful_full     :: Full;
+    }.
+
+  Class IsFunctorIso :=
+    {
+      inverse_functor   : D ⟶ C;
+      inv_functor_left  : (inverse_functor ∘ F = Id[C])%functor;
+      inv_functor_right : (F ∘ inverse_functor = Id[D])%functor;
+    }.
+End FunctorProperty.
+
+Arguments inverse_functor {_%_type_scope C%_category_scope _%_type_scope D%_category_scope} F%_functor_scope {FunctorIso} : rename, simpl never.
+
+Notation "F '⁻¹'" := (inverse_functor F%functor) (at level 7, left associativity, format "F ⁻¹") : functor_scope.

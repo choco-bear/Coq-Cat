@@ -45,6 +45,28 @@ Infix "∘" := FunctorCompose : functor_scope.
 
 Notation ".↦ v" := (ConstantFunctor v) (at level 8, right associativity) : functor_scope.
 
+Section FunctorApplications.
+  Context `{C : Category ObjC}.
+  Lemma Id_fobj (x : ObjC) : fobj Id[C] x = x.
+  Proof. reflexivity. Qed.
+  Lemma Id_fmap {x y : ObjC} (f : x ~> y) : Id[C] # f =[C] f.
+  Proof. reflexivity. Qed.
+
+  Context `{D : Category ObjD}.
+  Lemma Const_fobj (v : ObjD) (x : ObjC) : fobj (.↦ v) x = v.
+  Proof. reflexivity. Qed.
+  Lemma Const_fmap (v : ObjD) {x y : ObjC} (f : x ~> y) : (.↦ v) # f =[D] id[v].
+  Proof. reflexivity. Qed.
+
+  Context `{B : Category ObjB}.
+  Lemma Comp_fobj (F : C ⟶ D) (G : B ⟶ C) (x : ObjB) : fobj (F ∘ G) x = F (G x).
+  Proof. reflexivity. Qed.
+  Lemma Comp_fmap (F : C ⟶ D) (G : B ⟶ C) {x y : ObjB} (f : x ~> y) : 
+    (F ∘ G) # f =[D] F # (G # f).
+  Proof. reflexivity. Qed.
+End FunctorApplications.
+Global Opaque IdFunctor ConstantFunctor FunctorCompose.
+
 Class Faithful `{C : Category ObjC} `{D : Category ObjD} (F : C ⟶ D) :=
   { faithful {x y} (f g : x ~> y) : F # f =[D] F # g → f = g }.
 

@@ -16,7 +16,11 @@ Global Program Instance iso_functor_fully_faithful
 Next Obligation. fmap F⁻¹ in H. fmap_eq_simplify //. Qed.
 Next Obligation.
   eexists (⇑(F⁻¹ # h))%morphism.
+  duplicate_goal.
+  { fmap_eq_simplify. (* cannot address the hom_cast in the goal! *)
+    (* TODO: we should be able to address the hom_cast in the hypotheses/goal. *)
+    admit. } 
   eapply JMeq_eq. etransitivity; first eapply fmap_JMeq_JMeq=> //.
   autorewrite with functor_prep. eapply (fmap_JMeq (F ∘ F⁻¹) Id).
   Unshelve. all: functor_norm //.
-Qed.
+Admitted.

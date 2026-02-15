@@ -61,9 +61,9 @@ Notation "'id{' C '}'" := (@cat_id _ C%category _) (at level 9, no associativity
 Notation "'id{' C '}[' x ']'" := (@cat_id _ C%category x%object) (at level 9, no associativity, only parsing) : morphism_scope.
 
 Notation "f ∘ g" := (comp f%morphism g%morphism) : morphism_scope.
-Notation "f '∘[' C ']' g" := (@comp _ C%category _ _ _ f%object g%object) (at level 40, only parsing) : morphism_scope.
+Notation "f '∘[' C ']' g" := (@comp _ C%category _ _ _ f%morphism g%morphism) (at level 40, only parsing) : morphism_scope.
 
-Notation "f '≡[' C ']' g" := (f%morphism ≡[hom[C%category] _ _] g%morphism)
+Notation "f '≡[' C ']' g" := (f%morphism ≡@{hom[C%category] _ _} g%morphism)
   (at level 60, no associativity, only parsing) : coqcat_scope.
 
 Lemma cat_ext_JMeq `(C : Category Obj) `(C' : Category Obj')

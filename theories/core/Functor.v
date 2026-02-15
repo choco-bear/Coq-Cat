@@ -4,8 +4,8 @@ Structure Functor `{C : Category ObjC} `{D : Category ObjD} := mk_Functor {
   #[export] fobj :> ObjC → ObjD;
   fmap {x y} (f : x ~> y) : fobj x ~> fobj y;
   #[export] fmap_proper {x y} :: Proper ((≡) ==> (≡)) (@fmap x y);
-  fmap_id x : fmap id[x] ≡ id%morphism;
-  fmap_comp {x y z} (f : y ~> z) (g : x ~> y) : fmap (f ∘ g) ≡ (fmap f ∘ fmap g)%morphism;
+  fmap_id x : fmap id[x] ≡[D] id;
+  fmap_comp {x y z} (f : y ~> z) (g : x ~> y) : fmap (f ∘ g) ≡[D] fmap f ∘ fmap g;
 }.
 Global Hint Rewrite @fmap_id @fmap_comp : normalize.
 

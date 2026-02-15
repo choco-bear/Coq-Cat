@@ -99,19 +99,61 @@ Section FunctorJMeqCast.
   Lemma jm_to_eq {A} {x y : A} : JMeq x y -> x = y.
   Proof. apply JMeq_eq. Qed.
 
-  Context `{C : Category ObjC} `{D : Category ObjD}.
+  Lemma jmeq_downcast_lhs `{C : Category ObjC} {x1 y1 x1' y1' x2 y2 : ObjC}
+    (f : x1 ~> y1) (g : x2 ~> y2) (eqx : x1 = x1') (eqy : y1 = y1')
+    : JMeq (hom_cast eqx eqy f) g → JMeq f g.
+  Proof. depdes eqx eqy. rewrite hom_cast_eq //. Qed.
 
-  Lemma jmeq_subst_lhs (F1 F1' F2 : C ⟶ D) {x1 y1 x2 y2 : ObjC} (f : x1 ~> y1) (g : x2 ~> y2)
+  Lemma jmeq_downcast_rhs `{C : Category ObjC} {x1 y1 x2 y2 x2' y2' : ObjC}
+    (f : x1 ~> y1) (g : x2 ~> y2) (eqx : x2 = x2') (eqy : y2 = y2')
+    : JMeq f (hom_cast eqx eqy g) → JMeq f g.
+  Proof. depdes eqx eqy. rewrite hom_cast_eq //. Qed.
+
+  Lemma jmeq_upcast_lhs `{C : Category ObjC} {x1 y1 x1' y1' x2 y2 : ObjC}
+    (f : x1 ~> y1) (g : x2 ~> y2) (eqx : x1 = x1') (eqy : y1 = y1')
+    : JMeq f g → JMeq (hom_cast eqx eqy f) g.
+  Proof. depdes eqx eqy. rewrite hom_cast_eq //. Qed.
+
+  Lemma jmeq_upcast_rhs `{C : Category ObjC} {x1 y1 x2 y2 x2' y2' : ObjC}
+    (f : x1 ~> y1) (g : x2 ~> y2) (eqx : x2 = x2') (eqy : y2 = y2')
+    : JMeq f g → JMeq f (hom_cast eqx eqy g).
+  Proof. depdes eqx eqy. rewrite hom_cast_eq //. Qed.
+
+  Lemma jmeq_subst_lhs `{C : Category ObjC} `{D : Category ObjD} (F1 F1' F2 : C ⟶ D)
+    {x1 y1 x2 y2 : ObjC} (f : x1 ~> y1) (g : x2 ~> y2)
     : JMeq (F1 # f) (F2 # g) -> F1 = F1' -> JMeq (F1' # f) (F2 # g).
-  Proof. intros H <-. exact H. Qed.
+  Proof. by i; subst. Qed.
 
-  Lemma jmeq_subst_rhs (F1 F2 F2' : C ⟶ D) {x1 y1 x2 y2 : ObjC} (f : x1 ~> y1) (g : x2 ~> y2)
+  Lemma jmeq_subst_rhs `{C : Category ObjC} `{D : Category ObjD} (F1 F2 F2' : C ⟶ D)
+    {x1 y1 x2 y2 : ObjC} (f : x1 ~> y1) (g : x2 ~> y2)
     : JMeq (F1 # f) (F2 # g) -> F2 = F2' -> JMeq (F1 # f) (F2' # g).
-  Proof. intros H <-. exact H. Qed.
+  Proof. by i; subst. Qed.
+
+  Lemma jmeq_fmap_cast_lhs `{C : Category ObjC} `{D : Category ObjD} (F : C ⟶ D)
+    {x1 y1 x1' y1' : ObjC} (f : x1 ~> y1) {x2 y2 : ObjD} (g : x2 ~> y2) (eqx : x1 = x1') (eqy : y1 = y1')
+    : JMeq (F # (hom_cast eqx eqy f)) g → JMeq (hom_cast (fapply F eqx) (fapply F eqy) (F # f)) g.
+  Proof. depdes eqx eqy. rewrite !hom_cast_eq //. Qed.
+
+  Lemma jmeq_fmap_cast_rhs `{C : Category ObjC} `{D : Category ObjD} (F : C ⟶ D)
+    {x1 y1 : ObjD} (f : x1 ~> y1) {x2 y2 x2' y2' : ObjC} (g : x2 ~> y2) (eqx : x2 = x2') (eqy : y2 = y2')
+    : JMeq f (F # (hom_cast eqx eqy g)) → JMeq f (hom_cast (fapply F eqx) (fapply F eqy) (F # g)).
+  Proof. depdes eqx eqy. rewrite !hom_cast_eq //. Qed.
+
+  Lemma jmeq_cast_fmap_lhs `{C : Category ObjC} `{D : Category ObjD} (F : C ⟶ D)
+    {x1 y1 x1' y1' : ObjC} (f : x1 ~> y1) {x2 y2 : ObjD} (g : x2 ~> y2) (eqx : x1 = x1') (eqy : y1 = y1')
+    : JMeq (hom_cast (fapply F eqx) (fapply F eqy) (F # f)) g → JMeq (F # (hom_cast eqx eqy f)) g.
+  Proof. depdes eqx eqy. rewrite !hom_cast_eq //. Qed.
+
+  Lemma jmeq_cast_fmap_rhs `{C : Category ObjC} `{D : Category ObjD} (F : C ⟶ D)
+    {x1 y1 : ObjD} (f : x1 ~> y1) {x2 y2 x2' y2' : ObjC} (g : x2 ~> y2) (eqx : x2 = x2') (eqy : y2 = y2')
+    : JMeq f (hom_cast (fapply F eqx) (fapply F eqy) (F # g)) → JMeq f (F # (hom_cast eqx eqy g)).
+  Proof. depdes eqx eqy. rewrite !hom_cast_eq //. Qed.
 End FunctorJMeqCast.
 
-Ltac fmap_eq_simplify :=
-  match goal with
+Ltac fmap_eq_simplify_prep :=
+  tryif (do ! match goal with
+  | [ H : (?F1 # ?f1)%morphism = (?F2 # ?f2)%morphism |- _ ] => apply eq_to_jm in H
+  | [|- (?F1 # ?f1)%morphism = (?F2 # ?f2)%morphism ] => apply jm_to_eq
   | [|- ?f = ?g ] =>
       match type of f with
       | ?x ~> ?y =>
@@ -126,13 +168,27 @@ Ltac fmap_eq_simplify :=
           remember g as MORPHISM eqn:HeqMORPHISM;
           rewrite EQ; clear EQ; subst MORPHISM
       end
-  end;
+  end) then ( autorewrite with functor_prep in * ) else (fail "No morphism equalities found").
+
+Ltac fmap_eq_simplify :=
+  fmap_eq_simplify_prep;
   repeat match goal with
-  | [ H : (?F1 # ?f1)%morphism = (?F2 # ?f2)%morphism |- _ ] => apply eq_to_jm in H
-  | [|- (?F1 # ?f1)%morphism = (?F2 # ?f2)%morphism ] => apply jm_to_eq
-  end;
-  autorewrite with functor_prep in *;
-  repeat match goal with
+  | [ H : JMeq (?F # ⇑ ?f)%morphism ?g |- _ ] =>
+      eapply (jmeq_fmap_cast_lhs F f g) in H
+  | [ H : JMeq ?f (?F # ⇑ ?g)%morphism |- _ ] =>
+      eapply (jmeq_fmap_cast_rhs F f g) in H
+  | [|- JMeq (?F # ⇑ ?f)%morphism ?g ] =>
+      eapply (jmeq_cast_fmap_lhs F f g)
+  | [|- JMeq ?f (?F # ⇑ ?g)%morphism ] =>
+      eapply (jmeq_cast_fmap_rhs F f g)
+  | [|- JMeq (⇑ ?f)%morphism ?g ] =>
+      eapply jmeq_upcast_lhs
+  | [|- JMeq ?f (⇑ ?g)%morphism ] =>
+      eapply jmeq_upcast_rhs
+  | [ H : JMeq (⇑ ?f)%morphism ?g |- _ ] =>
+      eapply jmeq_downcast_lhs in H
+  | [ H : JMeq ?f (⇑ ?g)%morphism |- _ ] =>
+      eapply jmeq_downcast_rhs in H
   | [ H : JMeq (?F1 # ?f1)%morphism (?F2 # ?f2)%morphism |- _ ] =>
       let EQ := fresh "EQ" in
       eassert (EQ : F1 = _); first progress autorewrite with functor_laws; first reflexivity;
@@ -157,6 +213,7 @@ Ltac fmap_eq_simplify :=
       match type of EQ with
       | ?F = F2 => eapply (jmeq_subst_rhs F1 F F2 f1 f2); [|exact EQ]
       end; clear EQ
+  | _ => progress autorewrite with functor_prep in *
   end;
   repeat match goal with
   | [ H : JMeq (?F # ?f)%morphism (?F # ?g)%morphism |- _ ] => apply jm_to_eq in H

@@ -48,22 +48,22 @@ Notation ".↦ v" := (ConstantFunctor v) (at level 8, right associativity) : fun
 
 Section FunctorApplications.
   Context `{C : Category ObjC}.
-  Lemma Id_fobj (x : ObjC) : fobj Id[C] x = x.
+  Lemma Id_fobj : fobj Id[C] = Datatypes.id.
   Proof. reflexivity. Qed.
-  Lemma Id_fmap {x y : ObjC} (f : x ~> y) : Id[C] # f =[C] f.
+  Lemma Id_fmap {x y : ObjC} : fmap Id[C] = Datatypes.id :> (_ → x ~> y).
   Proof. reflexivity. Qed.
 
   Context `{D : Category ObjD}.
-  Lemma Const_fobj (v : ObjD) (x : ObjC) : fobj (.↦ v) x = v.
+  Lemma Const_fobj (v : ObjD) : fobj (.↦ v) = λ _, v.
   Proof. reflexivity. Qed.
-  Lemma Const_fmap (v : ObjD) {x y : ObjC} (f : x ~> y) : (.↦ v) # f =[D] id[v].
+  Lemma Const_fmap (v : ObjD) {x y : ObjC} : fmap (.↦ v) = (λ _, id[v]%morphism) :> (x ~> y → _).
   Proof. reflexivity. Qed.
 
   Context `{B : Category ObjB}.
-  Lemma Comp_fobj (F : C ⟶ D) (G : B ⟶ C) (x : ObjB) : fobj (F ∘ G) x = F (G x).
+  Lemma Comp_fobj (F : C ⟶ D) (G : B ⟶ C) : fobj (F ∘ G) = F ∘ G.
   Proof. reflexivity. Qed.
-  Lemma Comp_fmap (F : C ⟶ D) (G : B ⟶ C) {x y : ObjB} (f : x ~> y) : 
-    (F ∘ G) # f =[D] F # (G # f).
+  Lemma Comp_fmap (F : C ⟶ D) (G : B ⟶ C) {x y : ObjB} : 
+    fmap (F ∘ G) = fmap F ∘ fmap G :> (x ~> y → _).
   Proof. reflexivity. Qed.
 End FunctorApplications.
 Global Opaque IdFunctor ConstantFunctor FunctorCompose.

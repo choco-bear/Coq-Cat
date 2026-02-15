@@ -2,18 +2,14 @@ Require Import CommonTactics.
 
 Class Category (Obj : Type) := mk_Category {
   Arrow : Obj → Obj → Type;
-  
-  #[export] Arrow_equiv x y :: Equiv (Arrow x y);
-  #[export] Arrow_equivalence x y :: Equivalence (≡@{Arrow x y});
 
   comp {x y z} : Arrow y z → Arrow x y → Arrow x z;
-  #[export] comp_proper {x y z} :: Proper ((≡) ==> (≡) ==> (≡)) (@comp x y z);
   comp_assoc {x y z w} (f : Arrow z w) (g : Arrow y z) (h : Arrow x y)
-    : comp (comp f g) h ≡ comp f (comp g h);
+    : comp (comp f g) h = comp f (comp g h);
 
   cat_id x : Arrow x x;
-  cat_id_left {x y} (f : Arrow x y) : comp (cat_id y) f ≡ f;
-  cat_id_right {x y} (f : Arrow x y) : comp f (cat_id x) ≡ f;
+  cat_id_left {x y} (f : Arrow x y) : comp (cat_id y) f = f;
+  cat_id_right {x y} (f : Arrow x y) : comp f (cat_id x) = f;
 }.
 Global Hint Rewrite @comp_assoc @cat_id_left @cat_id_right : normalize.
 
@@ -41,7 +37,6 @@ Arguments _obj [Obj%_type_scope] C%_category_scope : rename.
 Arguments Arrow {Obj%_type_scope C%_category_scope} (x y)%_object_scope : rename.
 Arguments _dom {Obj%_type_scope C%_category_scope x%_object_scope y%_object_scope} f%_morphism_scope : rename.
 Arguments _cod {Obj%_type_scope C%_category_scope x%_object_scope y%_object_scope} f%_morphism_scope : rename.
-Arguments comp_proper {_%_type_scope _%_category_scope} {_ _ _}%_object_scope (f f)%_morphism_scope EQ (g g)%_morphism_scope EQ : rename.
 Arguments comp {Obj%_type_scope C%_category_scope} {x y z}%_object_scope (f g)%_morphism_scope : rename, simpl never.
 Arguments cat_id {Obj%_type_scope C%_category_scope x%_object_scope} : rename, simpl never.
 
@@ -63,25 +58,21 @@ Notation "'id{' C '}[' x ']'" := (@cat_id _ C%category x%object) (at level 9, no
 Notation "f ∘ g" := (comp f%morphism g%morphism) : morphism_scope.
 Notation "f '∘[' C ']' g" := (@comp _ C%category _ _ _ f%morphism g%morphism) (at level 40, only parsing) : morphism_scope.
 
-Notation "f '≡[' C ']' g" := (f%morphism ≡@{hom[C%category] _ _} g%morphism)
+Notation "f '=[' C ']' g" := (f%morphism = g%morphism :> (hom[C%category] _ _))
   (at level 60, no associativity, only parsing) : coqcat_scope.
 
 Lemma cat_ext_JMeq `(C : Category Obj) `(C' : Category Obj')
   : Obj = Obj'
   → JMeq hom[C] hom[C']
-  → JMeq (@Arrow_equiv _ C) (@Arrow_equiv _ C')
   → JMeq (@comp _ C) (@comp _ C')
   → JMeq (@cat_id _ C) (@cat_id _ C')
   → JMeq C C'.
 Proof.
   rewrite /Category.comp /Category.cat_id.
-  intros <- eqHom eqEquiv eqComp eqId. depdes C C'. ss.
+  intros <- eqHom eqComp eqId. depdes C C'. ss.
   apply JMeq_eq in eqHom as ->.
   apply JMeq_eq in eqComp as ->.
-  apply JMeq_eq in eqEquiv as ->.
   apply JMeq_eq in eqId as ->.
-  replace Arrow_equivalence0 with Arrow_equivalence1 by apply proof_irr.
-  replace comp_proper0 with comp_proper1 by apply proof_irr.
   replace comp_assoc0 with comp_assoc1 by apply proof_irr.
   replace cat_id_left0 with cat_id_left1 by apply proof_irr.
   by replace cat_id_right0 with cat_id_right1 by apply proof_irr.
@@ -89,7 +80,6 @@ Qed.
 
 Lemma cat_ext [Obj : Type] (C C' : Category Obj)
   : JMeq hom[C] hom[C']
-  → JMeq (@Arrow_equiv _ C) (@Arrow_equiv _ C')
   → JMeq (@comp _ C) (@comp _ C')
   → JMeq (@cat_id _ C) (@cat_id _ C')
   → C = C'.
@@ -98,10 +88,7 @@ Proof. by i; apply JMeq_eq, cat_ext_JMeq. Qed.
 Program Definition Opposite `(C : Category Obj) : Category Obj :=
   {|
     Arrow := λ x y, Arrow y x;
-    Arrow_equiv := λ x y, Arrow_equiv y x;
-
     comp := λ x y z f g, comp g f;
-
     cat_id := λ x, @cat_id Obj C x;
   |}.
 
@@ -115,10 +102,7 @@ Proof. by ii; apply cat_ext. Qed.
 Program Definition BinaryProduct `(C : Category ObjC) `(D : Category ObjD) : Category (ObjC * ObjD) :=
   {|
     Arrow := λ x y, (x.1 ~{C}~> y.1) * (x.2 ~{D}~> y.2);
-    Arrow_equiv := λ _ _, prod_equiv;
-
     comp := λ x y z f g, (f.1 ∘ g.1, f.2 ∘ g.2);
-
     cat_id := λ x, (id[x.1], id[x.2]);
   |}%type%morphism.
 

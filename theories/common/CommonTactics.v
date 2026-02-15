@@ -15,7 +15,7 @@ Tactic Notation "normalize" "in" "*" := autorewrite with normalize in *.
 Ltac cat := eauto with coqcat.
 
 Ltac cat_simpl :=
-  ii; ss; setoid_subst;
+  ii; ss; subst;
   try apply _;
   try solve_proper;
   tryif (

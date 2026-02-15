@@ -20,11 +20,11 @@ Program Definition Powerset : Sets ⟶ Sets :=
   |}.
 Next Obligation.
   rename x into X.
-  apply func_ext=> P. normalize. apply pred_ext=> x.
-  split=> [[y] [/[swap] ->]|]; normalize; eauto.
+  apply func_ext=> P. common_normalize. apply pred_ext=> x.
+  split=> [[y] [/[swap] ->]|]; common_normalize; eauto.
 Qed.
 Next Obligation.
   rename x into X. rename y into Y. rename z into Z.
-  apply func_ext=> P. normalize. apply pred_ext=> z.
-  split=> [[x] [/[swap] ->]|[y] [[x] /[swap] ->] [/[swap] ->]]; normalize; eauto.
+  apply func_ext=> P. common_normalize. apply pred_ext=> z.
+  split=> [[x] [/[swap] ->]|[y] [[x] /[swap] ->] [/[swap] ->]]; common_normalize; eauto.
 Qed.

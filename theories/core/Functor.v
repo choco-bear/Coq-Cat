@@ -41,7 +41,7 @@ Program Definition ConstantFunctor `{C : Category ObjC} `{D : Category ObjD} (v 
 Notation "'Id'" := (IdFunctor _) (only parsing) : functor_scope.
 Notation "'Id[' C ']'" := (IdFunctor C%category) (at level 7, no associativity, format "Id[ C ]") : functor_scope.
 
-Infix "∘" := FunctorCompose : functor_scope.
+Notation "F ∘ G" := (FunctorCompose F%functor G%functor) : functor_scope.
 
 Notation ".↦ v" := (ConstantFunctor v) (at level 8, right associativity) : functor_scope.
 

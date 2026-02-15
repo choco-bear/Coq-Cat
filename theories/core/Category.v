@@ -106,7 +106,4 @@ Program Definition BinaryProduct `(C : Category ObjC) `(D : Category ObjD) : Cat
     cat_id := λ x, (id[x.1], id[x.2]);
   |}%type%morphism.
 
-Infix "*" := BinaryProduct : category_scope.
-Notation "(*)" := BinaryProduct (only parsing) : coqcat_scope.
-Notation "( C *.)" := (BinaryProduct C%category) (only parsing) : coqcat_scope.
-Notation "(*. D *)" := (λ C, BinaryProduct C D%category) (only parsing) : coqcat_scope.
+Notation "C × D" := (BinaryProduct C%category D%category) (at level 41, right associativity): category_scope.

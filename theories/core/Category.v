@@ -85,6 +85,23 @@ Lemma cat_ext [Obj : Type] (C C' : Category Obj)
   → C = C'.
 Proof. by i; apply JMeq_eq, cat_ext_JMeq. Qed.
 
+Definition hom_cast [Obj : Type] {C : Category Obj} [x x' : Obj] (eqx : x = x') [y y' : Obj] (eqy : y = y') (f : x ~> y) : x' ~> y' :=
+  match eqx with
+  | eq_refl => match eqy with
+               | eq_refl => f
+               end
+  end.
+
+Notation "⇑ f" := (hom_cast _ _ f%morphism) (at level 8, right associativity, format "⇑ f") : morphism_scope.
+
+Lemma hom_cast_eq `{C : Category Obj} [x : Obj] (eqx : x = x) [y : Obj] (eqy : y = y) (f : x ~> y)
+  : hom_cast eqx eqy f = f.
+Proof. depdes eqx eqy. reflexivity. Qed.
+
+Lemma hom_cast_JMeq [Obj : Type] {C : Category Obj} [x x' : Obj] (eqx : x = x') [y y' : Obj] (eqy : y = y') (f : x ~> y)
+  : JMeq (hom_cast eqx eqy f) f.
+Proof. depdes eqx eqy. reflexivity. Qed.
+
 Program Definition Opposite `(C : Category Obj) : Category Obj :=
   {|
     Arrow := λ x y, Arrow y x;

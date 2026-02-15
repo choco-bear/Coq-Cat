@@ -28,7 +28,7 @@ Ltac common_simpl :=
 
 Global Obligation Tactic := program_simpl; common_simpl.
 
-Lemma fapply [A B : Type] (f : A → B) x y : x = y → f x = f y.
+Lemma fapply [A B : Type] (f : A → B) [x y : A] : x = y → f x = f y.
 Proof. i; rewrite H //. Qed.
 
 Tactic Notation "fapply" uconstr(f) "in" hyp(H) := eapply (fapply f) in H.

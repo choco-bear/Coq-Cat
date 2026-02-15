@@ -45,3 +45,15 @@ Notation "'Id[' C ']'" := (IdFunctor C%category) (at level 7, no associativity) 
 Infix "∘" := FunctorCompose : functor_scope.
 
 Notation ".↦ v" := (ConstantFunctor v) (at level 8, right associativity) : functor_scope.
+
+Class Faithful `{C : Category ObjC} `{D : Category ObjD} (F : C ⟶ D) :=
+  { faithful {x y} (f g : x ~> y) : F # f ≡[D] F # g → f ≡ g }.
+
+Class Full `{C : Category ObjC} `{D : Category ObjD} (F : C ⟶ D) :=
+  { full {x y} (h : F x ~> F y) : ∃ (f : x ~> y), F # f ≡[D] h }.
+
+Class FullyFaithful `{C : Category ObjC} `{D : Category ObjD} (F : C ⟶ D) :=
+  {
+    #[export] fully_faithful_faithful :: Faithful F;
+    #[export] fully_faithful_full :: Full F;
+  }.

@@ -89,3 +89,54 @@ End Inverses.
 Global Hint Rewrite @functor_inv_norm_1 @functor_inv_norm_2 : functor_laws.
 Global Hint Rewrite @inverse_functor_fobj : functor_unfold.
 Global Hint Rewrite <- @inverse_functor_fobj : functor_prep.
+
+Section FunctorJMeqCast.
+  Local Open Scope morphism_scope.
+
+  Lemma eq_to_jm {A} {x y : A} : x = y -> JMeq x y.
+  Proof. intros ->. apply JMeq_refl. Qed.
+
+  Lemma jm_to_eq {A} {x y : A} : JMeq x y -> x = y.
+  Proof. apply JMeq_eq. Qed.
+
+  Context `{C : Category ObjC} `{D : Category ObjD}.
+
+  Lemma jmeq_subst_lhs (F1 F1' F2 : C ⟶ D) {x1 y1 x2 y2 : ObjC} (f : x1 ~> y1) (g : x2 ~> y2)
+    : JMeq (F1 # f) (F2 # g) -> F1 = F1' -> JMeq (F1' # f) (F2 # g).
+  Proof. intros H <-. exact H. Qed.
+
+  Lemma jmeq_subst_rhs (F1 F2 F2' : C ⟶ D) {x1 y1 x2 y2 : ObjC} (f : x1 ~> y1) (g : x2 ~> y2)
+    : JMeq (F1 # f) (F2 # g) -> F2 = F2' -> JMeq (F1 # f) (F2' # g).
+  Proof. intros H <-. exact H. Qed.
+End FunctorJMeqCast.
+
+Ltac fmap_eq_simplify :=
+  repeat match goal with
+  | [ H : (?F1 # ?f1)%morphism = (?F2 # ?f2)%morphism |- _ ] => apply eq_to_jm in H
+  | [|- (?F1 # ?f1)%morphism = (?F2 # ?f2)%morphism ] => apply jm_to_eq
+  end;
+  autorewrite with functor_prep in *;
+  repeat match goal with
+  | [ H : JMeq (?F1 # ?f1)%morphism (?F2 # ?f2)%morphism |- _ ] =>
+      let EQ := fresh "EQ" in
+      eassert (EQ : F1 = _); first progress autorewrite with functor_laws; first reflexivity;
+      match type of EQ with
+      | F1 = ?F => eapply (jmeq_subst_lhs F1 F F2 f1 f2) in H; [|exact EQ]
+      end; clear EQ
+  | [ H : JMeq (?F1 # ?f1)%morphism (?F2 # ?f2)%morphism |- _ ] =>
+      let EQ := fresh "EQ" in
+      eassert (EQ : F2 = _); first progress autorewrite with functor_laws; first reflexivity;
+      match type of EQ with
+      | F2 = ?F => eapply (jmeq_subst_rhs F1 F2 F f1 f2) in H; [|exact EQ]
+      end; clear EQ
+  end;
+  repeat match goal with
+  | [ H : JMeq (?F # ?f)%morphism (?F # ?g)%morphism |- _ ] => apply jm_to_eq in H
+  | [|- JMeq (?F # ?f)%morphism (?F # ?g)%morphism ] => apply eq_to_jm
+  end.
+Tactic Notation "fmap_eq_simplify" "//" := fmap_eq_simplify=> //.
+Tactic Notation "fmap_eq_simplify" "/=" := fmap_eq_simplify=> /=.
+Tactic Notation "fmap_eq_simplify" "//=" := fmap_eq_simplify=> //=.
+
+Tactic Notation "fmap" constr(F) "in" hyp(H) := eapply (fapply (fmap F)) in H.
+Tactic Notation "fmap" constr(F) "in" hyp(H) "as" ident(name) := eapply (fapply (fmap F)) in H as name.

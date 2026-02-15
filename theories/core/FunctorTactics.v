@@ -111,6 +111,22 @@ Section FunctorJMeqCast.
 End FunctorJMeqCast.
 
 Ltac fmap_eq_simplify :=
+  match goal with
+  | [|- ?f = ?g ] =>
+      match type of f with
+      | ?x ~> ?y =>
+          let EQ := fresh "EQ" in let MORPHISM := fresh "MORPHISM" in let HeqMORPHISM := fresh "HeqMORPHISM" in
+          assert (EQ : f = (Id # f)%morphism) by reflexivity;
+          remember f as MORPHISM eqn:HeqMORPHISM;
+          rewrite EQ; clear EQ; subst MORPHISM
+      end; match type of g with
+      | ?x ~> ?y =>
+          let EQ := fresh "EQ" in let MORPHISM := fresh "MORPHISM" in let HeqMORPHISM := fresh "HeqMORPHISM" in
+          assert (EQ : g = (Id # g)%morphism) by reflexivity;
+          remember g as MORPHISM eqn:HeqMORPHISM;
+          rewrite EQ; clear EQ; subst MORPHISM
+      end
+  end;
   repeat match goal with
   | [ H : (?F1 # ?f1)%morphism = (?F2 # ?f2)%morphism |- _ ] => apply eq_to_jm in H
   | [|- (?F1 # ?f1)%morphism = (?F2 # ?f2)%morphism ] => apply jm_to_eq
@@ -128,6 +144,18 @@ Ltac fmap_eq_simplify :=
       eassert (EQ : F2 = _); first progress autorewrite with functor_laws; first reflexivity;
       match type of EQ with
       | F2 = ?F => eapply (jmeq_subst_rhs F1 F2 F f1 f2) in H; [|exact EQ]
+      end; clear EQ
+  | [|- JMeq (?F1 # ?f1)%morphism (?F2 # ?f2)%morphism] =>
+      let EQ := fresh "EQ" in
+      eassert (EQ : _ = F1); first progress autorewrite with functor_laws; first reflexivity;
+      match type of EQ with
+      | ?F = F1 => eapply (jmeq_subst_lhs F F1 F2 f1 f2); [|exact EQ]
+      end; clear EQ
+  | [|- JMeq (?F1 # ?f1)%morphism (?F2 # ?f2)%morphism] =>
+      let EQ := fresh "EQ" in
+      eassert (EQ : _ = F2); first progress autorewrite with functor_laws; first reflexivity;
+      match type of EQ with
+      | ?F = F2 => eapply (jmeq_subst_rhs F1 F F2 f1 f2); [|exact EQ]
       end; clear EQ
   end;
   repeat match goal with

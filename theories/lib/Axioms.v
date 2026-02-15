@@ -2,17 +2,13 @@ Require ClassicalFacts.
 Require FunctionalExtensionality.
 Require ChoiceFacts.
 Require IndefiniteDescription.
-Require ProofIrrelevance.
+Require PropExtensionality.
 
 Lemma func_ext_dep {A} {B : A -> Type} (f g : forall x, B x) : (forall x, f x = g x) -> f = g.
-Proof.
-  apply @FunctionalExtensionality.functional_extensionality_dep.
-Qed.
+Proof. apply @FunctionalExtensionality.functional_extensionality_dep. Qed.
 
 Lemma func_ext {A B} (f g : A -> B) : (forall x, f x = g x) -> f = g.
-Proof.
-  apply func_ext_dep.
-Qed.
+Proof. apply func_ext_dep. Qed.
 
 Lemma dependent_functional_choice {A : Type} (B : A -> Type) :
   forall R : forall x : A, B x -> Prop,
@@ -23,8 +19,15 @@ Proof.
   clear. exact Stdlib.Logic.IndefiniteDescription.functional_choice.
 Qed.
 
-Lemma proof_irr : ClassicalFacts.proof_irrelevance.
+Lemma prop_ext (P Q : Prop) : (P <-> Q) -> P = Q.
+Proof. apply PropExtensionality.propositional_extensionality. Qed.
+
+Lemma pred_ext {A} (P Q : A -> Prop) : (forall x : A, P x <-> Q x) -> P = Q.
+Proof. intros. apply func_ext. intros. apply prop_ext. auto. Qed.
+
+Lemma proof_irr [P : Prop] (p q : P) : p = q.
 Proof.
-  red. intros. apply ProofIrrelevance.proof_irrelevance.
+  cut (P = True).
+  { intros ->. destruct p, q. reflexivity. }
+  apply prop_ext. intuition.
 Qed.
-Arguments proof_irr [A].

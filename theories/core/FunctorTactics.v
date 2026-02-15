@@ -51,6 +51,7 @@ Section FunctorPreps.
   Proof. rewrite Comp_fmap //. Qed.
 End FunctorPreps.
 Global Hint Rewrite @functor_prep_compose_fobj @functor_prep_compose_fmap : functor_prep.
+Global Hint Rewrite <- @Comp_fobj @Comp_fmap : functor_prep.
 
 Section FunctorLaws.
   Context `{C : Category ObjC} `{D : Category ObjD}.

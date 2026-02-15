@@ -7,6 +7,8 @@ From stdpp Require Export ssreflect.
 Create HintDb normalize discriminated.
 Create HintDb coqcat discriminated.
 
+Global Hint Rewrite @compose_id_right @compose_id_left.
+
 Ltac common_normalize := autorewrite with normalize.
 Tactic Notation "common_normalize" "in" hyp(H) := autorewrite with normalize in H.
 Tactic Notation "common_normalize" "in" "*" "|-" := repeat_on_hyps (fun H => common_normalize in H).

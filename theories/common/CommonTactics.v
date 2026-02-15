@@ -33,3 +33,8 @@ Proof. i; rewrite H //. Qed.
 
 Tactic Notation "fapply" uconstr(f) "in" hyp(H) := eapply (fapply f) in H.
 Tactic Notation "fapply" uconstr(f) "in" hyp(H) "as" ident(name) := eapply (fapply f) in H as name. 
+
+Lemma duplicate_goal P : P → P → P.
+Proof. ss. Qed.
+
+Ltac duplicate_goal := match goal with [|- ?G ] => apply (duplicate_goal G) end.

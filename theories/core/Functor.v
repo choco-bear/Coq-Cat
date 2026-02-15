@@ -71,9 +71,13 @@ Global Opaque IdFunctor ConstantFunctor FunctorCompose.
 Section FunctorProperty.
   Context `{C : Category ObjC} `{D : Category ObjD} (F : C ⟶ D).
 
-  Class Faithful := faithful : ∀ {x y} (f g : x ~> y), F # f =[D] F # g → f = g.
+  Class Faithful := {
+    #[export] faithful {x y : ObjC} :: Inj (=) (=) (fmap F : x ~> y → _)
+  }.
 
-  Class Full := full : ∀ {x y} (h : F x ~> F y), ∃ (f : x ~> y), F # f =[D] h.
+  Class Full := {
+    #[export] full {x y : ObjC} :: Surj (=) (fmap F : x ~> y → _)
+  }.
 
   Class FullyFaithful :=
     {

@@ -38,3 +38,5 @@ Lemma duplicate_goal P : P → P → P.
 Proof. ss. Qed.
 
 Ltac duplicate_goal := match goal with [|- ?G ] => apply (duplicate_goal G) end.
+
+Ltac construct := unshelve econstructor; ii; ss.

@@ -1,1 +1,1 @@
-Require Export CommonTactics CommonFacts Category Functor.
+Require Export CommonTactics CommonFacts Category Functor FunctorTactics Morphism.

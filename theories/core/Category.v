@@ -5,7 +5,7 @@ Class Category (Obj : Type) := mk_Category {
 
   comp {x y z} : Arrow y z → Arrow x y → Arrow x z;
   comp_assoc {x y z w} (f : Arrow z w) (g : Arrow y z) (h : Arrow x y)
-    : comp (comp f g) h = comp f (comp g h);
+    : comp f (comp g h) = comp (comp f g) h;
 
   cat_id x : Arrow x x;
   cat_id_left {x y} (f : Arrow x y) : comp (cat_id y) f = f;

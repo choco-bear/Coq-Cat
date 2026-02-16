@@ -126,3 +126,7 @@ Program Definition BinaryProduct `(C : Category ObjC) `(D : Category ObjD) : Cat
   |}%type%morphism.
 
 Notation "C × D" := (BinaryProduct C%category D%category) (at level 41, right associativity): category_scope.
+
+Class IsPreOrder `(C : Category Obj) := {
+  #[export] is_preorder x y :: ProofIrrel (x ~> y)
+}.

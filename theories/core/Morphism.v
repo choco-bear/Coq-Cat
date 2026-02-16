@@ -112,3 +112,7 @@ Section MorphismProperty.
   }.
 End MorphismProperty.
 Global Hint Rewrite @idempotent @retr_left_inv @sect_right_inv : normalize.
+
+Class IsGroupoid `(C : Category Obj) := {
+  #[export] is_groupoid {x y} (f : x ~> y) :: IsIsomorphism f
+}.

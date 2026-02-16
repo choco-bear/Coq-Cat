@@ -40,3 +40,16 @@ Proof. ss. Qed.
 Ltac duplicate_goal := match goal with [|- ?G ] => apply (duplicate_goal G) end.
 
 Ltac construct := unshelve econstructor; ii; ss.
+
+Notation CReflexive := CRelationClasses.Reflexive.
+Notation CSymmetric := CRelationClasses.Symmetric.
+Notation CTransitive := CRelationClasses.Transitive.
+Notation CEquivalence := CRelationClasses.Equivalence.
+Notation CAntisymmetric := CRelationClasses.Antisymmetric.
+Notation CAsymmetric := CRelationClasses.Asymmetric.
+Notation CPreOrder := CRelationClasses.PreOrder.
+Notation CPartialOrder := CRelationClasses.PartialOrder.
+Notation crelation := CRelationClasses.crelation.
+Notation CEquivalence_CReflexive := CRelationClasses.Equivalence_Reflexive.
+Notation CEquivalence_CSymmetric := CRelationClasses.Equivalence_Symmetric.
+Notation CEquivalence_CTransitive := CRelationClasses.Equivalence_Transitive.

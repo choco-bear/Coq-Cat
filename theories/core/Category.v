@@ -134,3 +134,9 @@ Class IsPreOrder `(C : Category Obj) := {
 Class IsMonoid `(C : Category Obj) := {
   #[export] is_monoid :: Unique Obj
 }.
+
+Global Instance hom_c_preorder `(C : Category Obj) : CPreOrder hom[C] :=
+  {|
+    CPreOrder_CReflexive  := λ x, id[x];
+    CPreOrder_CTransitive := λ _ _ _ f g, g ∘ f;
+  |}%morphism.

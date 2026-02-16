@@ -53,20 +53,20 @@ Declare Scope iso_scope.
 Delimit Scope iso_scope with iso.
 Bind Scope iso_scope with Isomorphic.
 
-Notation "x ≅ y" := (Isomorphic x%object y%object) (at level 70, no associativity) : iso_scope.
+Arguments iso_morphism {Obj%_type_scope C%_category_scope} [x y]%_object_scope ! ISO%_iso_scope : rename.
+
+Notation "x ≅ y" := (Isomorphic x%object y%object) (at level 70, no associativity) : type_scope.
 Notation "x '≅[' C ']' y" := (@Isomorphic _ C%category x%object y%object)
-  (at level 70, no associativity, format "x  ≅[ C ]  y") : iso_scope.
+  (at level 70, no associativity, format "x  ≅[ C ]  y") : type_scope.
 
 Section IsomorphicEquivalence.
   Context `{C : Category Obj}.
-  Local Open Scope iso_scope.
 
-  Definition isomorphic_refl (x : Obj) : (x ≅ x) := {| iso_morphism := id[x] |}.
+  Definition isomorphic_refl (x : Obj) : x ≅ x := {| iso_morphism := id[x] |}.
   
-  Definition isomorphic_sym {x y : Obj} (H : x ≅ y) : y ≅ x := {| iso_morphism := (iso_morphism)⁻¹ |}.
+  Definition isomorphic_sym {x y : Obj} (H : x ≅ y) : y ≅ x := {| iso_morphism := H⁻¹ |}.
 
-  Definition isomorphic_trans {x y z : Obj} (H1 : x ≅ y) (H2 : y ≅ z) : x ≅ z :=
-    {| iso_morphism := @iso_morphism _ _ y z H2 ∘ @iso_morphism _ _ x y H1 |}.
+  Definition isomorphic_trans {x y z : Obj} (H1 : x ≅ y) (H2 : y ≅ z) : x ≅ z := {| iso_morphism := H2 ∘ H1 |}.
 
   Global Program Instance isomorphic_is_cequivalence : CEquivalence (@Isomorphic _ C) :=
     {|
@@ -76,5 +76,7 @@ Section IsomorphicEquivalence.
     |}.
 End IsomorphicEquivalence.
 
+Notation "'id[' x ']'" := (isomorphic_refl x%object) : iso_scope.
+Notation "'id'" := (isomorphic_refl _) (only parsing) : iso_scope.
 Notation "H1 ∘ H2" := (isomorphic_trans H1%iso H2%iso) : iso_scope.
 Notation "H '⁻¹'" := (isomorphic_sym H%iso) : iso_scope.

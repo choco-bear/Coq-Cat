@@ -28,3 +28,6 @@ Lemma inv_normalize_2 [A B C : Type] (f : A → B) `{!Bijective f} (g : A → C)
 Proof. extensionalities=> /=. common_normalize=> //. Qed.
 
 Global Hint Rewrite @inv_normalize_1 @inv_normalize_2 : normalize.
+
+Global Instance prop_pi (P : Prop) : ProofIrrel P.
+Proof. ii. apply proof_irr. Qed.

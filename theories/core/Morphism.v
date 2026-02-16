@@ -80,3 +80,35 @@ Notation "'id[' x ']'" := (isomorphic_refl x%object) : iso_scope.
 Notation "'id'" := (isomorphic_refl _) (only parsing) : iso_scope.
 Notation "H1 ∘ H2" := (isomorphic_trans H2%iso H1%iso) : iso_scope.
 Notation "H '⁻¹'" := (isomorphic_sym H%iso) : iso_scope.
+
+Section MorphismProperty.
+  Context `{C : Category Obj}.
+  
+  Class Idempotent {x : Obj} (f : x ~> x) := { idempotent : f ∘ f =[C] f }.
+
+  Context {x y : Obj} (f : x ~> y).
+
+  Class Monic := {
+    #[export] monic {z} :: Inj (=) (=) ((∘) f : z ~> x → _)%morphism
+  }.
+
+  Class Epic := {
+    #[export] epic {z} :: Inj (=) (=) ((.∘ f) : y ~> z → _)%morphism
+  }.
+
+  Class BiMorphic := {
+    #[export] bimorphic_monic :: Monic;
+    #[export] bimorphic_epic  :: Epic;
+  }.
+
+  Class RetractionOf := {
+    #[export] retraction :> y ~> x;
+    retr_left_inv : retraction ∘ f =[C] id;
+  }.
+
+  Class SectionOf := {
+    #[export] section :> y ~> x;
+    sect_right_inv : f ∘ section =[C] id;
+  }.
+End MorphismProperty.
+Global Hint Rewrite @idempotent @retr_left_inv @sect_right_inv : normalize.

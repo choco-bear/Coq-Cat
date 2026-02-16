@@ -69,7 +69,7 @@ Section FunctorLaws.
 End FunctorLaws.
 Global Hint Rewrite @functor_id_left @functor_id_right @functor_comp_assoc : functor_laws.
 
-Section Inverses.
+Section InverseNorm.
   Context `{C : Category ObjC} `{D : Category ObjD} (F : C ⟶ D) `{!IsFunctorIso F}.
   Local Open Scope functor_scope.
 
@@ -85,10 +85,22 @@ Section Inverses.
 
   Lemma inverse_functor_fobj : fobj F⁻¹ = (F⁻¹)%function.
   Proof. reflexivity. Qed.
-End Inverses.
+End InverseNorm.
 Global Hint Rewrite @functor_inv_norm_1 @functor_inv_norm_2 : functor_laws.
 Global Hint Rewrite @inverse_functor_fobj : functor_unfold.
 Global Hint Rewrite <- @inverse_functor_fobj : functor_prep.
+
+Global Program Instance iso_functor_compose_iso `{B : Category ObjB} `{C : Category Obj} `{D : Category ObjD}
+  (F : C ⟶ D) `{!IsFunctorIso F} (G : B ⟶ C) `{!IsFunctorIso G} : IsFunctorIso (F ∘ G) :=
+  {| inverse_functor := G⁻¹ ∘ F⁻¹ |}.
+Next Obligation. functor_norm //. Qed.
+Next Obligation. functor_norm //. Qed.
+
+Lemma comp_inv_simpl `{B : Category ObjB} `{C : Category Obj} `{D : Category ObjD}
+  (F : C ⟶ D) `{!IsFunctorIso F} (G : B ⟶ C) `{!IsFunctorIso G}
+  : ((F ∘ G)⁻¹ = G⁻¹ ∘ F⁻¹)%functor.
+Proof. ss. Qed.
+Global Hint Rewrite @comp_inv_simpl : functor_laws.
 
 Section FunctorJMeqCast.
   Local Open Scope morphism_scope.

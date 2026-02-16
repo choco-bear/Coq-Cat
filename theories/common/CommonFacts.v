@@ -31,3 +31,8 @@ Global Hint Rewrite @inv_normalize_1 @inv_normalize_2 : normalize.
 
 Global Instance prop_pi (P : Prop) : ProofIrrel P.
 Proof. ii. apply proof_irr. Qed.
+
+Class Unique (A : Type) := {
+  #[export] unique_inhabited :: Inhabited A;
+  #[export] unique_proof_irrel :: ProofIrrel A;
+}.

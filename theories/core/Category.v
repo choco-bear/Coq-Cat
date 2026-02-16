@@ -1,4 +1,4 @@
-Require Import CommonTactics.
+Require Import CommonTactics CommonFacts.
 
 Class Category (Obj : Type) := mk_Category {
   Arrow : Obj → Obj → Type;
@@ -129,4 +129,8 @@ Notation "C × D" := (BinaryProduct C%category D%category) (at level 41, right a
 
 Class IsPreOrder `(C : Category Obj) := {
   #[export] is_preorder x y :: ProofIrrel (x ~> y)
+}.
+
+Class IsMonoid `(C : Category Obj) := {
+  #[export] is_monoid :: Unique Obj
 }.

@@ -78,5 +78,5 @@ End IsomorphicEquivalence.
 
 Notation "'id[' x ']'" := (isomorphic_refl x%object) : iso_scope.
 Notation "'id'" := (isomorphic_refl _) (only parsing) : iso_scope.
-Notation "H1 ∘ H2" := (isomorphic_trans H1%iso H2%iso) : iso_scope.
+Notation "H1 ∘ H2" := (isomorphic_trans H2%iso H1%iso) : iso_scope.
 Notation "H '⁻¹'" := (isomorphic_sym H%iso) : iso_scope.

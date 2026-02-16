@@ -27,7 +27,10 @@ Makefile.coq: Makefile $(COQTHEORIES)
 	 echo "-arg -w -arg -parsing"; \
 	 echo "-arg -w -arg -intuition-auto-with-star"; \
 	 echo "-arg -w -arg -non-primitive-record"; \
-	 echo "-R theories $(COQMODULE)"; \
+	 echo "-R theories/categories $(COQMODULE)"; \
+	 echo "-R theories/common $(COQMODULE)"; \
+	 echo "-R theories/core $(COQMODULE)"; \
+	 echo "-R theories/lib $(COQMODULE)"; \
 	 echo $(COQTHEORIES)) > _CoqProject
 	$(COQBIN)coq_makefile -f _CoqProject -o Makefile.coq
 .PHONY: Makefile.coq

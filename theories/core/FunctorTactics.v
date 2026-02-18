@@ -30,6 +30,8 @@ Tactic Notation "functor_norm" "in" "*" :=
   autorewrite with functor_norm in *.
 Tactic Notation "functor_norm" "in" "*" "|-" := repeat_on_hyps (fun H => functor_norm in H).
 
+Ltac functor_solver := program_simpl; functor_norm in *; done.
+
 Lemma functor_ext `{C : Category ObjC} `{D : Category ObjD} (F G : C ⟶ D)
   : fobj F = fobj G
   → (∀ x y (f : x ~> y), JMeq (F # f) (G # f))%morphism

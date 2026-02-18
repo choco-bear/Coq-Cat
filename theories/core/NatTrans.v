@@ -2,7 +2,7 @@ Require Import CommonTactics CommonFacts Category.
 Require Import Functor FunctorTactics FunctorFacts.
 
 Structure NatTrans `{C : Category ObjC} `{D : Category ObjD} {F G : C ⟶ D} := mk_NatTrans {
-  component :> ∀ x : ObjC, F x ~> G x;
+  component :> ∀ x, F x ~> G x;
   naturality {x y} (f : x ~> y) : component y ∘ (F # f) =[D] (G # f) ∘ component x
 }.
 
@@ -17,3 +17,25 @@ Arguments component {ObjC%_type_scope C%_category_scope ObjD%_type_scope D%_cate
 Notation "F ⟹ G" := (NatTrans F G) (at level 70, no associativity) : type_scope.
 Notation "F '⟹@{' C ',' D '}' G" := (@NatTrans _ C%category _ D%category F%functor G%functor)
   (at level 70, no associativity, format "F  ⟹@{ C , D }  G") : type_scope.
+
+Program Definition IdNatTrans `{C : Category ObjC} `{D : Category ObjD} (F : C ⟶ D)
+  : F ⟹ F := {| component := λ x, id[F x] |}%morphism.
+
+Program Definition NatTransVerComp `{C : Category ObjB} `{D : Category ObjC} {F G K : C ⟶ D} (τ : G ⟹ K) (μ : F ⟹ G)
+  : F ⟹ K := {| component := λ x, τ x ∘ μ x |}%morphism.
+Next Obligation. rewrite -comp_assoc naturality comp_assoc naturality //. Qed.
+
+Notation "'id'" := (IdNatTrans _) (at level 0, no associativity, only parsing) : nat_trans_scope.
+Notation "'id[' F ']'" := (IdNatTrans F%functor) (at level 9, no associativity, format "id[ F ]") : nat_trans_scope.
+Notation "τ ▪ μ" := (NatTransVerComp τ% nat_trans μ%nat_trans) (at level 40, left associativity) : nat_trans_scope.
+
+Section NatTransComponent.
+  Context `{C : Category ObjC} `{D : Category ObjD}.
+  
+  Lemma IdNatTransComponent (F : C ⟶ D) x : id[F]%nat_trans x = id[F x]%morphism.
+  Proof. reflexivity. Qed.
+
+  Lemma NatTransVerCompComponent {F G K : C ⟶ D} (τ : G ⟹ K) (μ : F ⟹ G) x
+    : (τ ▪ μ)%nat_trans x = (τ x ∘ μ x)%morphism.
+  Proof. reflexivity. Qed.
+End NatTransComponent.

@@ -5,7 +5,7 @@ Module Mon.
   Structure Object := {
     obj : Type;
     #[export] monoid :> Category obj;
-    #[export] is_group :: IsMonoid monoid;
+    #[export] is_monoid :: IsMonoid monoid;
   }.
 
   Local Notation MonArrow := (λ M M' : Object, M ⟶ M').

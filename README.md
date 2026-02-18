@@ -33,3 +33,8 @@ To clean the build files, use:
 ```
 make clean
 ```
+
+## Additional Notes
+- The `Makefile` is configured to use `coq_makefile` to generate the necessary build files. If you want to customize the build process, you can modify the `Makefile` accordingly.
+- The `theories/lib/sflib.v` file is a modified copy of the `src/sflib.v` file from the [sflib](https://github.com/snu-sf/sflib) repository. It is included here to avoid the notation conflict with the `mathcomp` library. If you want to use the latest version of `sflib`, you can replace this file with the one from the `sflib` repository, but be aware of potential conflicts.
+- The `theories/core` directory contains the core definitions and lemmas of category theory, while the `theories/categories` directory contains specific categories and their properties. You can explore these directories to understand the structure of the formalization.

@@ -47,4 +47,11 @@ Module Grp.
       fobj := λ G, obj[G];
       fmap := λ G H ϕ, fobj ϕ;
     |}.
+
+  Definition grp2mon (G : Object) : Mon.Object :=
+    {|
+      Mon.obj := obj[G];
+      Mon.monoid := G;
+    |}.
 End Grp.
+#[export] Coercion Grp.grp2mon : Grp.Object >-> Mon.Object.

@@ -1,4 +1,5 @@
-Require Import CommonFacts CommonTactics Category Functor FunctorTactics.
+Require Import CommonFacts CommonTactics Category.
+Require Import Functor FunctorTactics.
 
 Local Open Scope functor_scope.
 

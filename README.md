@@ -21,6 +21,7 @@ opam update
 ```
 opam install rocq-prover.9.0.0
 opam install coq-stdpp.1.12.0
+opam install rocq-mathcomp-algebra.2.5.0
 ```
 
 ## How to Compile

@@ -7,7 +7,19 @@ From stdpp Require Export ssreflect.
 Create HintDb normalize discriminated.
 Create HintDb coqcat discriminated.
 
-Global Hint Rewrite @compose_id_right @compose_id_left.
+Global Hint Rewrite @compose_id_right @compose_id_left : normalize.
+
+Class Unique (A : Type) := {
+  #[export] unique_inhabited :: Inhabited A;
+  #[export] unique_proof_irrel :: ProofIrrel A;
+}.
+
+Lemma unique_collapse (A : Type) `{!Unique A} : ∀ a : A, a = inhabitant.
+Proof. i. apply proof_irrel. Qed.
+Hint Rewrite @unique_collapse : normalize.
+
+Global Program Instance unit_unique : Unique ().
+Global Program Instance true_unique : Unique True.
 
 Ltac common_normalize := autorewrite with normalize.
 Tactic Notation "common_normalize" "in" hyp(H) := autorewrite with normalize in H.

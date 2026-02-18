@@ -31,15 +31,3 @@ Global Hint Rewrite @inv_normalize_1 @inv_normalize_2 : normalize.
 
 Global Instance prop_pi (P : Prop) : ProofIrrel P.
 Proof. ii. apply proof_irr. Qed.
-
-Class Unique (A : Type) := {
-  #[export] unique_inhabited :: Inhabited A;
-  #[export] unique_proof_irrel :: ProofIrrel A;
-}.
-
-Lemma unique_collapse (A : Type) `{!Unique A} : ∀ a : A, a = inhabitant.
-Proof. i. apply proof_irrel. Qed.
-Hint Rewrite @unique_collapse : normalize.
-
-Global Program Instance unit_unique : Unique ().
-Global Program Instance true_unique : Unique True.

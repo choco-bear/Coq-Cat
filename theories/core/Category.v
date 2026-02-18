@@ -61,7 +61,7 @@ Notation "(.∘ g )" := (λ f, comp f g%morphism) (only parsing) : morphism_scop
 Notation "f '∘[' C ']' g" := (@comp _ C%category _ _ _ f%morphism g%morphism) (at level 40, only parsing) : morphism_scope.
 
 Notation "f '=[' C ']' g" := (f%morphism = g%morphism :> (hom[C%category] _ _))
-  (at level 60, no associativity, only parsing) : coqcat_scope.
+  (at level 70, no associativity, only parsing) : coqcat_scope.
 
 Lemma cat_ext_JMeq `(C : Category Obj) `(C' : Category Obj')
   : Obj = Obj'

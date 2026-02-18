@@ -3,8 +3,8 @@ Require Import Common Sets.
 
 Module Mon.
   Structure Object := {
-    ObjM : Type;
-    #[export] monoid :> Category ObjM;
+    obj : Type;
+    #[export] monoid :> Category obj;
     #[export] is_group :: IsMonoid monoid;
   }.
 
@@ -27,8 +27,8 @@ End Mon.
 
 Module Grp.
   Structure Object := {
-    ObjG : Type;
-    #[export] group :> Category ObjG;
+    obj : Type;
+    #[export] group :> Category obj;
     #[export] is_group :: IsGroup group;
   }.
 

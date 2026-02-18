@@ -71,7 +71,7 @@ Module Two.
     | [f : Arrow _ _ |- _] => depdes f
     end; ss.
 
-  Ltac solver := common_simpl; two_simpl; hrepeat do 1 constructor.
+  Ltac solver := common_simpl; two_simpl; (hrepeat do 1 constructor); common_simpl.
   Local Obligation Tactic := solver.
 
   Definition comp {x y z} (f : Arrow y z) (g : Arrow x y) : Arrow x z.
@@ -107,7 +107,7 @@ Module Three.
     | [f : Arrow _ _ |- _] => depdes f
     end; ss.
 
-  Ltac solver := common_simpl; three_simpl; hrepeat do 1 constructor.
+  Ltac solver := common_simpl; three_simpl; (hrepeat do 1 constructor); common_simpl.
   Local Obligation Tactic := solver.
 
   Definition comp {x y z} (f : Arrow y z) (g : Arrow x y) : Arrow x z.
@@ -141,7 +141,7 @@ Module Parallel.
     | [f : Arrow _ _ |- _] => depdes f
     end; ss.
     
-  Ltac solver := common_simpl; par_simpl; hrepeat do 1 constructor.
+  Ltac solver := common_simpl; par_simpl; (hrepeat do 1 constructor); common_simpl.
   Local Obligation Tactic := solver.
 
   Definition comp {x y z} (f : Arrow y z) (g : Arrow x y) : Arrow x z.

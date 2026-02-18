@@ -39,8 +39,8 @@ Program Definition ConstantFunctor `{C : Category ObjC} `{D : Category ObjD} (v 
     fmap := λ _ _ _, id[v]%morphism
   |}.
 
-Notation "'Id'" := (IdFunctor _) (only parsing) : functor_scope.
-Notation "'Id[' C ']'" := (IdFunctor C%category) (at level 7, no associativity, format "Id[ C ]") : functor_scope.
+Notation "'id'" := (IdFunctor _) (only parsing) : functor_scope.
+Notation "'id[' C ']'" := (IdFunctor C%category) (at level 9, no associativity, format "id[ C ]") : functor_scope.
 
 Notation "F ∘ G" := (FunctorCompose F%functor G%functor) : functor_scope.
 
@@ -48,9 +48,9 @@ Notation ".↦ v" := (ConstantFunctor v) (at level 8, right associativity) : fun
 
 Section FunctorApplications.
   Context `{C : Category ObjC}.
-  Lemma Id_fobj : fobj Id[C] = Datatypes.id.
+  Lemma Id_fobj : fobj id[C] = Datatypes.id.
   Proof. reflexivity. Qed.
-  Lemma Id_fmap {x y : ObjC} : fmap Id[C] = Datatypes.id :> (_ → x ~> y).
+  Lemma Id_fmap {x y : ObjC} : fmap id[C] = Datatypes.id :> (_ → x ~> y).
   Proof. reflexivity. Qed.
 
   Context `{D : Category ObjD}.
@@ -88,8 +88,8 @@ Section FunctorProperty.
   Class IsFunctorIso :=
     {
       inverse_functor   : D ⟶ C;
-      inv_functor_left  : (inverse_functor ∘ F = Id[C])%functor;
-      inv_functor_right : (F ∘ inverse_functor = Id[D])%functor;
+      inv_functor_left  : (inverse_functor ∘ F = id[C])%functor;
+      inv_functor_right : (F ∘ inverse_functor = id[D])%functor;
     }.
 End FunctorProperty.
 

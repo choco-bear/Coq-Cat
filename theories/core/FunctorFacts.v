@@ -12,10 +12,10 @@ Section InverseUnique.
   Context `{C : Category ObjC} `{D : Category ObjD} (F : C ⟶ D) `{!IsFunctorIso F} (G : D ⟶ C).
   Local Open Scope functor_scope.
 
-  Lemma functor_inv_left_unique : G ∘ F = Id → G = F⁻¹.
+  Lemma functor_inv_left_unique : G ∘ F = id → G = F⁻¹.
   Proof. i; transitivity (G ∘ F ∘ F⁻¹); last rewrite H; functor_norm //. Qed.
 
-  Lemma functor_inv_right_unique : F ∘ G = Id → G = F⁻¹.
+  Lemma functor_inv_right_unique : F ∘ G = id → G = F⁻¹.
   Proof. i; transitivity (F⁻¹ ∘ F ∘ G); last rewrite -functor_comp_assoc H; functor_norm //. Qed.
 End InverseUnique.
 

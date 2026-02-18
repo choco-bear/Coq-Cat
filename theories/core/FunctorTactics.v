@@ -59,10 +59,10 @@ Section FunctorLaws.
   Context `{C : Category ObjC} `{D : Category ObjD}.
   Local Open Scope functor_scope.
 
-  Lemma functor_id_left (F : C ⟶ D) : Id ∘ F = F.
+  Lemma functor_id_left (F : C ⟶ D) : id ∘ F = F.
   Proof. apply functor_ext; first apply func_ext; i; functor_norm //. Qed.
 
-  Lemma functor_id_right (F : C ⟶ D) : F ∘ Id = F.
+  Lemma functor_id_right (F : C ⟶ D) : F ∘ id = F.
   Proof. apply functor_ext; first apply func_ext; i; functor_norm //. Qed.
 
   Lemma functor_comp_assoc (F : C ⟶ D) `(G : (B : Category ObjB) ⟶ C) `(H : (A : Category ObjA) ⟶ B)
@@ -99,7 +99,7 @@ Section IsoFunctorInstances.
   Solve Obligations with ii; functor_norm //.
 
   Global Program Instance id_functor_iso `{C : Category Obj}
-    : IsFunctorIso Id[C] := {| inverse_functor := Id |}.
+    : IsFunctorIso id[C] := {| inverse_functor := id |}.
   Solve Obligations with ii; functor_norm //.
 
   Global Program Instance inv_functor_iso `{C : Category ObjC} `{D : Category ObjD} (F : C ⟶ D) `{!IsFunctorIso F}
@@ -114,7 +114,7 @@ Section IsoFunctorInstances.
   Lemma inv_involutive `{C : Category ObjC} `{D : Category ObjD} (F : C ⟶ D) `{!IsFunctorIso F} : (F⁻¹)⁻¹ = F.
   Proof. ss. Qed.
 
-  Lemma id_inv_id `{C : Category Obj} : (Id⁻¹ = Id)%functor.
+  Lemma id_inv_id `{C : Category Obj} : (id[C]⁻¹ = id[C])%functor.
   Proof. ss. Qed.
 End IsoFunctorInstances.
 Global Hint Rewrite @comp_inv @inv_involutive @id_inv_id : functor_laws.
@@ -187,13 +187,13 @@ Ltac fmap_eq_simplify_prep :=
       match type of f with
       | ?x ~> ?y =>
           let EQ := fresh "EQ" in let MORPHISM := fresh "MORPHISM" in let HeqMORPHISM := fresh "HeqMORPHISM" in
-          assert (EQ : f = (Id # f)%morphism) by reflexivity;
+          assert (EQ : f = (id # f)%morphism) by reflexivity;
           remember f as MORPHISM eqn:HeqMORPHISM;
           rewrite EQ; clear EQ; subst MORPHISM
       end; match type of g with
       | ?x ~> ?y =>
           let EQ := fresh "EQ" in let MORPHISM := fresh "MORPHISM" in let HeqMORPHISM := fresh "HeqMORPHISM" in
-          assert (EQ : g = (Id # g)%morphism) by reflexivity;
+          assert (EQ : g = (id # g)%morphism) by reflexivity;
           remember g as MORPHISM eqn:HeqMORPHISM;
           rewrite EQ; clear EQ; subst MORPHISM
       end

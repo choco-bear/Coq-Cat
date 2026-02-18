@@ -14,7 +14,7 @@ Module Mon.
     {|
       Arrow   := MonArrow;
       comp    := λ M1 M2 M3 ϕ ψ, ϕ ∘ ψ;
-      cat_id  := λ M, Id[monoid M];
+      cat_id  := λ M, id[monoid M];
     |}%functor.
   Solve Obligations with functor_solver.
 
@@ -39,7 +39,7 @@ Module Grp.
     {|
       Arrow   := GrpArrow;
       comp    := λ G H K ϕ ψ, ϕ ∘ ψ;
-      cat_id  := λ G, Id[group G];
+      cat_id  := λ G, id[group G];
     |}%functor.
   Solve Obligations with functor_solver.
 

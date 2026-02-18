@@ -5,20 +5,19 @@ Module Zero.
 
   Inductive Arrow : Object → Object → Type := .
 
-  #[export]
-  Ltac zero_solver :=
+  Ltac solver :=
     common_simpl;
     match goal with
     | [x : Object |- _] => depdes x
     | [f : Arrow _ _ |- _] => depdes f
     end.
-  Local Obligation Tactic := zero_solver.
+  Local Obligation Tactic := solver.
   
   Definition comp {x y z} (f : Arrow y z) (g : Arrow x y) : Arrow x z.
-  Proof. zero_solver. Defined.
+  Proof. solver. Defined.
 
   Definition id x : Arrow x x.
-  Proof. zero_solver. Defined.
+  Proof. solver. Defined.
   
   Program Instance Zero : Category Object :=
     {|
@@ -34,20 +33,19 @@ Module One.
   
   Inductive Arrow : Object → Object → Type := id_A : Arrow A A.
 
-  #[export]
-  Ltac one_solver :=
+  Ltac solver :=
     common_simpl;
     hrepeat progress do 1 match goal with
     | [x : Object |- _] => depdes x
     | [f : Arrow _ _ |- _] => depdes f
     end; ss.
-  Local Obligation Tactic := one_solver.
+  Local Obligation Tactic := solver.
 
   Definition comp {x y z} (f : Arrow y z) (g : Arrow x y) : Arrow x z.
-  Proof. one_solver. Defined.
+  Proof. solver. Defined.
 
   Definition id x : Arrow x x.
-  Proof. one_solver. Defined.
+  Proof. solver. Defined.
 
   Program Instance One : Category Object :=
     {|
@@ -73,15 +71,14 @@ Module Two.
     | [f : Arrow _ _ |- _] => depdes f
     end; ss.
 
-  #[export]
-  Ltac two_solver := common_simpl; two_simpl; hrepeat do 1 constructor.
-  Local Obligation Tactic := two_solver.
+  Ltac solver := common_simpl; two_simpl; hrepeat do 1 constructor.
+  Local Obligation Tactic := solver.
 
   Definition comp {x y z} (f : Arrow y z) (g : Arrow x y) : Arrow x z.
-  Proof. two_solver. Defined.
+  Proof. solver. Defined.
 
   Definition id x : Arrow x x.
-  Proof. two_solver. Defined.
+  Proof. solver. Defined.
 
   Program Instance Two : Category Object :=
     {|
@@ -110,15 +107,14 @@ Module Three.
     | [f : Arrow _ _ |- _] => depdes f
     end; ss.
 
-  #[export]
-  Ltac three_solver := common_simpl; three_simpl; hrepeat do 1 constructor.
-  Local Obligation Tactic := three_solver.
+  Ltac solver := common_simpl; three_simpl; hrepeat do 1 constructor.
+  Local Obligation Tactic := solver.
 
   Definition comp {x y z} (f : Arrow y z) (g : Arrow x y) : Arrow x z.
-  Proof. three_solver. Defined.
+  Proof. solver. Defined.
 
   Definition id x : Arrow x x.
-  Proof. three_solver. Defined.
+  Proof. solver. Defined.
 
   Program Instance Three : Category Object :=
     {|
@@ -145,15 +141,14 @@ Module Parallel.
     | [f : Arrow _ _ |- _] => depdes f
     end; ss.
     
-  #[export]
-  Ltac par_solver := common_simpl; par_simpl; hrepeat do 1 constructor.
-  Local Obligation Tactic := par_solver.
+  Ltac solver := common_simpl; par_simpl; hrepeat do 1 constructor.
+  Local Obligation Tactic := solver.
 
   Definition comp {x y z} (f : Arrow y z) (g : Arrow x y) : Arrow x z.
   Proof. par_simpl. Defined.
 
   Definition id x : Arrow x x.
-  Proof. par_solver. Defined.
+  Proof. solver. Defined.
 
   Program Instance Parallel : Category Object := 
     {|

@@ -111,7 +111,7 @@ Section MorphismProperty.
     sect_right_inv : f ∘ section =[C] id;
   }.
 End MorphismProperty.
-Global Hint Rewrite @idempotent @retr_left_inv @sect_right_inv : normalize.
+Global Hint Rewrite @retr_left_inv @sect_right_inv : normalize.
 
 Class IsGroupoid `(C : Category Obj) := {
   #[export] is_groupoid {x y} (f : x ~> y) :: IsIsomorphism f

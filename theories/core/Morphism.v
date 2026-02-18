@@ -45,7 +45,7 @@ End IsomorphismInstances.
 Global Hint Rewrite @inv_involutive @comp_inv @id_inv_id : normalize.
 
 Class Isomorphic `{C : Category Obj} (x y : Obj) := {
-  #[export] iso_morphism :> x ~> y;
+  iso_morphism :> x ~> y;
   #[export] is_iso_morphism :: IsIsomorphism iso_morphism
 }.
 
@@ -102,12 +102,12 @@ Section MorphismProperty.
   }.
 
   Class RetractionOf := {
-    #[export] retraction :> y ~> x;
+    retraction    :> y ~> x;
     retr_left_inv : retraction ∘ f =[C] id;
   }.
 
   Class SectionOf := {
-    #[export] section :> y ~> x;
+    section        :> y ~> x;
     sect_right_inv : f ∘ section =[C] id;
   }.
 End MorphismProperty.

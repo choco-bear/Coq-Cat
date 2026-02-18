@@ -1,7 +1,7 @@
 Require Import Category CommonTactics.
 
 Structure Functor `{C : Category ObjC} `{D : Category ObjD} := mk_Functor {
-  #[export] fobj :> ObjC → ObjD;
+  fobj :> ObjC → ObjD;
   fmap {x y} (f : x ~> y) : fobj x ~> fobj y;
   fmap_id x : fmap id[x] =[D] id;
   fmap_comp {x y z} (f : y ~> z) (g : x ~> y) : fmap (f ∘ g) =[D] fmap f ∘ fmap g;

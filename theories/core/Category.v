@@ -29,7 +29,7 @@ Bind Scope morphism_scope with Arrow.
 Delimit Scope category_scope with category.
 Delimit Scope object_scope with object.
 Delimit Scope morphism_scope with morphism.
-Delimit Scope coqcat_scope with coacat.
+Delimit Scope coqcat_scope with coqcat.
 
 #[export] Open Scope coqcat_scope.
 

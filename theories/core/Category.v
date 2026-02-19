@@ -140,3 +140,11 @@ Global Instance hom_c_preorder `(C : Category Obj) : CPreOrder hom[C] :=
     CPreOrder_CReflexive  := λ x, id[x];
     CPreOrder_CTransitive := λ _ _ _ f g, g ∘ f;
   |}%morphism.
+
+Notation "x ≤ y" := (inhabited (x%object ~> y%object)) : coqcat_scope.
+Notation "(≤)" := (λ x y, inhabited (x ~> y)) : coqcat_scope.
+Notation "'(.≤' y ')'" := (λ x, inhabited (x ~> y%object)) : coqcat_scope.
+Notation "x ≤ y ≤ z" := (x ≤ y ∧ y ≤ z)%coqcat : coqcat_scope.
+
+Global Program Instance leq_preorder `{!@IsPreOrder Obj C} : PreOrder (≤).
+Next Obligation. by inv H0; inv H1; split; etransitivity. Qed.

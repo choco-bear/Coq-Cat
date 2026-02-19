@@ -146,5 +146,5 @@ Notation "(≤)" := (λ x y, inhabited (x ~> y)) : coqcat_scope.
 Notation "'(.≤' y ')'" := (λ x, inhabited (x ~> y%object)) : coqcat_scope.
 Notation "x ≤ y ≤ z" := (x ≤ y ∧ y ≤ z)%coqcat : coqcat_scope.
 
-Global Program Instance leq_preorder `{!@IsPreOrder Obj C} : PreOrder (≤).
-Next Obligation. by inv H0; inv H1; split; etransitivity. Qed.
+Global Program Instance leq_preorder `(C : Category Obj) : PreOrder (≤).
+Next Obligation. by inv H; inv H0; split; etransitivity. Qed.

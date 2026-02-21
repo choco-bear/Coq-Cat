@@ -36,8 +36,6 @@ Ltac address_pi :=
   | _ => idtac
   end.
 
-Ltac cat := address_pi; eauto with coqcat.
-
 Lemma unique_collapse [A B : Type] (f : A → B) (x : A) `{!Unique B} : f x = ●.
 Proof. apply proof_irrel. Qed.
 
@@ -58,9 +56,9 @@ Ltac common_simpl :=
   try solve_proper;
   simpl_unique;
   tryif (
-    solve [ common_normalize in *; try by cat]
+    solve [ common_normalize in *; try by address_pi; eauto with coqcat]
   ) then idtac else (
-    common_normalize; try by cat
+    common_normalize; try by address_pi; eauto with coqcat
   ).
 
 Global Obligation Tactic := program_simpl; common_simpl.

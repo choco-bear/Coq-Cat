@@ -26,11 +26,9 @@ Global Hint Rewrite @unique_collapse : normalize.
 
 Ltac address_pi :=
   match goal with
-  | [|- ?x = ?y] =>
-      let T := type of x in
-      let T_PI := fresh T "_PI" in
+  | [|- @eq ?A _ _] =>
       tryif (
-        assert (T_PI : ProofIrrel T) by apply _
+        assert (ProofIrrel A) by apply _
       ) then (
         apply proof_irrel
       ) else idtac

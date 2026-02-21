@@ -30,7 +30,7 @@ Tactic Notation "functor_norm" "in" "*" :=
   autorewrite with functor_norm in *.
 Tactic Notation "functor_norm" "in" "*" "|-" := repeat_on_hyps (fun H => functor_norm in H).
 
-Ltac functor_solver := program_simpl; functor_norm in *; done.
+Ltac functor_solver := program_simpl; functor_norm in *; common_simpl; done.
 
 Lemma functor_ext `{C : Category ObjC} `{D : Category ObjD} (F G : C ⟶ D)
   : fobj F = fobj G
@@ -206,8 +206,8 @@ Ltac fmap_eq_simplify_prep :=
       end
   end) then ( autorewrite with functor_prep in * ) else (
   match goal with
-  | [|- JMeq ?f ?g ] => idtac
-  | [ H : JMeq (?F1 # ?f1)%morphism (?F2 # ?f2)%morphism |- _ ] => idtac
+  | [|- JMeq ?f ?g ] => autorewrite with functor_prep in *
+  | [ H : JMeq (?F1 # ?f1)%morphism (?F2 # ?f2)%morphism |- _ ] => autorewrite with functor_prep in *
   | _ => fail "No morphism equalities found"
   end).
 

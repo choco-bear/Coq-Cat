@@ -31,3 +31,10 @@ Global Hint Rewrite @inv_normalize_1 @inv_normalize_2 : normalize.
 
 Global Instance prop_pi (P : Prop) : ProofIrrel P.
 Proof. ii. apply proof_irr. Qed.
+
+Definition take A : inhabited A → A.
+Proof.
+  ii. assert (∃ a : A, True) by by inv H.
+  apply IndefiniteDescription.constructive_indefinite_description in H0.
+  by depdes H0.
+Defined.

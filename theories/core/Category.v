@@ -141,10 +141,15 @@ Global Instance hom_c_preorder `(C : Category Obj) : CPreOrder hom[C] :=
     CPreOrder_CTransitive := λ _ _ _ f g, g ∘ f;
   |}%morphism.
 
-Notation "x ≤ y" := (inhabited (x%object ~> y%object)) : coqcat_scope.
-Notation "(≤)" := (λ x y, inhabited (x ~> y)) : coqcat_scope.
-Notation "'(.≤' y ')'" := (λ x, inhabited (x ~> y%object)) : coqcat_scope.
-Notation "x ≤ y ≤ z" := (x ≤ y ∧ y ≤ z) : coqcat_scope.
+Definition object_leq `{!Category Obj} : relation Obj := λ x y, inhabited (x ~> y).
+
+Notation "x ≤ y" := (object_leq x%object y%object) : coqcat_scope.
+Notation "(≤)" := object_leq (only parsing) : coqcat_scope.
+Notation "'(.≤' y ')'" := (λ x, object_leq x y%object) (only parsing) : coqcat_scope.
+
+Notation "x '≤' y ':>' C" := (@object_leq _ C%category x%object y%object) (only parsing) : coqcat_scope.
+Notation "'(≤@{' C '})'" := (@object_leq _ C%category) (only parsing) : coqcat_scope.
+Notation "'(.≤@{' C '}' y ')'" := (λ x, @object_leq _ C%category x y%object) (only parsing) : coqcat_scope.
 
 Global Program Instance leq_preorder `(C : Category Obj) : PreOrder (≤).
 Next Obligation. by inv H; inv H0; split; etransitivity. Qed.

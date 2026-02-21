@@ -157,27 +157,34 @@ Section FunctorJMeqCast.
     {x1 y1 x2 y2 : ObjC} (f : x1 ~> y1) (g : x2 ~> y2)
     : JMeq (F1 # f) (F2 # g) -> F2 = F2' -> JMeq (F1 # f) (F2' # g).
   Proof. by i; subst. Qed.
-
-  Lemma jmeq_fmap_cast_lhs `{C : Category ObjC} `{D : Category ObjD} (F : C ⟶ D)
-    {x1 y1 x1' y1' : ObjC} (f : x1 ~> y1) {x2 y2 : ObjD} (g : x2 ~> y2) (eqx : x1 = x1') (eqy : y1 = y1')
-    : JMeq (F # (hom_cast eqx eqy f)) g → JMeq (hom_cast (fapply F eqx) (fapply F eqy) (F # f)) g.
-  Proof. depdes eqx eqy. rewrite !hom_cast_eq //. Qed.
-
-  Lemma jmeq_fmap_cast_rhs `{C : Category ObjC} `{D : Category ObjD} (F : C ⟶ D)
-    {x1 y1 : ObjD} (f : x1 ~> y1) {x2 y2 x2' y2' : ObjC} (g : x2 ~> y2) (eqx : x2 = x2') (eqy : y2 = y2')
-    : JMeq f (F # (hom_cast eqx eqy g)) → JMeq f (hom_cast (fapply F eqx) (fapply F eqy) (F # g)).
-  Proof. depdes eqx eqy. rewrite !hom_cast_eq //. Qed.
-
-  Lemma jmeq_cast_fmap_lhs `{C : Category ObjC} `{D : Category ObjD} (F : C ⟶ D)
-    {x1 y1 x1' y1' : ObjC} (f : x1 ~> y1) {x2 y2 : ObjD} (g : x2 ~> y2) (eqx : x1 = x1') (eqy : y1 = y1')
-    : JMeq (hom_cast (fapply F eqx) (fapply F eqy) (F # f)) g → JMeq (F # (hom_cast eqx eqy f)) g.
-  Proof. depdes eqx eqy. rewrite !hom_cast_eq //. Qed.
-
-  Lemma jmeq_cast_fmap_rhs `{C : Category ObjC} `{D : Category ObjD} (F : C ⟶ D)
-    {x1 y1 : ObjD} (f : x1 ~> y1) {x2 y2 x2' y2' : ObjC} (g : x2 ~> y2) (eqx : x2 = x2') (eqy : y2 = y2')
-    : JMeq f (hom_cast (fapply F eqx) (fapply F eqy) (F # g)) → JMeq f (F # (hom_cast eqx eqy g)).
-  Proof. depdes eqx eqy. rewrite !hom_cast_eq //. Qed.
 End FunctorJMeqCast.
+
+Section HomCastBubble.
+  Context `{C : Category ObjC}.
+  Local Open Scope morphism_scope.
+
+  Lemma hom_cast_comp {x1 y1 z1 x2 y2 z2 : ObjC}
+    (eqy1 : y1 = y2) (eqy2 : y1 = y2) (eqz : z1 = z2) (eqx : x1 = x2)
+    (f : y1 ~> z1) (g : x1 ~> y1) :
+    hom_cast eqy1 eqz f ∘ hom_cast eqx eqy2 g = hom_cast eqx eqz (f ∘ g).
+  Proof. assert (eqy1 = eqy2) as -> by apply proof_irr. depdes eqx eqy2 eqz. rewrite !hom_cast_eq //. Qed.
+
+  Lemma hom_cast_comp_left {x y z z' : ObjC} (eqz : z = z') (f : y ~> z) (g : x ~> y) :
+    hom_cast eq_refl eqz f ∘ g = hom_cast eq_refl eqz (f ∘ g).
+  Proof. depdes eqz. rewrite !hom_cast_eq //. Qed.
+
+  Lemma hom_cast_comp_right {x y z x' : ObjC} (eqx : x = x') (f : y ~> z) (g : x ~> y) :
+    f ∘ hom_cast eqx eq_refl g = hom_cast eqx eq_refl (f ∘ g).
+  Proof. depdes eqx. rewrite !hom_cast_eq //. Qed.
+
+  Context `{D : Category ObjD}.
+
+  Lemma hom_cast_fmap (F : C ⟶ D) {x y x' y' : ObjC}
+    (eqx : x = x') (eqy : y = y') (f : x ~> y) :
+    F # hom_cast eqx eqy f = hom_cast (fapply F eqx) (fapply F eqy) (F # f).
+  Proof. depdes eqx eqy. rewrite !hom_cast_eq //. Qed.
+End HomCastBubble.
+Global Hint Rewrite @hom_cast_comp @hom_cast_comp_left @hom_cast_comp_right @hom_cast_fmap : functor_prep.
 
 Ltac fmap_eq_simplify_prep :=
   tryif (do ! match goal with

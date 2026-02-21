@@ -191,13 +191,13 @@ Ltac fmap_eq_simplify_prep :=
   | [ H : (?F1 # ?f1)%morphism = (?F2 # ?f2)%morphism |- _ ] => apply eq_to_jm in H
   | [|- (?F1 # ?f1)%morphism = (?F2 # ?f2)%morphism ] => apply jm_to_eq
   | [|- ?f = ?g ] =>
-      match type of f with
+      match type of (f : _ ~> _) with
       | ?x ~> ?y =>
           let EQ := fresh "EQ" in let MORPHISM := fresh "MORPHISM" in let HeqMORPHISM := fresh "HeqMORPHISM" in
           assert (EQ : f = (id # f)%morphism) by reflexivity;
           remember f as MORPHISM eqn:HeqMORPHISM;
           rewrite EQ; clear EQ; subst MORPHISM
-      end; match type of g with
+      end; match type of (g : _ ~> _) with
       | ?x ~> ?y =>
           let EQ := fresh "EQ" in let MORPHISM := fresh "MORPHISM" in let HeqMORPHISM := fresh "HeqMORPHISM" in
           assert (EQ : g = (id # g)%morphism) by reflexivity;

@@ -131,6 +131,10 @@ Class IsMonoid `(C : Category Obj) := {
   #[export] is_monoid :: Unique Obj
 }.
 
+Definition monoid_cast `(C : Category Obj) `{!IsMonoid C} := ● ~> ●.
+
+Notation "⇑ C" := (monoid_cast C%category) : type_scope.
+
 Global Instance hom_c_preorder `(C : Category Obj) : CPreOrder hom[C] :=
   {|
     CPreOrder_CReflexive  := λ x, id[x];

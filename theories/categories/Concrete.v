@@ -5,7 +5,7 @@ Module Mon.
   Structure Object := {
     obj : Type;
     monoid : Category obj;
-    #[export] is_monoid :: IsMonoid monoid;
+    is_monoid :: IsMonoid monoid;
   }.
 
   Local Notation MonArrow := (λ M M' : Object, monoid M ⟶ monoid M').
@@ -25,13 +25,14 @@ Module Mon.
     |}.
 End Mon.
 Existing Instance Mon.t.
+Existing Instance is_monoid.
 Coercion Mon.monoid : Mon.Object >-> Category.
 
 Module Grp.
   Structure Object := {
     obj : Type;
     group : Category obj;
-    #[export] is_group :: IsGroup group;
+    is_group :: IsGroup group;
   }.
 
   Local Notation GrpArrow := (λ G G' : Object, group G ⟶ group G').
@@ -57,5 +58,6 @@ Module Grp.
     |}.
 End Grp.
 Existing Instance Grp.t.
+Existing Instance Grp.is_group.
 Coercion Grp.group : Grp.Object >-> Category.
 Coercion Grp.grp2mon : Grp.Object >-> Mon.Object.

@@ -10,7 +10,7 @@ Module Mon.
 
   Local Notation MonArrow := (λ M M' : Object, monoid M ⟶ monoid M').
 
-  Program Instance Mon : Category Object :=
+  Program Instance t : Category Object :=
     {|
       Arrow   := MonArrow;
       comp    := λ M1 M2 M3 ϕ ψ, ϕ ∘ ψ;
@@ -35,7 +35,7 @@ Module Grp.
 
   Local Notation GrpArrow := (λ G G' : Object, group G ⟶ group G').
   
-  Program Instance Grp : Category Object :=
+  Program Instance t : Category Object :=
     {|
       Arrow   := GrpArrow;
       comp    := λ G H K ϕ ψ, ϕ ∘ ψ;

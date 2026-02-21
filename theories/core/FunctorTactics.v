@@ -214,14 +214,6 @@ Ltac fmap_eq_simplify_prep :=
 Ltac fmap_eq_simplify :=
   fmap_eq_simplify_prep;
   repeat match goal with
-  | [ H : JMeq (?F # ⇑ ?f)%morphism ?g |- _ ] =>
-      eapply (jmeq_fmap_cast_lhs F f g) in H
-  | [ H : JMeq ?f (?F # ⇑ ?g)%morphism |- _ ] =>
-      eapply (jmeq_fmap_cast_rhs F f g) in H
-  | [|- JMeq (?F # ⇑ ?f)%morphism ?g ] =>
-      eapply (jmeq_cast_fmap_lhs F f g)
-  | [|- JMeq ?f (?F # ⇑ ?g)%morphism ] =>
-      eapply (jmeq_cast_fmap_rhs F f g)
   | [|- JMeq (⇑ ?f)%morphism ?g ] =>
       eapply jmeq_upcast_lhs
   | [|- JMeq ?f (⇑ ?g)%morphism ] =>

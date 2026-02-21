@@ -197,7 +197,12 @@ Ltac fmap_eq_simplify_prep :=
           remember g as MORPHISM eqn:HeqMORPHISM;
           rewrite EQ; clear EQ; subst MORPHISM
       end
-  end) then ( autorewrite with functor_prep in * ) else (fail "No morphism equalities found").
+  end) then ( autorewrite with functor_prep in * ) else (
+    match goal with
+    | [|- JMeq ?f ?g ] => idtac
+    | [ H : JMeq (?F1 # ?f1)%morphism (?F2 # ?f2)%morphism |- _ ] => idtac
+    | _ => fail "No morphism equalities found"
+    end).
 
 Ltac fmap_eq_simplify :=
   fmap_eq_simplify_prep;

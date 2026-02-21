@@ -24,7 +24,19 @@ Proof. apply proof_irrel. Qed.
 
 Global Hint Rewrite @unique_collapse : normalize.
 
-Ltac cat := eauto with coqcat.
+Ltac address_pi :=
+  match goal with
+  | [|- ?x = ?y] =>
+      let T := type of x in
+      let T_PI := fresh T "_PI" in
+      tryif (
+        assert (T_PI : ProofIrrel T) by apply _
+      ) then (
+        apply proof_irrel
+      ) else idtac
+  end.
+
+Ltac cat := address_pi; eauto with coqcat.
 
 Ltac simpl_unique :=
   hrepeat do 1 match goal with

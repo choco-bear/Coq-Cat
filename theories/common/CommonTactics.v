@@ -4,6 +4,10 @@ Export ListNotations.
 
 From stdpp Require Export ssreflect.
 
+Declare Scope coqcat_scope.
+Delimit Scope coqcat_scope with coqcat.
+#[export] Open Scope coqcat_scope.
+
 Create HintDb normalize discriminated.
 Create HintDb coqcat discriminated.
 
@@ -19,10 +23,7 @@ Class Unique (A : Type) := {
   #[export] unique_proof_irrel :: ProofIrrel A;
 }.
 
-Lemma unique_collapse [A B : Type] (f : A → B) (x : A) `{!Unique B} : f x = inhabitant.
-Proof. apply proof_irrel. Qed.
-
-Global Hint Rewrite @unique_collapse : normalize.
+Notation "●" := inhabitant : coqcat_scope.
 
 Ltac address_pi :=
   match goal with
@@ -36,6 +37,9 @@ Ltac address_pi :=
   end.
 
 Ltac cat := address_pi; eauto with coqcat.
+
+Lemma unique_collapse [A B : Type] (f : A → B) (x : A) `{!Unique B} : f x = ●.
+Proof. apply proof_irrel. Qed.
 
 Ltac simpl_unique :=
   hrepeat do 1 match goal with

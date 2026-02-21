@@ -18,7 +18,6 @@ Local Definition _obj [T : Type] : Category T → Type := λ _, T.
 Local Definition _dom `{Category Obj} `(Arrow x y) : Obj := x.
 Local Definition _cod `{Category Obj} `(Arrow x y) : Obj := y.
 
-Declare Scope coqcat_scope.
 Declare Scope category_scope.
 Declare Scope object_scope.
 Declare Scope morphism_scope.
@@ -29,9 +28,6 @@ Bind Scope morphism_scope with Arrow.
 Delimit Scope category_scope with category.
 Delimit Scope object_scope with object.
 Delimit Scope morphism_scope with morphism.
-Delimit Scope coqcat_scope with coqcat.
-
-#[export] Open Scope coqcat_scope.
 
 Arguments _obj [Obj%_type_scope] C%_category_scope : rename.
 Arguments Arrow {Obj%_type_scope C%_category_scope} (x y)%_object_scope : rename.

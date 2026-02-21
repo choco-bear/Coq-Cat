@@ -252,9 +252,9 @@ Ltac fmap_eq_simplify :=
   | [ H : JMeq (?F # ?f)%morphism (?F # ?g)%morphism |- _ ] => apply jm_to_eq in H
   | [|- JMeq (?F # ?f)%morphism (?F # ?g)%morphism ] => apply eq_to_jm
   end.
-Tactic Notation "fmap_eq_simplify" "//" := fmap_eq_simplify=> //.
-Tactic Notation "fmap_eq_simplify" "/=" := fmap_eq_simplify=> /=.
-Tactic Notation "fmap_eq_simplify" "//=" := fmap_eq_simplify=> //=.
+Tactic Notation "fmap_eq_simplify" "//" := fmap_eq_simplify; common_simpl.
+Tactic Notation "fmap_eq_simplify" "/=" := fmap_eq_simplify; try functor_solver.
+Tactic Notation "fmap_eq_simplify" "//=" := fmap_eq_simplify; common_simpl; try functor_solver.
 
 Tactic Notation "fmap" constr(F) "in" hyp(H) := eapply (fapply (fmap F)) in H.
 Tactic Notation "fmap" constr(F) "in" hyp(H) "as" ident(name) := eapply (fapply (fmap F)) in H as name.

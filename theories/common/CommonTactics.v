@@ -34,6 +34,7 @@ Ltac address_pi :=
       ) then (
         apply proof_irrel
       ) else idtac
+  | _ => idtac
   end.
 
 Ltac cat := address_pi; eauto with coqcat.

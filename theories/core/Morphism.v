@@ -8,6 +8,8 @@ Class IsIsomorphism `{C : Category Obj} {x y : Obj} (f : x ~> y) := {
 Global Hint Rewrite @inv_morphism_left @inv_morphism_right : normalize.
 
 Arguments inverse_morphism {ObjC%_type_scope C%_category_scope} {x y}%_object_scope f%_morphism_scope {IsIso} : rename, simpl never.
+Arguments inv_morphism_left {ObjC%_type_scope C%_category_scope} {x y}%_object_scope f%_morphism_scope {IsIso} : rename.
+Arguments inv_morphism_right {ObjC%_type_scope C%_category_scope} {x y}%_object_scope f%_morphism_scope {IsIso} : rename.
 Notation "f '⁻¹'" := (inverse_morphism f%morphism) (at level 7, left associativity, format "f ⁻¹") : morphism_scope.
 
 Section InverseNorm.

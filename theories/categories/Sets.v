@@ -1,21 +1,29 @@
 Require Import Common.
 
-Program Instance Sets : Category Type :=
-  {|
-    Arrow := λ X Y, X → Y;
-    comp := @compose;
-    cat_id := λ X x, x;
-  |}.
+Module Sets.
+  Structure Object := from_type { _set : Type }.
 
-Lemma Sets_id_unfold X x : id{Sets}[X]%morphism x = x.
+  Local Notation SetsArrow := (λ X Y : Object, _set X → _set Y).
+  
+  Program Instance t : Category Object :=
+    {|
+      Arrow := SetsArrow;
+      comp := λ X Y Z f g, (f ∘ g)%stdpp;
+      cat_id := λ X x, x;
+    |}.
+End Sets.
+Existing Instance Sets.t.
+Coercion Sets._set : Sets.Object >-> Sortclass.
+
+Lemma Sets_id_unfold X x : id{Sets.t}[X]%morphism x = x.
 Proof. rewrite /cat_id //. Qed.
-Lemma Sets_comp_unfold [X Y Z : Type] (f : Y ~> Z) (g : X ~> Y) x : (f ∘ g)%morphism x = f (g x).
+Lemma Sets_comp_unfold [X Y Z : Sets.Object] (f : Y ~> Z) (g : X ~> Y) x : (f ∘ g)%morphism x = f (g x).
 Proof. rewrite /comp //. Qed.
 #[export] Hint Rewrite @Sets_id_unfold @Sets_comp_unfold : normalize.
 
-Program Definition Powerset : Sets ⟶ Sets :=
+Program Definition Powerset : Sets.t ⟶ Sets.t :=
   {|
-    fobj := λ X, X → Prop;
+    fobj := λ X, Sets.from_type (X → Prop);
     fmap := λ X Y f P y, ∃ x, P x ∧ y = f x;
   |}.
 Next Obligation.

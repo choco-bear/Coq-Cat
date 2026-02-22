@@ -1,4 +1,4 @@
-Require Import CommonTactics CommonFacts Category.
+Require Import CommonTactics CommonFacts Category CategoryTactics.
 
 Section Morphisms.
   Context `{C : Category Obj}.

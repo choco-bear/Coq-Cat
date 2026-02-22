@@ -30,7 +30,7 @@ Delimit Scope object_scope with object.
 Delimit Scope morphism_scope with morphism.
 
 Arguments _obj [Obj%_type_scope] C%_category_scope : rename.
-Arguments Arrow {Obj%_type_scope C%_category_scope} (x y)%_object_scope : rename.
+Arguments Arrow {Obj%_type_scope C%_category_scope} (x y)%_object_scope : rename, simpl never.
 Arguments _dom {Obj%_type_scope C%_category_scope x%_object_scope y%_object_scope} f%_morphism_scope : rename.
 Arguments _cod {Obj%_type_scope C%_category_scope x%_object_scope y%_object_scope} f%_morphism_scope : rename.
 Arguments comp {Obj%_type_scope C%_category_scope} {x y z}%_object_scope (f g)%_morphism_scope : rename, simpl never.
@@ -66,7 +66,7 @@ Lemma cat_ext_JMeq `(C : Category Obj) `(C' : Category Obj')
   → JMeq (@cat_id _ C) (@cat_id _ C')
   → JMeq C C'.
 Proof.
-  rewrite /Category.comp /Category.cat_id.
+  rewrite /Category.comp /Category.cat_id /Category.Arrow.
   intros <- eqHom eqComp eqId. depdes C C'. ss.
   apply JMeq_eq in eqHom as ->.
   apply JMeq_eq in eqComp as ->.

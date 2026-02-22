@@ -1,6 +1,7 @@
 From mathcomp Require Import ssreflect all_algebra.
 Require Import Common Sets.
 
+
 Module Mon.
   Structure Object := {
     obj : Type;
@@ -18,7 +19,7 @@ Module Mon.
     |}%functor.
   Solve Obligations with functor_solver.
 
-  Program Definition Forgetful : t ⟶ Sets :=
+  Program Definition Forgetful : t ⟶ Sets.t :=
     {|
       fobj := λ M, obj[monoid M];
       fmap := λ M1 M2 ϕ, fobj ϕ;
@@ -45,7 +46,7 @@ Module Grp.
     |}%functor.
   Solve Obligations with functor_solver.
 
-  Program Definition Forgetful : t ⟶ Sets :=
+  Program Definition Forgetful : t ⟶ Sets.t :=
     {|
       fobj := λ G, obj[group G];
       fmap := λ G H ϕ, fobj ϕ;

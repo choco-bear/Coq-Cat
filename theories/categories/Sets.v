@@ -14,6 +14,7 @@ Module Sets.
 End Sets.
 Existing Instance Sets.t.
 Coercion Sets._set : Sets.Object >-> Sortclass.
+Coercion Sets.from_type : Sortclass >-> Sets.Object.
 
 Lemma Sets_id_unfold X x : id{Sets.t}[X]%morphism x = x.
 Proof. rewrite /cat_id //. Qed.
@@ -23,7 +24,7 @@ Proof. rewrite /comp //. Qed.
 
 Program Definition Powerset : Sets.t ⟶ Sets.t :=
   {|
-    fobj := λ X, Sets.from_type (X → Prop);
+    fobj := λ X, (X → Prop);
     fmap := λ X Y f P y, ∃ x, P x ∧ y = f x;
   |}.
 Next Obligation.

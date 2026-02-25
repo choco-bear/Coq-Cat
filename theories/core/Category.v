@@ -30,7 +30,7 @@ Delimit Scope object_scope with object.
 Delimit Scope morphism_scope with morphism.
 
 Arguments _obj [Obj%_type_scope] C%_category_scope : rename.
-Arguments Arrow {Obj%_type_scope C%_category_scope} (x y)%_object_scope : rename, simpl never.
+Arguments Arrow {Obj%_type_scope C%_category_scope} (x y)%_object_scope : rename.
 Arguments _dom {Obj%_type_scope C%_category_scope x%_object_scope y%_object_scope} f%_morphism_scope : rename.
 Arguments _cod {Obj%_type_scope C%_category_scope x%_object_scope y%_object_scope} f%_morphism_scope : rename.
 Arguments comp {Obj%_type_scope C%_category_scope} {x y z}%_object_scope (f g)%_morphism_scope : rename, simpl never.

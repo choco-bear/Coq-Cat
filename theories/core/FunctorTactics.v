@@ -211,8 +211,7 @@ Ltac fmap_eq_simplify_prep :=
   | _ => fail "No morphism equalities found"
   end).
 
-Ltac fmap_eq_simplify :=
-  fmap_eq_simplify_prep;
+Ltac fmap_eq_simplify_proc :=
   repeat match goal with
   | [|- JMeq (⇑ ?f)%morphism ?g ] =>
       eapply jmeq_upcast_lhs
@@ -247,11 +246,15 @@ Ltac fmap_eq_simplify :=
       | ?F = F2 => eapply (jmeq_subst_rhs F1 F F2 f1 f2); [|exact EQ]
       end; clear EQ
   | _ => progress autorewrite with functor_prep in *
-  end;
+  end.
+
+Ltac fmap_eq_simplify_final :=
   repeat match goal with
   | [ H : JMeq (?F # ?f)%morphism (?F # ?g)%morphism |- _ ] => apply jm_to_eq in H
   | [|- JMeq (?F # ?f)%morphism (?F # ?g)%morphism ] => apply eq_to_jm
   end.
+
+Ltac fmap_eq_simplify := fmap_eq_simplify_prep; fmap_eq_simplify_proc; fmap_eq_simplify_final.
 Tactic Notation "fmap_eq_simplify" "//" := fmap_eq_simplify; common_simpl.
 Tactic Notation "fmap_eq_simplify" "/=" := fmap_eq_simplify; try functor_solver.
 Tactic Notation "fmap_eq_simplify" "//=" := fmap_eq_simplify; common_simpl; try functor_solver.

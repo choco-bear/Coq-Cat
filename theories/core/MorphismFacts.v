@@ -2,7 +2,16 @@ Require Import CommonTactics CommonFacts Category.
 Require Import Functor FunctorTactics FunctorFacts.
 Require Import Morphism MorphismTactics.
 
-Program Instance Functor_preserves_IsIso `{C : Category ObjC} `{D : Category ObjD} (T : C ⟶ D) `(g : x ~{C}~> y) `{!IsIsomorphism g}
-  : IsIsomorphism (T # g) := {| inverse_morphism := T # g⁻¹ |}.
+Local Open Scope morphism_scope.
+
+#[export]
+Program Instance Functor_preserves_IsIso `{C : Category ObjC} `{D : Category ObjD} (T : C ⟶ D) `(f : x ~{C}~> y) `{!IsIsomorphism f}
+  : IsIsomorphism (T # f) := {| inverse_morphism := T # f⁻¹ |}.
 Next Obligation. rewrite -fmap_comp inv_morphism_left; common_simpl. Qed.
 Next Obligation. rewrite -fmap_comp inv_morphism_right; common_simpl. Qed.
+
+Lemma fmap_to_inv `{C : Category ObjC} `{D : Category ObjD} (T : C ⟶ D) `(f : x ~{C}~> y) `{!IsIsomorphism f}
+  : T # f⁻¹ = (T # f)⁻¹.
+Proof. common_simpl. Qed.
+
+Hint Rewrite @fmap_to_inv : functor_prep.

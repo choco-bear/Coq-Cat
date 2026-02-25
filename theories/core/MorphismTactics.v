@@ -14,7 +14,7 @@ Lemma right_cancel `{C : Category Obj} [x y z : Obj] (f g : y ~> z) (h : x ~> y)
 Proof. i. comp_r h⁻¹ in H. common_simpl. Qed.
 
 Tactic Notation "comp_l" uconstr(p) :=
-  autorewrite with assoc_left; unshelve simple refine (left_cancel _ _ p _); autorewrite with assoc_right.
+  autorewrite with assoc_right; unshelve simple refine (left_cancel _ _ p _); autorewrite with assoc_left.
 
 Tactic Notation "comp_r" uconstr(p) :=
-  autorewrite with assoc_right; unshelve simple refine (right_cancel _ _ p _); autorewrite with assoc_right.
+  autorewrite with assoc_left; unshelve simple refine (right_cancel _ _ p _); autorewrite with assoc_left.

@@ -20,14 +20,14 @@ Tactic Notation "cancel_l" uconstr(p) :=
 Tactic Notation "comp_l" uconstr(p) "in" hyp(H) :=
   match type of H with
   | @eq ?A ?f ?g => eapply (left_comp f g p) in H; autorewrite with assoc_right in H
-  | @eq ?A ?f ?g => fail 1 "The hypothesis" H "is not an equality between morphisms"
+  | @eq ?A ?f ?g => fail 1 "The hypothesis" H "is not an equality between morphisms, or the term" p "is not appropriate"
   | _ => fail 1 "The hypothesis" H "is not an equality"
   end.
   
 Tactic Notation "comp_l" uconstr(p) "in" hyp(H) "as" ident(name) :=
   match type of H with
   | @eq ?A ?f ?g => eapply (left_comp f g p) in H as name; autorewrite with assoc_right in name
-  | @eq ?A ?f ?g => fail 1 "The hypothesis" H "is not an equality between morphisms"
+  | @eq ?A ?f ?g => fail 1 "The hypothesis" H "is not an equality between morphisms, or the term" p "is not appropriate"
   | _ => fail 1 "The hypothesis" H "is not an equality"
   end.
 
@@ -37,13 +37,13 @@ Tactic Notation "cancel_r" uconstr(p) :=
 Tactic Notation "comp_r" uconstr(p) "in" hyp(H) :=
   match type of H with
   | @eq ?A ?f ?g => eapply (right_comp f g p) in H; autorewrite with assoc_right in H
-  | @eq ?A ?f ?g => fail 1 "The hypothesis" H "is not an equality between morphisms"
+  | @eq ?A ?f ?g => fail 1 "The hypothesis" H "is not an equality between morphisms, or the term" p "is not appropriate"
   | _ => fail 1 "The hypothesis" H "is not an equality"
   end.
 
 Tactic Notation "comp_r" uconstr(p) "in" hyp(H) "as" ident(name) :=
   match type of H with
   | @eq ?A ?f ?g => eapply (right_comp f g p) in H as name; autorewrite with assoc_right in name
-  | @eq ?A ?f ?g => fail 1 "The hypothesis" H "is not an equality between morphisms"
+  | @eq ?A ?f ?g => fail 1 "The hypothesis" H "is not an equality between morphisms, or the term" p "is not appropriate"
   | _ => fail 1 "The hypothesis" H "is not an equality"
   end.

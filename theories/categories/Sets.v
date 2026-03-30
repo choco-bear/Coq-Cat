@@ -52,7 +52,6 @@ Module SetsNotations.
   Declare Scope sets_scope.
   Delimit Scope sets_scope with sets.
   Bind Scope sets_scope with Sets.Object.
-  Open Scope sets_scope.
 
   Notation "X × Y" := (Sets.from_type (Sets._set X%sets * Sets._set Y%sets)%type) : sets_scope.
   Notation "X + Y" := (Sets.from_type (Sets._set X%sets + Sets._set Y%sets)%type) : sets_scope.

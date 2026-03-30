@@ -28,14 +28,10 @@ Program Definition Powerset : Sets.t ⟶ Sets.t :=
     fmap := λ X Y f P y, ∃ x, P x ∧ y = f x;
   |}.
 Next Obligation.
-  rename x into X.
-  apply func_ext=> P. common_normalize. apply pred_ext=> x.
-  split=> [[y] [/[swap] ->]|]; common_normalize; eauto.
+  cby split=> [[?] [/[swap] ->]|].
 Qed.
 Next Obligation.
-  rename x into X. rename y into Y. rename z into Z.
-  apply func_ext=> P. common_normalize. apply pred_ext=> z.
-  split=> [[x] [/[swap] ->]|[y] [[x] /[swap] ->] [/[swap] ->]]; common_normalize; eauto.
+  cby split=> [[?] [/[swap] ->]|[?] [[?] /[swap] ->] [/[swap] ->]].
 Qed.
 
 Program Definition BinaryProductSet : (Sets.t × Sets.t) ⟶ Sets.t :=
@@ -43,10 +39,7 @@ Program Definition BinaryProductSet : (Sets.t × Sets.t) ⟶ Sets.t :=
     fobj := λ XY, XY.1 * XY.2;
     fmap := λ XY1 XY2 fg xy, (fg.1 xy.1, fg.2 xy.2) 
   |}.
-Next Obligation.
-  rename o into X. rename o0 into Y.
-  apply func_ext=> [] [x y] //.
-Qed.
+Next Obligation. by depdes x. Qed.
 
 Module SetsNotations.
   Declare Scope sets_scope.

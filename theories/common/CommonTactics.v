@@ -36,6 +36,16 @@ Ltac address_pi :=
   | _ => idtac
   end.
 
+Ltac address_inhabited :=
+  match goal with
+  | [|- ?A] =>
+      tryif (
+        assert (Inhabited A) by apply _
+      ) then (
+        apply inhabitant
+      ) else idtac
+  end.
+
 Lemma unique_collapse [A B : Type] (f : A → B) (x : A) `{!Unique B} : f x = ●.
 Proof. apply proof_irrel. Qed.
 
@@ -56,10 +66,14 @@ Ltac common_simpl :=
   try solve_proper;
   simpl_unique;
   tryif (
-    solve [ common_normalize in *; try by address_pi; eauto with coqcat]
+    solve [ common_normalize in *; try by address_pi; try by address_inhabited; eauto with coqcat]
   ) then idtac else (
-    common_normalize; try by address_pi; eauto with coqcat
+    common_normalize; try by address_pi; try by address_inhabited; eauto with coqcat
   ).
+
+Tactic Notation "cby" tactic(t) := t; common_simpl; done.
+
+Hint Extern 10 (_ * _) => split : coqcat.
 
 Global Obligation Tactic := program_simpl; common_simpl.
 

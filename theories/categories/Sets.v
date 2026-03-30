@@ -11,6 +11,13 @@ Module Sets.
       comp := λ X Y Z f g, (f ∘ g)%stdpp;
       cat_id := λ X x, x;
     |}.
+
+  Program Definition BinaryProduct : t × t ⟶ t :=
+    {|
+      fobj := λ XY, from_type (_set XY.1 * _set XY.2);
+      fmap := λ _ _ fg xy, (fg.1 xy.1, fg.2 xy.2);
+    |}.
+  Next Obligation. apply func_ext=> [] [x y] //. Qed.
 End Sets.
 Existing Instance Sets.t.
 Coercion Sets._set : Sets.Object >-> Sortclass.
@@ -36,13 +43,6 @@ Next Obligation.
   cby split=> [[?] [/[swap] ->]|[?] [[?] /[swap] ->] [/[swap] ->]].
 Qed.
 
-Program Definition BinaryProductSet : (Sets.t × Sets.t) ⟶ Sets.t :=
-  {|
-    fobj := λ XY, XY.1 * XY.2;
-    fmap := λ XY1 XY2 fg xy, (fg.1 xy.1, fg.2 xy.2) 
-  |}.
-Next Obligation. apply func_ext=> [] [x y] //. Qed.
-
 Module SetsNotations.
   Declare Scope sets_scope.
   Delimit Scope sets_scope with sets.
@@ -52,5 +52,5 @@ Module SetsNotations.
   Notation "X + Y" := (Sets.from_type (Sets._set X%sets + Sets._set Y%sets)%type) : sets_scope.
   Notation "X → Y" := (Sets.from_type (Sets._set X%sets → Sets._set Y%sets)%type) : sets_scope.
   Notation "'𝒫'" := Powerset (at level 0) : sets_scope.
-  Notation "'(-×-)'" := BinaryProductSet (at level 0) : sets_scope.
+  Notation "'(-×-)'" := Sets.BinaryProduct (at level 0) : sets_scope.
 End SetsNotations.

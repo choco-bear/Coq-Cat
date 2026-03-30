@@ -163,6 +163,9 @@ Section HomCastBubble.
   Context `{C : Category ObjC}.
   Local Open Scope morphism_scope.
 
+  Lemma hom_cast_id {x y : ObjC} (eq1 eq2 : x = y) : hom_cast eq1 eq2 id[x] = id[y].
+  Proof. depdes eq1 eq2. rewrite hom_cast_eq //. Qed.
+
   Lemma hom_cast_comp {x1 y1 z1 x2 y2 z2 : ObjC}
     (eqy1 : y1 = y2) (eqy2 : y1 = y2) (eqz : z1 = z2) (eqx : x1 = x2)
     (f : y1 ~> z1) (g : x1 ~> y1) :
@@ -184,7 +187,7 @@ Section HomCastBubble.
     F # hom_cast eqx eqy f = hom_cast (fapply F eqx) (fapply F eqy) (F # f).
   Proof. depdes eqx eqy. rewrite !hom_cast_eq //. Qed.
 End HomCastBubble.
-Global Hint Rewrite @hom_cast_comp @hom_cast_comp_left @hom_cast_comp_right @hom_cast_fmap : functor_prep.
+Global Hint Rewrite @hom_cast_id @hom_cast_comp @hom_cast_comp_left @hom_cast_comp_right @hom_cast_fmap : functor_prep.
 
 Ltac fmap_eq_simplify_prep :=
   tryif (do ! match goal with

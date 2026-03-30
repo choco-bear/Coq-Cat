@@ -7,7 +7,8 @@ Create HintDb functor_unfold discriminated. (* For unfolding fobj / fmap *)
 Create HintDb functor_norm discriminated.   (* For normalizing the exprssions *)
 
 Global Hint Rewrite @inv_functor_left @inv_functor_right : functor_laws.
-Global Hint Rewrite @Id_fobj @Id_fmap @Const_fobj @Const_fmap @Comp_fobj @Comp_fmap : functor_unfold.
+Global Hint Rewrite @Id_fobj @Id_fmap @Const_fobj @Const_fmap @Comp_fobj @Comp_fmap
+                    @Paring_fobj @Paring_fmap @Fst_fobj @Fst_fmap @Snd_fobj @Snd_fmap : functor_unfold.
 Global Hint Rewrite @fmap_id @fmap_comp : functor_norm.
 
 Ltac functor_norm :=

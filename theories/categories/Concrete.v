@@ -1,4 +1,4 @@
-From mathcomp Require Import ssreflect all_algebra.
+(* From mathcomp Require Import ssreflect all_algebra. *)
 Require Import Common Sets.
 
 Module Mon.

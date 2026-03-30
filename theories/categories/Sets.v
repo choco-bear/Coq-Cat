@@ -48,3 +48,15 @@ Next Obligation.
   apply func_ext=> P. common_normalize. apply pred_ext=> z.
   split=> [[x] [/[swap] ->]|[y] [[x] /[swap] ->] [/[swap] ->]]; common_normalize; eauto.
 Qed.
+
+Program Definition BinaryProductSet : (Sets.t × Sets.t) ⟶ Sets.t :=
+  {|
+    fobj := λ XY, XY.1 × XY.2;
+    fmap := λ XY1 XY2 fg xy, (fg.1 xy.1, fg.2 xy.2) 
+  |}.
+Next Obligation.
+  rename o into X. rename o0 into Y.
+  apply func_ext=> [] [x y] //.
+Qed.
+
+Notation "'(-×-)'" := BinaryProductSet (at level 0) : sets_scope.

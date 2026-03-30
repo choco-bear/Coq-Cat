@@ -56,8 +56,19 @@ Module Grp.
       Mon.obj := obj[group G];
       Mon.monoid := group G;
     |}.
+
+  Program Definition BinaryProduct (G H : Object) : Object := {| group := group G × group H |}.
+  Next Obligation. cby construct. Qed.
 End Grp.
 Existing Instance Grp.t.
 Existing Instance Grp.is_group.
 Coercion Grp.group : Grp.Object >-> Category.
 Coercion Grp.grp2mon : Grp.Object >-> Mon.Object.
+
+Module GrpNotations.
+  Declare Scope grp_scope.
+  Delimit Scope grp_scope with grp.
+  Bind Scope grp_scope with Grp.Object.
+
+  Notation "G × H" := (BinaryProduct G%grp H%grp) : grp_scope.
+End GrpNotations.

@@ -30,7 +30,7 @@ Tactic Notation "functor_norm" "in" "*" :=
   autorewrite with functor_norm in *.
 Tactic Notation "functor_norm" "in" "*" "|-" := repeat_on_hyps (fun H => functor_norm in H).
 
-Ltac functor_solver := program_simpl; functor_norm in *; common_simpl; done.
+Ltac functor_done := program_simpl; functor_norm in *; common_simpl; done.
 
 Lemma functor_ext `{C : Category ObjC} `{D : Category ObjD} (F G : C ⟶ D)
   : fobj F = fobj G
@@ -256,8 +256,10 @@ Ltac fmap_eq_simplify_final :=
 
 Ltac fmap_eq_simplify := fmap_eq_simplify_prep; fmap_eq_simplify_proc; fmap_eq_simplify_final.
 Tactic Notation "fmap_eq_simplify" "//" := fmap_eq_simplify; common_simpl.
-Tactic Notation "fmap_eq_simplify" "/=" := fmap_eq_simplify; try functor_solver.
-Tactic Notation "fmap_eq_simplify" "//=" := fmap_eq_simplify; common_simpl; try functor_solver.
+Tactic Notation "fmap_eq_simplify" "/=" := fmap_eq_simplify; try functor_done.
+Tactic Notation "fmap_eq_simplify" "//=" := fmap_eq_simplify; common_simpl; try functor_done.
 
 Tactic Notation "fmap" constr(F) "in" hyp(H) := eapply (fapply (fmap F)) in H.
 Tactic Notation "fmap" constr(F) "in" hyp(H) "as" ident(name) := eapply (fapply (fmap F)) in H as name.
+
+Ltac functor_solver := program_simpl; functor_norm in *; common_simpl; solve [done | fmap_eq_simplify //=].

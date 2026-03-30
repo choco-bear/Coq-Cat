@@ -95,6 +95,7 @@ Notation "⇑ f" := (hom_cast _ _ f%morphism) (at level 8, right associativity, 
 Lemma hom_cast_eq `{C : Category Obj} [x : Obj] (eqx : x = x) [y : Obj] (eqy : y = y) (f : x ~> y)
   : hom_cast eqx eqy f = f.
 Proof. depdes eqx eqy. reflexivity. Qed.
+Hint Rewrite @hom_cast_eq : normalize.
 
 Lemma hom_cast_JMeq [Obj : Type] {C : Category Obj} [x x' : Obj] (eqx : x = x') [y y' : Obj] (eqy : y = y') (f : x ~> y)
   : JMeq (hom_cast eqx eqy f) f.

@@ -187,7 +187,7 @@ Section HomCastBubble.
     F # hom_cast eqx eqy f = hom_cast (fapply F eqx) (fapply F eqy) (F # f).
   Proof. depdes eqx eqy. rewrite !hom_cast_eq //. Qed.
 End HomCastBubble.
-Global Hint Rewrite @hom_cast_id @hom_cast_comp @hom_cast_comp_left @hom_cast_comp_right @hom_cast_fmap : functor_prep.
+Global Hint Rewrite @hom_cast_comp @hom_cast_comp_left @hom_cast_comp_right @hom_cast_fmap : functor_prep.
 
 Ltac fmap_eq_simplify_prep :=
   tryif (do ! match goal with

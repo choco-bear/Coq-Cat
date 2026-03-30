@@ -39,12 +39,20 @@ Program Definition ConstantFunctor `{C : Category ObjC} `{D : Category ObjD} (v 
     fmap := λ _ _ _, id[v]%morphism
   |}.
 
+Program Definition ParingFunctor `{A : Category ObjA} `{B : Category ObjB} `{C : Category ObjC} (F : A ⟶ B) (G : A ⟶ C) : A ⟶ (B × C) :=
+  {|
+    fobj := λ x, (F x, G x);
+    fmap := λ x y f, (F # f, G # f)%morphism;
+  |}.
+
 Notation "'id'" := (IdFunctor _) (only parsing) : functor_scope.
 Notation "'id[' C ']'" := (IdFunctor C%category) (at level 9, no associativity, format "id[ C ]") : functor_scope.
 
 Notation "F ∘ G" := (FunctorCompose F%functor G%functor) : functor_scope.
 
 Notation ".↦ v" := (ConstantFunctor v) (at level 8, right associativity) : functor_scope.
+
+Notation "⟨ F , G ⟩" := (ParingFunctor F G) (at level 9, no associativity, format "⟨ F ,  G ⟩") : functor_scope.
 
 Section FunctorApplications.
   Context `{C : Category ObjC}.

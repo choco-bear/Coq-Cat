@@ -70,5 +70,5 @@ Module GrpNotations.
   Delimit Scope grp_scope with grp.
   Bind Scope grp_scope with Grp.Object.
 
-  Notation "G × H" := (BinaryProduct G%grp H%grp) : grp_scope.
+  Notation "G × H" := (Grp.BinaryProduct G%grp H%grp) : grp_scope.
 End GrpNotations.

@@ -1,7 +1,6 @@
 From mathcomp Require Import ssreflect all_algebra.
 Require Import Common Sets.
 
-
 Module Mon.
   Structure Object := {
     obj : Type;

@@ -60,19 +60,10 @@ Ltac simpl_unique :=
       ) else idtac
   end; hrepeat do 1 progress rewrite @unique_collapse in *.
 
-Ltac common_simpl_prep1 := ii; ss; subst; try apply _; try solve_proper; simpl_unique.
-
-Ltac common_simpl_prep2 :=
-  common_simpl_prep1;
-  hrepeat do 1 match goal with
-  | [|- @eq (∀ _ : ?A, Prop) _ _] =>
-      apply pred_ext; common_simpl_prep1
-  | [|- @eq (?A → ?B) _ _] =>
-      apply func_ext; common_simpl_prep1
-  end.
+Ltac common_simpl_prep := ii; ss; subst; try apply _; try solve_proper; simpl_unique.
 
 Ltac common_simpl :=
-  common_simpl_prep2;
+  common_simpl_prep;
   tryif (
     solve [ common_normalize in *; try by address_pi; try by address_inhabited; eauto with coqcat]
   ) then idtac else (

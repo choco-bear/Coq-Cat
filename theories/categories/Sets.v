@@ -28,9 +28,11 @@ Program Definition Powerset : Sets.t ⟶ Sets.t :=
     fmap := λ X Y f P y, ∃ x, P x ∧ y = f x;
   |}.
 Next Obligation.
+  apply func_ext. i. apply pred_ext. i.
   cby split=> [[?] [/[swap] ->]|].
 Qed.
 Next Obligation.
+  apply func_ext. i. apply pred_ext. i.
   cby split=> [[?] [/[swap] ->]|[?] [[?] /[swap] ->] [/[swap] ->]].
 Qed.
 
@@ -39,7 +41,7 @@ Program Definition BinaryProductSet : (Sets.t × Sets.t) ⟶ Sets.t :=
     fobj := λ XY, XY.1 * XY.2;
     fmap := λ XY1 XY2 fg xy, (fg.1 xy.1, fg.2 xy.2) 
   |}.
-Next Obligation. by depdes x. Qed.
+Next Obligation. apply func_ext=> [] [x y] //. Qed.
 
 Module SetsNotations.
   Declare Scope sets_scope.

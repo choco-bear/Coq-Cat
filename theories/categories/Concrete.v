@@ -51,7 +51,7 @@ Module Grp.
       fobj := λ G, ⇑ (group G);
       fmap := λ G H ϕ g, (⇑ (ϕ # g))%morphism;
     |}.
-  Solve Obligations with functor_solver.
+  Solve Obligations with (program_simpl; apply func_ext; functor_solver).
 
   Definition grp2mon (G : Object) : Mon.Object :=
     {|

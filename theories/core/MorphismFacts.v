@@ -15,3 +15,10 @@ Lemma fmap_to_inv `{C : Category ObjC} `{D : Category ObjD} (T : C ⟶ D) `(f : 
 Proof. common_simpl. Qed.
 
 Hint Rewrite @fmap_to_inv : functor_prep.
+
+#[export]
+Instance BinaryProduct_preserves_IsGroupoid `[G : Category ObjG] `(!IsGroupoid G) `[H : Category ObjH] `(!IsGroupoid H) : IsGroupoid (G × H).
+Proof.
+  construct. depdes x y f.
+  construct; common_simpl.
+Qed.

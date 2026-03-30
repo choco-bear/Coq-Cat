@@ -119,6 +119,11 @@ Class IsGroupoid `(C : Category Obj) := {
   #[export] is_groupoid {x y} (f : x ~> y) :: IsIsomorphism f
 }.
 
+Hint Extern 10 (?y ~> ?x) =>
+  match goal with
+  | [ f : ?x ~> ?y |- _ ] => exact (f⁻¹)%morphism
+  end : coqcat.
+
 Class IsGroup `(G : Category Obj) := {
   #[export] group_is_monoid :: IsMonoid G;
   #[export] group_is_groupoid :: IsGroupoid G;

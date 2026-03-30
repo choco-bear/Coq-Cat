@@ -5,6 +5,7 @@ Class IsIsomorphism `{C : Category Obj} {x y : Obj} (f : x ~> y) := {
   inv_morphism_left : inverse_morphism ∘ f =[C] id[x];
   inv_morphism_right : f ∘ inverse_morphism =[C] id[y]
 }.
+Hint Mode IsIsomorphism - - - - ! : typeclass_instances.
 Global Hint Rewrite @inv_morphism_left @inv_morphism_right : normalize.
 
 Arguments inverse_morphism {ObjC%_type_scope C%_category_scope} {x y}%_object_scope f%_morphism_scope {IsIso} : rename, simpl never.
@@ -82,6 +83,23 @@ Notation "'id[' x ']'" := (isomorphic_refl x%object) : iso_scope.
 Notation "'id'" := (isomorphic_refl _) (only parsing) : iso_scope.
 Notation "H1 ∘ H2" := (isomorphic_trans H2%iso H1%iso) : iso_scope.
 Notation "H '⁻¹'" := (isomorphic_sym H%iso) : iso_scope.
+
+Section IsomorphicOpposite.
+  Context `{C : Category Obj}.
+
+  Program Instance isomorphic_opposite_append (x y : Obj) (H : x ≅ y) : x ≅[C ᵒᵖ] y :=
+    {|
+      iso_morphism := H⁻¹;
+      is_iso_morphism := {|
+        inverse_morphism := H;
+        inv_morphism_left := inv_morphism_right (H⁻¹);
+        inv_morphism_right := inv_morphism_left (H⁻¹)
+      |}
+    |}.
+
+  Definition isomorphic_opposite_cancel (x y : Obj) (H : x ≅[C ᵒᵖ] y) : x ≅[C] y.
+  Proof. depdes H. depdes is_iso_morphism0. hrepeat construct. Defined.
+End IsomorphicOpposite.
 
 Section MorphismProperty.
   Context `{C : Category Obj}.

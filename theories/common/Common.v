@@ -4,3 +4,4 @@ Require Export Morphism MorphismTactics MorphismFacts.
 Require Export Functor FunctorTactics FunctorFacts.
 Require Export NatTrans NatTransTactics NatTransFacts.
 Global Set Primitive Projections.
+Global Close Scope nat_scope.

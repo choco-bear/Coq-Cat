@@ -59,8 +59,17 @@ Module Grp.
       Mon.monoid := group G;
     |}.
 
-  Program Definition BinaryProduct (G H : Object) : Object := {| group := group G × group H |}.
+  Program Definition BinaryProduct : t × t ⟶ t :=
+    {|
+      fobj := λ GH, {| group := group GH.1 × group GH.2 |};
+      fmap := λ GH1 GH2 ϕψ, ⟨ ϕψ.1 ∘ Fst , ϕψ.2 ∘ Snd ⟩%functor
+    |}.
   Next Obligation. cby construct. Qed.
+  Next Obligation.
+    apply functor_ext; ss; try functor_solver.
+    apply func_ext=> [] [x y] //.
+  Qed.
+  Next Obligation. by apply functor_ext. Qed.
 End Grp.
 Existing Instance Grp.t.
 Existing Instance Grp.is_group.
@@ -72,5 +81,6 @@ Module GrpNotations.
   Delimit Scope grp_scope with grp.
   Bind Scope grp_scope with Grp.Object.
 
-  Notation "G × H" := (Grp.BinaryProduct G%grp H%grp) : grp_scope.
+  Notation "G × H" := (Grp.BinaryProduct (G%grp, H%grp)) : grp_scope.
+  Notation "(-×-)" := Grp.BinaryProduct : grp_scope.
 End GrpNotations.

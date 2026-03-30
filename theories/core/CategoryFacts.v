@@ -10,3 +10,7 @@ Section Morphisms.
     → f = id.
   Proof. i. cut (f ∘ id[x] = id[x]); common_simpl. Qed.
 End Morphisms.
+
+#[export]
+Instance BinaryProduct_preserves_IsMonoid `[M : Category ObjM] `(!IsMonoid M) `[N : Category ObjN] `(!IsMonoid N) : IsMonoid (M × N).
+Proof. repeat construct; common_simpl. Qed.

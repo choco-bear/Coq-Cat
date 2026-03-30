@@ -123,6 +123,18 @@ Program Definition BinaryProduct `(C : Category ObjC) `(D : Category ObjD) : Cat
 
 Notation "C × D" := (BinaryProduct C%category D%category) (at level 41, right associativity): category_scope.
 
+Notation "⟨ f , g ⟩" := ((f%morphism,g%morphism) : (_,_) ~{_ × _}~> (_,_))
+  (at level 9, no associativity, format "⟨ f ,  g ⟩") : morphism_scope.
+
+Section BinaryProductNorm.
+  Context `{C : Category ObjC} {c1 c2 c3 : ObjC} (fc : c2 ~> c3) (gc : c1 ~> c2).
+  Context `{D : Category ObjD} {d1 d2 d3 : ObjD} (fd : d2 ~> d3) (gd : d1 ~> d2).
+
+  Lemma binaryproduct_morphism_norm : ⟨fc,fd⟩ ∘[C × D] ⟨gc,gd⟩ =[C × D] ⟨fc ∘ gc, fd ∘ gd⟩.
+  Proof. reflexivity. Qed.
+End BinaryProductNorm.
+Global Hint Rewrite @binaryproduct_morphism_norm : normalize.
+
 Class IsPreOrder `(C : Category Obj) := {
   #[export] is_preorder x y :: ProofIrrel (x ~> y)
 }.

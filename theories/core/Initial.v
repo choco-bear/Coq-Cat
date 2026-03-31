@@ -19,6 +19,3 @@ Section Facts.
   Proof. hrepeat construct; repeat_on_hyps (fun H => apply H). Defined.
 End Facts.
 #[export] Hint Resolve @initials_are_isomorphic @terminals_are_isomorphic : coqcat.
-
-Goal ∀ (Obj : Type) (C : Category Obj) (T T' : Obj) (TERMINAL : IsTerminal@[C] T) (TERMINAL' : IsTerminal@[C] T'), T ≅[C] T'.
-Proof. common_simpl. Qed.

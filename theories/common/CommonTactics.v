@@ -23,7 +23,7 @@ Class Unique (A : Type) := {
   #[export] unique_proof_irrel :: ProofIrrel A;
 }.
 
-Notation "●" := inhabitant : coqcat_scope.
+Notation "●" := (@inhabitant _ unique_inhabited) : coqcat_scope.
 
 Ltac address_pi :=
   match goal with

@@ -51,10 +51,10 @@ Notation "'id[' x ']'" := (@cat_id _ _ x%object) (at level 9, no associativity, 
 Notation "'id{' C '}'" := (@cat_id _ C%category _) (at level 9, no associativity, only parsing) : morphism_scope.
 Notation "'id{' C '}[' x ']'" := (@cat_id _ C%category x%object) (at level 9, no associativity, only parsing) : morphism_scope.
 
-Notation "f ∘ g" := (comp f%morphism g%morphism) : morphism_scope.
+Notation "f ∘ g" := (comp f g) : morphism_scope.
 Notation "(∘)" := comp (only parsing) : morphism_scope.
-Notation "(.∘ g )" := (λ f, comp f g%morphism) (only parsing) : morphism_scope.
-Notation "f '∘[' C ']' g" := (@comp _ C%category _ _ _ f%morphism g%morphism) (at level 40, only parsing) : morphism_scope.
+Notation "(.∘ g )" := (λ f, comp f g) (only parsing) : morphism_scope.
+Notation "f '∘[' C ']' g" := (@comp _ C%category _ _ _ f g) (at level 40, only parsing) : morphism_scope.
 
 Notation "f '=[' C ']' g" := (f%morphism = g%morphism :> (hom[C%category] _ _))
   (at level 70, no associativity, only parsing) : coqcat_scope.
@@ -124,7 +124,7 @@ Program Definition BinaryProduct `(C : Category ObjC) `(D : Category ObjD) : Cat
 
 Notation "C × D" := (BinaryProduct C%category D%category) (at level 41, right associativity): category_scope.
 
-Notation "⟨ f , g ⟩" := ((f%morphism,g%morphism) : (_,_) ~{_ × _}~> (_,_))
+Notation "⟨ f , g ⟩" := ((f,g) : (_,_) ~{_ × _}~> (_,_))
   (at level 9, no associativity, format "⟨ f ,  g ⟩") : morphism_scope.
 
 Section BinaryProductNorm.

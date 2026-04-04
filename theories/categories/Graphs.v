@@ -19,14 +19,14 @@ Module Zero.
   Definition id x : Arrow x x.
   Proof. solver. Defined.
   
-  Program Instance Zero : Category Object :=
+  Program Instance t : Category Object :=
     {|
       Category.Arrow := Arrow;
       Category.comp := @comp;
       cat_id := Zero.id;
     |}.
 End Zero.
-Notation "0" := Zero.Zero : category_scope.
+Notation "0" := Zero.t : category_scope.
 
 Module One.
   Inductive Object := A.
@@ -47,14 +47,14 @@ Module One.
   Definition id x : Arrow x x.
   Proof. solver. Defined.
 
-  Program Instance One : Category Object :=
+  Program Instance t : Category Object :=
     {|
       Category.Arrow := Arrow;
       Category.comp := @comp;
       cat_id := One.id;
     |}.
 End One.
-Notation "1" := One.One : category_scope.
+Notation "1" := One.t : category_scope.
 
 Module Two.
   Inductive Object := A | B.
@@ -80,14 +80,14 @@ Module Two.
   Definition id x : Arrow x x.
   Proof. solver. Defined.
 
-  Program Instance Two : Category Object :=
+  Program Instance t : Category Object :=
     {|
       Category.Arrow := Arrow;
       Category.comp := @comp;
       cat_id := Two.id;
     |}.
 End Two.
-Notation "2" := Two.Two : category_scope.
+Notation "2" := Two.t : category_scope.
 
 Module Three.
   Inductive Object := A | B | C.
@@ -116,14 +116,14 @@ Module Three.
   Definition id x : Arrow x x.
   Proof. solver. Defined.
 
-  Program Instance Three : Category Object :=
+  Program Instance t : Category Object :=
     {|
       Category.Arrow := Arrow;
       Category.comp := @comp;
       cat_id := Three.id;
     |}.
 End Three.
-Notation "3" := Three.Three : category_scope.
+Notation "3" := Three.t : category_scope.
 
 Module Parallel.
   Inductive Object := A | B.
@@ -150,11 +150,11 @@ Module Parallel.
   Definition id x : Arrow x x.
   Proof. solver. Defined.
 
-  Program Instance Parallel : Category Object := 
+  Program Instance t : Category Object := 
     {|
       Category.Arrow := Arrow;
       Category.comp := @comp;
       cat_id := Parallel.id;
     |}.
 End Parallel.
-Notation "⇊" := Parallel.Parallel : category_scope.
+Notation "⇊" := Parallel.t : category_scope.

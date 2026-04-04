@@ -16,6 +16,7 @@ Proof. by intros ->. Qed.
 
 Tactic Notation "cancel_l" uconstr(p) :=
   autorewrite with assoc_right; unshelve simple refine (left_comp _ _ p _); autorewrite with assoc_left.
+Tactic Notation "cancel_l" := cancel_l _.
 
 Tactic Notation "comp_l" uconstr(p) "in" hyp(H) :=
   match type of H with
@@ -33,6 +34,7 @@ Tactic Notation "comp_l" uconstr(p) "in" hyp(H) "as" ident(name) :=
 
 Tactic Notation "cancel_r" uconstr(p) :=
   autorewrite with assoc_left; unshelve simple refine (right_comp _ _ p _); autorewrite with assoc_left.
+Tactic Notation "cancel_r" := cancel_r _.
 
 Tactic Notation "comp_r" uconstr(p) "in" hyp(H) :=
   match type of H with

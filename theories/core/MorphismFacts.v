@@ -29,3 +29,25 @@ Section IsGroupoid.
     construct; common_simpl.
   Qed.
 End IsGroupoid.
+
+Section MorphismProperties.
+  Context `{C : Category Obj} `(f : x ~> y).
+
+  Program Instance has_retraction_monic (r : RetractionOf f) : Monic f.
+  Next Obligation. comp_l r in H. rewrite retr_left_inv in H. common_simpl. Qed.
+
+  Program Instance has_section_epic (s : SectionOf f) : Epic f.
+  Next Obligation. cby comp_r (f ∘ s); rewrite ?H ?sect_right_inv. Qed.
+
+  Program Instance monic_comp `{!Monic f} `(g : z ~> x) `{!Monic g} : Monic (f ∘ g).
+  Next Obligation. rewrite -!comp_assoc in H. hrepeat apply monic in H; ss. Qed.
+
+  Program Definition monic_strip `(g : z ~> x) `{!Monic (f ∘ g)} : Monic g := _.
+  Next Obligation. construct. comp_l f in H. apply monic in H; ss. Qed.
+
+  Program Instance epic_comp `{!Epic f} `(g : z ~> x) `{!Epic g} : Epic (f ∘ g).
+  Next Obligation. rewrite !comp_assoc in H. hrepeat apply epic in H; ss. Qed.
+
+  Program Definition epic_strip `(g : z ~> x) `{!Epic (f ∘ g)} : Epic f := _.
+  Next Obligation. construct. comp_r g in H. rewrite -!comp_assoc in H. apply epic in H; ss. Qed.
+End MorphismProperties.

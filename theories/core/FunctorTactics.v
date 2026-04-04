@@ -182,6 +182,10 @@ Section HomCastBubble.
     f ∘ hom_cast eqx eq_refl g = hom_cast eqx eq_refl (f ∘ g).
   Proof. depdes eqx. rewrite !hom_cast_eq //. Qed.
 
+  Lemma double_hom_cast {x1 x2 x3 y1 y2 y3 : ObjC} (eqx1 : x1 = x2) (eqx2 : x2 = x3) (eqy1 : y1 = y2) (eqy2 : y2 = y3) (f : x1 ~> y1)
+    : hom_cast eqx2 eqy2 (hom_cast eqx1 eqy1 f) = hom_cast (eq_trans eqx1 eqx2) (eq_trans eqy1 eqy2) f.
+  Proof. depdes eqx1 eqx2 eqy1 eqy2. rewrite !hom_cast_eq //. Qed.
+
   Context `{D : Category ObjD}.
 
   Lemma hom_cast_fmap (F : C ⟶ D) {x y x' y' : ObjC}
@@ -189,7 +193,7 @@ Section HomCastBubble.
     F # hom_cast eqx eqy f = hom_cast (fapply F eqx) (fapply F eqy) (F # f).
   Proof. depdes eqx eqy. rewrite !hom_cast_eq //. Qed.
 End HomCastBubble.
-Global Hint Rewrite @hom_cast_comp @hom_cast_comp_left @hom_cast_comp_right @hom_cast_fmap : functor_prep.
+Global Hint Rewrite @hom_cast_comp @hom_cast_comp_left @hom_cast_comp_right @double_hom_cast @hom_cast_fmap : functor_prep.
 
 Ltac fmap_eq_simplify_prep :=
   tryif (do ! match goal with

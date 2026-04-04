@@ -83,4 +83,5 @@ Module GrpNotations.
 
   Notation "G × H" := (Grp.BinaryProduct (G%grp, H%grp)) : grp_scope.
   Notation "(-×-)" := Grp.BinaryProduct : grp_scope.
+  Notation "⇑ g" := (hom_cast (proof_irrel _ ●) (proof_irrel _ ●) g%morphism) : grp_scope.
 End GrpNotations.

@@ -6,7 +6,7 @@ Class IsInitial `[C : Category Obj] (I : Obj) := {
 
 Notation "'IsInitial@[' C ']'" := (@IsInitial _ C%category)
   (at level 9, no associativity, format "IsInitial@[ C ]") : coqcat_scope.
-Notation "'IsTerminal@[' C ']'" := (@IsInitial _ (C%category ᵒᵖ))
+Notation "'IsTerminal@[' C ']'" := (@IsInitial _ (C ᵒᵖ)%category)
   (at level 9, no associativity, format "IsTerminal@[ C ]") : coqcat_scope.
 
 Section Facts.

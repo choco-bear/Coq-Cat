@@ -18,6 +18,9 @@ Tactic Notation "common_normalize" "in" hyp(H) := autorewrite with normalize in 
 Tactic Notation "common_normalize" "in" "*" "|-" := repeat_on_hyps (fun H => common_normalize in H).
 Tactic Notation "common_normalize" "in" "*" := autorewrite with normalize in *.
 
+Inductive Void : Type := .
+#[global] Hint Constructors Void : core normalize coqcat.
+
 Class Unique (A : Type) := {
   #[export] unique_inhabited :: Inhabited A;
   #[export] unique_proof_irrel :: ProofIrrel A;

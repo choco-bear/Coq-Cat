@@ -102,18 +102,27 @@ Section IsomorphicOpposite.
 End IsomorphicOpposite.
 
 Section MorphismProperty.
+  Local Open Scope morphism_scope.
   Context `{C : Category Obj}.
   
-  Class Idempotent {x : Obj} (f : x ~> x) := { idempotent : f ∘ f =[C] f }.
+  Class Idempotent `(f : x ~> x) := { idempotent : f ∘ f = f }.
+
+  Class SplitIdempotent `(f : x ~> x) := {
+    split_obj : Obj;
+    split_epic : x ~> split_obj;
+    split_monic : split_obj ~> x;
+    split_comp_orig : split_monic ∘ split_epic = f;
+    split_comp_id : split_epic ∘ split_monic = id;
+  }.
 
   Context {x y : Obj} (f : x ~> y).
 
   Class Monic := {
-    #[export] monic {z} :: Inj (=) (=) ((∘) f : z ~> x → _)%morphism
+    #[export] monic {z} :: Inj (=) (=) ((∘) f : z ~> x → _)
   }.
 
   Class Epic := {
-    #[export] epic {z} :: Inj (=) (=) ((.∘ f) : y ~> z → _)%morphism
+    #[export] epic {z} :: Inj (=) (=) ((.∘ f) : y ~> z → _)
   }.
 
   Class BiMorphic := {
@@ -123,15 +132,33 @@ Section MorphismProperty.
 
   Class RetractionOf := {
     retraction    :> y ~> x;
-    retr_left_inv : retraction ∘ f =[C] id;
+    retr_left_inv : retraction ∘ f = id;
   }.
 
   Class SectionOf := {
     section        :> y ~> x;
-    sect_right_inv : f ∘ section =[C] id;
+    sect_right_inv : f ∘ section = id;
   }.
 End MorphismProperty.
-Global Hint Rewrite @retr_left_inv @sect_right_inv : normalize.
+Global Hint Rewrite @retr_left_inv @sect_right_inv @split_comp_id : normalize.
+
+Section MorphismPropertySimpl.
+  Local Open Scope morphism_scope.
+  Context `{C : Category Obj}.
+
+  Lemma retr_simpl `(f : x ~> y) `(g : x ~> z) {r : RetractionOf f} : g ∘ r ∘ f = g.
+  Proof. cby rewrite -comp_assoc retr_left_inv. Qed.
+
+  Lemma sect_simpl `(f : x ~> y) `(g : y ~> z) {s : SectionOf f} : g ∘ f ∘ s = g.
+  Proof. cby rewrite -comp_assoc sect_right_inv. Qed.
+
+  Lemma split_idempotent_simpl1 `(f : x ~> x) `{!SplitIdempotent f} `(g : split_obj ~> y) : g ∘ split_epic ∘ split_monic = g.
+  Proof. cby rewrite -comp_assoc split_comp_id. Qed.
+
+  Lemma split_idempotent_simpl2 `(f : x ~> x) `{!SplitIdempotent f} `(g : x ~> y) : g ∘ split_monic ∘ split_epic = g ∘ f.
+  Proof. cby rewrite -comp_assoc split_comp_orig. Qed.
+End MorphismPropertySimpl.
+Global Hint Rewrite @retr_simpl @sect_simpl @split_idempotent_simpl1 @split_idempotent_simpl2 : normalize.
 
 Class IsGroupoid `(C : Category Obj) := {
   #[export] is_groupoid {x y} (f : x ~> y) :: IsIsomorphism f

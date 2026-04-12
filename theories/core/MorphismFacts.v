@@ -10,6 +10,14 @@ Section IsIsomorphism.
     : IsIsomorphism (T # f) := {| inverse_morphism := T # f⁻¹ |}.
   Next Obligation. rewrite -fmap_comp inv_morphism_left; common_simpl. Qed.
   Next Obligation. rewrite -fmap_comp inv_morphism_right; common_simpl. Qed.
+
+  #[export]
+  Program Instance isomorphism_is_epic `{C : Category Obj} `{f : x ~> y} `{!IsIsomorphism f} : Epic f.
+  Next Obligation. cby comp_r f⁻¹ in H. Qed.
+
+  #[export]
+  Program Instance isomorphism_is_monic `{C : Category Obj} `{f : x ~> y} `{!IsIsomorphism f} : Monic f.
+  Next Obligation. cby comp_l f⁻¹ in H. Qed.
 End IsIsomorphism.
 
 Section FunctorSimpl.
@@ -33,21 +41,39 @@ End IsGroupoid.
 Section MorphismProperties.
   Context `{C : Category Obj} `(f : x ~> y).
 
+  #[export]
   Program Instance has_retraction_monic (r : RetractionOf f) : Monic f.
-  Next Obligation. comp_l r in H. rewrite retr_left_inv in H. common_simpl. Qed.
+  Next Obligation. cby comp_l r in H. Qed.
 
+  #[export]
   Program Instance has_section_epic (s : SectionOf f) : Epic f.
   Next Obligation. cby comp_r (f ∘ s); rewrite ?H ?sect_right_inv. Qed.
 
+  #[export]
   Program Instance monic_comp `{!Monic f} `(g : z ~> x) `{!Monic g} : Monic (f ∘ g).
   Next Obligation. rewrite -!comp_assoc in H. hrepeat apply monic in H; ss. Qed.
 
   Program Definition monic_strip `(g : z ~> x) `{!Monic (f ∘ g)} : Monic g := _.
-  Next Obligation. construct. comp_l f in H. apply monic in H; ss. Qed.
+  Next Obligation. cby construct; comp_l f in H. Qed.
 
+  #[export]
   Program Instance epic_comp `{!Epic f} `(g : z ~> x) `{!Epic g} : Epic (f ∘ g).
   Next Obligation. rewrite !comp_assoc in H. hrepeat apply epic in H; ss. Qed.
 
   Program Definition epic_strip `(g : z ~> x) `{!Epic (f ∘ g)} : Epic f := _.
   Next Obligation. construct. comp_r g in H. rewrite -!comp_assoc in H. apply epic in H; ss. Qed.
 End MorphismProperties.
+
+Section SplitIdempotent.
+  Context `{C : Category Obj}.
+
+  #[export]
+  Program Instance split_epic_has_section `(f : x ~> x) `{!SplitIdempotent f} : SectionOf split_epic := { section := split_monic }.
+  
+  #[export]
+  Program Instance split_monic_has_retraction `(f : x ~> x) `{!SplitIdempotent f} : RetractionOf split_monic := { retraction := split_epic }.
+
+  #[export]
+  Program Instance split_idempotent_idempotent `(f : x ~> x) `{!SplitIdempotent f} : Idempotent f.
+  Next Obligation. by split_idempotent f; rewrite comp_assoc split_idempotent_simpl1. Qed.
+End SplitIdempotent.

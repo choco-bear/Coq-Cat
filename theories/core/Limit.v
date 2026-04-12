@@ -1,2 +1,4 @@
 Require Import CommonTactics CommonFacts Category Morphism.
-Require Export Initial Product.
+Require Export Limits.Initial Limits.Product.
+
+(* Define Limit / CoLimit *)

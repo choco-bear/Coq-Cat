@@ -46,3 +46,6 @@ Tactic Notation "cancel_r" uconstr(p) "in" hyp(H) "as" ident(name) :=
   | @eq ?A ?f ?g => fail 1 "The hypothesis" H "is not an equality between morphisms, or the term" p "is not appropriate"
   | _ => fail 1 "The hypothesis" H "is not an equality"
   end.
+
+Tactic Notation "split_idempotent" uconstr(p) := rewrite -(@split_comp_orig _ _ _ p).
+Tactic Notation "split_idempotent" uconstr(p) "in" hyp(H) := rewrite -(@split_comp_orig _ _ _ p) in H.

@@ -20,6 +20,8 @@ Tactic Notation "common_normalize" "in" "*" := autorewrite with normalize in *.
 
 Inductive Void : Type := .
 
+Global Instance Void_pi : ProofIrrel Void := λ x, match x with end.
+
 Class Unique (A : Type) := {
   #[export] unique_inhabited :: Inhabited A;
   #[export] unique_proof_irrel :: ProofIrrel A;

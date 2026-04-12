@@ -9,6 +9,9 @@ Notation "'IsInitial@[' C ']'" := (@IsInitial _ C%category)
 Notation "'IsTerminal@[' C ']'" := (@IsInitial _ (C ᵒᵖ)%category)
   (at level 9, no associativity, format "IsTerminal@[ C ]") : coqcat_scope.
 
+#[export]
+Instance is_terminal_unique `{C : Category Obj} `{!IsTerminal@[C] T} c : Unique (c ~> T) := @is_initial_unique _ (C ᵒᵖ) _ _ c.
+
 Section Facts.
   Context `{C : Category Obj}.
 

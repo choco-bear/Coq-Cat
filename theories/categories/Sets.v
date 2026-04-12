@@ -43,6 +43,40 @@ Next Obligation.
   cby split=> [[?] [/[swap] ->]|[?] [[?] /[swap] ->] [/[swap] ->]].
 Qed.
 
+Module PtSets.
+  Structure Object := from_pt {
+    _set : Type;
+    pt : _set;
+  }.
+
+  Inductive Arrow x y := from_ftn (ftn : _set x → _set y) (pt_compat : ftn (pt x) = pt y).
+
+  Definition comp {x y z} (f : Arrow y z) (g : Arrow x y) : Arrow x z.
+  Proof.
+    depdes f g; unshelve esplit.
+    - exact (ftn ∘ ftn0).
+    - s. rewrite pt_compat0 pt_compat //.
+  Defined.
+
+  Lemma Arrow_ext x y ftn1 ftn2 pt_compat1 pt_compat2
+    :  ftn1 = ftn2
+    → from_ftn x y ftn1 pt_compat1 = from_ftn x y ftn2 pt_compat2.
+  Proof. cby common_simpl; assert (pt_compat1 = pt_compat2). Qed.
+
+  Ltac solver := by program_simpl; common_simpl; repeat match goal with H : Arrow _ _ |- _ => depdes H end; ss; apply Arrow_ext.
+  
+  Program Instance t : Category Object :=
+    {|
+      Category.Arrow := Arrow;
+      Category.comp := @comp;
+      cat_id := λ x, from_ftn x x (λ x, x) _
+    |}.
+  Solve Obligations with solver.
+End PtSets.
+Existing Instance PtSets.t.
+Coercion PtSets._set : PtSets.Object >-> Sortclass.
+Arguments PtSets.from_pt {_set}%_type_scope pt.
+
 Module SetsNotations.
   Declare Scope sets_scope.
   Delimit Scope sets_scope with sets.

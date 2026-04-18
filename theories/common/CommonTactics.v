@@ -20,7 +20,13 @@ Tactic Notation "common_normalize" "in" "*" := autorewrite with normalize in *.
 
 Inductive Void : Type := .
 
-Global Instance Void_pi : ProofIrrel Void := λ x, match x with end.
+Class IsEmpty (A : Type) := { is_empty : A → Void }.
+
+Global Instance void_is_empty : IsEmpty Void := {| is_empty := λ x, x |}.
+
+Global Instance false_is_empty : IsEmpty False := {| is_empty := λ x, False_rect _ x |}.
+
+Global Instance empty_pi [A : Type] `{!IsEmpty A} : ProofIrrel A := λ x, match is_empty x with end.
 
 Class Unique (A : Type) := {
   #[export] unique_inhabited :: Inhabited A;

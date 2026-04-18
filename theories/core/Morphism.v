@@ -168,8 +168,13 @@ Section MorphismProperty.
     section        :> y ~> x;
     sect_right_inv : f ∘ section = id;
   }.
+
+  Class IsRegular := {
+    psuedo_inverse : y ~> x;
+    is_regular     : f ∘ psuedo_inverse ∘ f = f;
+  }.
 End MorphismProperty.
-Global Hint Rewrite @retr_left_inv @sect_right_inv @split_comp_id : normalize.
+Global Hint Rewrite @split_comp_id @retr_left_inv @sect_right_inv @is_regular : normalize.
 
 Section MorphismPropertySimpl.
   Local Open Scope morphism_scope.

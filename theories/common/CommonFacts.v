@@ -52,3 +52,29 @@ Section Unique.
 
   Global Program Instance func_unique_dep {A : Type} `{!(∀ a : A, Unique (B a))} : Unique (∀ a, B a).
 End Unique.
+
+Section JMeq.
+  Lemma eq_to_jm {A} {x y : A} : x = y -> JMeq x y.
+  Proof. intros ->. apply JMeq_refl. Qed.
+
+  Lemma jm_to_eq {A} {x y : A} : JMeq x y -> x = y.
+  Proof. apply JMeq_eq. Qed.
+
+  Lemma jmeq_type_eq (A B : Type) (a : A) (b : B) : JMeq a b → A = B.
+  Proof. i. depdes H. reflexivity. Qed.
+
+  Lemma jmeq_fun_ext_dep
+    A (P : A -> Type) (Q : A -> Type)
+    (f : forall a, P a) (g : forall a, Q a)
+    (JMEQ : forall a, JMeq (f a) (g a)) : JMeq f g.
+  Proof.
+    assert (P = Q) as ->.
+    { apply func_ext_dep. i. eapply jmeq_type_eq, JMEQ. }
+    assert (f = g) as ->; ss.
+    apply func_ext_dep. i. apply jm_to_eq, JMEQ.
+  Qed.
+
+  Lemma jmeq_fun_ext A B C (f : A → B) (g : A → C)
+    (JMEQ : ∀ a, JMeq (f a) (g a)) : JMeq f g.
+  Proof. by eapply jmeq_fun_ext_dep. Qed.
+End JMeq.

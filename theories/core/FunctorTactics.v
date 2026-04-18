@@ -123,12 +123,6 @@ Global Hint Rewrite @comp_inv @inv_involutive @id_inv_id : functor_laws.
 Section FunctorJMeqCast.
   Local Open Scope morphism_scope.
 
-  Lemma eq_to_jm {A} {x y : A} : x = y -> JMeq x y.
-  Proof. intros ->. apply JMeq_refl. Qed.
-
-  Lemma jm_to_eq {A} {x y : A} : JMeq x y -> x = y.
-  Proof. apply JMeq_eq. Qed.
-
   Lemma jmeq_downcast_lhs `{C : Category ObjC} {x1 y1 x1' y1' x2 y2 : ObjC}
     (f : x1 ~> y1) (g : x2 ~> y2) (eqx : x1 = x1') (eqy : y1 = y1')
     : JMeq (hom_cast eqx eqy f) g → JMeq f g.

@@ -65,6 +65,8 @@ Section MorphismProperties.
 End MorphismProperties.
 
 Section SplitIdempotent.
+  Class IsKaroubiClosed `(C : Category Obj) := { split_idempotent_of {x} (f : x ~> x) `{!Idempotent f} : SplitIdempotent f }.
+
   Context `{C : Category Obj}.
 
   #[export]

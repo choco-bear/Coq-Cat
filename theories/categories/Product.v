@@ -31,20 +31,6 @@ Module BinaryProduct.
       fmap := λ _ _ fg, fg.2;
     |}.
 
-  
-  Lemma binaryproduct_id_norm `[C : Category ObjC] (c : ObjC) `[D : Category ObjD] (d : ObjD)
-    : id[(c,d)] =[C × D] ⟨id[c],id[d]⟩.
-  Proof. reflexivity. Qed.
-
-  Lemma binaryproduct_comp_norm
-    `{C : Category ObjC} {c1 c2 c3 : ObjC} (fc : c2 ~> c3) (gc : c1 ~> c2)
-    `{D : Category ObjD} {d1 d2 d3 : ObjD} (fd : d2 ~> d3) (gd : d1 ~> d2)
-    : ⟨fc,fd⟩ ∘[C × D] ⟨gc,gd⟩ =[C × D] ⟨fc ∘ gc, fd ∘ gd⟩.
-  Proof. reflexivity. Qed.
-  
-  Global Hint Rewrite @binaryproduct_id_norm @binaryproduct_comp_norm : normalize.
-
-
   Notation "⟨ F , G ⟩" := (ParingFunctor F G) (at level 9, no associativity, format "⟨ F ,  G ⟩") : functor_scope.
 
   Notation "'Fst'" := (FstFunctor _ _) (at level 9, no associativity) : functor_scope.
@@ -75,6 +61,18 @@ Module BinaryProduct.
   Global Opaque ParingFunctor FstFunctor SndFunctor.
   Global Hint Rewrite @Paring_fobj @Paring_fmap @Fst_fobj @Fst_fmap @Snd_fobj @Snd_fmap : functor_unfold.
 
+  Section Normalize.
+    Lemma binaryproduct_id_norm `[C : Category ObjC] (c : ObjC) `[D : Category ObjD] (d : ObjD)
+      : id[(c,d)] =[C × D] ⟨id[c],id[d]⟩.
+    Proof. reflexivity. Qed.
+
+    Lemma binaryproduct_comp_norm
+      `{C : Category ObjC} {c1 c2 c3 : ObjC} (fc : c2 ~> c3) (gc : c1 ~> c2)
+      `{D : Category ObjD} {d1 d2 d3 : ObjD} (fd : d2 ~> d3) (gd : d1 ~> d2)
+      : ⟨fc,fd⟩ ∘[C × D] ⟨gc,gd⟩ =[C × D] ⟨fc ∘ gc, fd ∘ gd⟩.
+    Proof. reflexivity. Qed.
+  End Normalize.
+  Global Hint Rewrite @binaryproduct_id_norm @binaryproduct_comp_norm : normalize.
 
   Section PreservingProperties.
     Context `{C : Category ObjC} `{D : Category ObjD}.

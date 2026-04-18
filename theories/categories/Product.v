@@ -64,13 +64,12 @@ Module BinaryProduct.
   Global Hint Rewrite @Paring_fobj @Paring_fmap @Fst_fobj @Fst_fmap @Snd_fobj @Snd_fmap : functor_unfold.
 
   Section Normalize.
-    Lemma id_norm `[C : Category ObjC] (c : ObjC) `[D : Category ObjD] (d : ObjD)
-      : id[(c,d)] =[C × D] ⟨id[c],id[d]⟩.
+    Context `[C : Category ObjC] `[D : Category ObjD].
+
+    Lemma id_norm c d : id[(c,d)] =[C × D] ⟨id[c],id[d]⟩.
     Proof. reflexivity. Qed.
 
-    Lemma comp_norm
-      `{C : Category ObjC} {c1 c2 c3 : ObjC} (fc : c2 ~> c3) (gc : c1 ~> c2)
-      `{D : Category ObjD} {d1 d2 d3 : ObjD} (fd : d2 ~> d3) (gd : d1 ~> d2)
+    Lemma comp_norm `(fc : c2 ~{C}~> c3) `(gc : c1 ~{C}~> c2) `(fd : d2 ~{D}~> d3) `(gd : d1 ~{D}~> d2)
       : ⟨fc,fd⟩ ∘[C × D] ⟨gc,gd⟩ =[C × D] ⟨fc ∘ gc, fd ∘ gd⟩.
     Proof. reflexivity. Qed.
   End Normalize.

@@ -113,7 +113,27 @@ Section MorphismProperty.
     split_monic : split_obj ~> x;
     split_comp_orig : split_monic ∘ split_epic = f;
     split_comp_id : split_epic ∘ split_monic = id;
+    #[export] split_idempotent :: Idempotent f;
   }.
+
+  Section SplitIdempotentConstructor.
+    Context `(f : x ~> x).
+ 
+    Program Definition mk_SplitIdempotent
+      (split_obj : Obj) (split_epic : x ~> split_obj) (split_monic : split_obj ~> x)
+      (split_comp_orig : split_monic ∘ split_epic = f)
+      (split_comp_id : split_epic ∘ split_monic = id)
+      : SplitIdempotent f :=
+        {|
+          split_obj   := split_obj;
+          split_epic  := split_epic;
+          split_monic := split_monic;
+
+          split_comp_orig := split_comp_orig;
+          split_comp_id   := split_comp_id;
+        |}.
+    Next Obligation. cby construct; rewrite comp_assoc -(comp_assoc split_monic0) split_comp_id0. Qed.
+  End SplitIdempotentConstructor.
 
   Context {x y : Obj} (f : x ~> y).
 

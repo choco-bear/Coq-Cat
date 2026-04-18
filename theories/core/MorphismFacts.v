@@ -68,12 +68,8 @@ Section SplitIdempotent.
   Context `{C : Category Obj}.
 
   #[export]
-  Program Instance split_epic_has_section `(f : x ~> x) `{!SplitIdempotent f} : SectionOf split_epic := { section := split_monic }.
+  Program Instance split_epic_has_section `(f : x ~> x) `{!SplitIdempotent f} : SectionOf split_epic := {| section := split_monic |}.
   
   #[export]
-  Program Instance split_monic_has_retraction `(f : x ~> x) `{!SplitIdempotent f} : RetractionOf split_monic := { retraction := split_epic }.
-
-  #[export]
-  Program Instance split_idempotent_idempotent `(f : x ~> x) `{!SplitIdempotent f} : Idempotent f.
-  Next Obligation. by split_idempotent f; rewrite comp_assoc split_idempotent_simpl1. Qed.
+  Program Instance split_monic_has_retraction `(f : x ~> x) `{!SplitIdempotent f} : RetractionOf split_monic := {| retraction := split_epic |}.
 End SplitIdempotent.

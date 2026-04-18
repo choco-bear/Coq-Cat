@@ -32,7 +32,7 @@ Hint Rewrite @fmap_to_inv : functor_prep.
 Section Functors.
   Context `{B : Category ObjB} `{C : Category ObjC} (F : B ⟶ C).
 
-  Program Instance faithful_fmap_monic_strip `(f : x ~{B}~> y) `{!Faithful F} `{!Monic (F # f)%morphism} : Monic f.
+  Program Instance faithful_monic_strip_fmap `(f : x ~{B}~> y) `{!Faithful F} `{!Monic (F # f)%morphism} : Monic f.
   Next Obligation.
     eapply faithful; first apply _.
     eapply monic; first apply _.

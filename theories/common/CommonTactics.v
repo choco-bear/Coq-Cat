@@ -106,7 +106,8 @@ Proof. ss. Qed.
 
 Ltac duplicate_goal := match goal with [|- ?G ] => apply (duplicate_goal G) end.
 
-Ltac construct := unshelve econstructor; ii; ss.
+Ltac smart_constructor_hook := fail.
+Ltac construct := unshelve first [smart_constructor_hook|econstructor]; ii; ss.
 
 Notation CReflexive := CRelationClasses.Reflexive.
 Notation CSymmetric := CRelationClasses.Symmetric.

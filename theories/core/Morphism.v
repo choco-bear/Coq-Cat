@@ -133,6 +133,15 @@ Section MorphismProperty.
           split_comp_id   := split_comp_id;
         |}.
     Next Obligation. cby construct; rewrite comp_assoc -(comp_assoc split_monic0) split_comp_id0. Qed.
+
+    Ltac previous_smart_constructor_hook := smart_constructor_hook.
+    Ltac smart_constructor_hook ::= first [ fail
+      | match goal with
+        | |- SplitIdempotent ?f =>
+            eapply mk_SplitIdempotent
+        end
+      | previous_smart_constructor_hook
+      ].
   End SplitIdempotentConstructor.
 
   Context {x y : Obj} (f : x ~> y).

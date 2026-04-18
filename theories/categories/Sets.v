@@ -78,6 +78,16 @@ Next Obligation.
   cby split=> [[?] [/[swap] ->]|[?] [[?] /[swap] ->] [/[swap] ->]].
 Qed.
 
+Program Instance SetsIsKaroubiClosed : IsKaroubiClosed Sets.t.
+Next Obligation.
+  unshelve eapply (mk_SplitIdempotent (f : x ~{Sets.t}~> x) {a : x & ∃ b, a = f b} ).
+  { construct. unshelve esplit; first exact (f X); eauto. }
+  { Sets.simpl. construct. depdes X. exact x0. }
+  all: Sets.simpl.
+  depdes x0. des. subst. apply subsetT_eq_compat.
+  depdes Idempotent0. cby eapply Sets.equal_f in idempotent.
+Qed.
+
 Module PtSets.
   Structure Object := from_pt {
     _set : Type;

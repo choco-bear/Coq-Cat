@@ -152,6 +152,11 @@ Definition monoid_cast `(C : Category Obj) `{!IsMonoid C} := ● ~> ●.
 
 Notation "⇑ C" := (monoid_cast C%category) : type_scope.
 
+Class IsDiscrete `(C : Category Obj) := {
+  discrete_obj_eq : ∀ {x y : Obj}, (x ~> y) → x = y;
+  discrete_hom_eq : ∀ {x : Obj} (f : x ~> x), f =[C] id[x]
+}.
+
 Global Instance hom_c_preorder `(C : Category Obj) : CPreOrder hom[C] :=
   {|
     CPreOrder_CReflexive  := λ x, id[x];

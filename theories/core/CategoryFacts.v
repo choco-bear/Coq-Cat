@@ -11,6 +11,13 @@ Section Morphisms.
   Proof. i. cut (f ∘ id[x] = id[x]); common_simpl. Qed.
 End Morphisms.
 
-#[export]
-Instance BinaryProduct_preserves_IsMonoid `[M : Category ObjM] `(!IsMonoid M) `[N : Category ObjN] `(!IsMonoid N) : IsMonoid (M × N).
-Proof. repeat construct; common_simpl. Qed.
+Section BinaryProduct.
+  Context `{C : Category ObjC} `{D : Category ObjD}.
+
+  #[export]
+  Instance BinaryProduct_preserves_IsMonoid `(!IsMonoid C) `(!IsMonoid D) : IsMonoid (C × D).
+  Proof. repeat construct; ss; common_simpl. Qed.
+  
+  #[export]
+  Program Instance BinaryProduct_preserves_IsDiscrete `{!IsDiscrete C} `{!IsDiscrete D} : IsDiscrete (C × D).
+End BinaryProduct.

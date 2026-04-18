@@ -49,3 +49,23 @@ Tactic Notation "comp_r" uconstr(p) "in" hyp(H) "as" ident(name) :=
   | @eq ?A ?f ?g => fail 1 "The hypothesis" H "is not an equality between morphisms, or the term" p "is not appropriate"
   | _ => fail 1 "The hypothesis" H "is not an equality"
   end.
+
+Ltac deal_discrete := repeat match goal with
+                      | f : ?x ~{?C}~> ?x |- _ =>
+                          match goal with
+                          | H : f =[C] id[x] |- _ => fail 1
+                          | _ =>  let EQ_hom := fresh "EQ_hom" in
+                                  pose proof (discrete_hom_eq f) as EQ_hom;
+                                  tryif (depdes EQ_hom) then (try clear f) else (try clear f EQ_hom)
+                          end 
+                      | f : ?x ~> ?y |- _ =>
+                          match goal with
+                          | _ : x = y |- _ => fail 1
+                          | _ : y = x |- _ => fail 1
+                          | _ =>  let EQ_obj := fresh "EQ_obj" in
+                                  pose proof (discrete_obj_eq f) as EQ_obj;
+                                  try depdes EQ_obj
+                          end
+                      end.
+
+Ltac common_simpl_prep_hook_category ::= deal_discrete.

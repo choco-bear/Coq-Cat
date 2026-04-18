@@ -19,7 +19,13 @@ Module Sets.
     : f = g
     → from_ftn X Y f = from_ftn X Y g.
   Proof. common_simpl. Qed.
-  #[export] Hint Resolve Arrow_ext func_ext : __Sets.
+
+  Lemma equal_f X Y (f g : Arrow X Y) (x : _set X)
+    : f = g
+    → apply f x = apply g x.
+  Proof. common_simpl. Qed.
+  
+  #[export] Hint Resolve Arrow_ext func_ext equal_f : __Sets.
 
   Ltac simpl := repeat first [ fail
                 | match goal with

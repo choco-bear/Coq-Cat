@@ -17,6 +17,9 @@ Section BinaryProduct.
   #[export]
   Program Instance BinaryProduct_preserves_IsMonoid `{!IsMonoid C} `{!IsMonoid D} : IsMonoid (C × D).
   Next Obligation. cby repeat construct. Qed.
+
+  #[export]
+  Program Instance BinaryProduct_preserves_IsPreOrder `{!IsPreOrder C} `{!IsPreOrder D} : IsPreOrder (C × D).
   
   #[export]
   Program Instance BinaryProduct_preserves_IsDiscrete `{!IsDiscrete C} `{!IsDiscrete D} : IsDiscrete (C × D).

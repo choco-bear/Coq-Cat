@@ -30,3 +30,25 @@ Section Inverses.
 End Inverses.
 Global Hint Rewrite @bijective_inv_left @bijective_inv_right @inv_left_pointwise @inv_right_pointwise
                     @inv_spec @inv_normalize_1 @inv_normalize_2 : normalize.
+
+Section ProofIrrel.
+  Global Instance prop_pi (P : Prop) : ProofIrrel P.
+  Proof. ii. apply proof_irr. Qed.
+
+  Global Instance func_pi {A : Type} `{!ProofIrrel B} : ProofIrrel (A → B).
+  Proof. ii. apply func_ext=> //. Qed.
+
+  Global Instance func_pi_dep {A : Type} `{!(∀ a : A, ProofIrrel (B a))} : ProofIrrel (∀ a, B a).
+  Proof. ii. apply func_ext_dep. i. apply proof_irrel. Qed.
+End ProofIrrel.
+
+Section Inhabited.
+  Global Instance func_inhabited_dep {A : Type} `{!(∀ a : A, Inhabited (B a))} : Inhabited (∀ a, B a).
+  Proof. split. i. exact inhabitant. Qed.
+End Inhabited.
+
+Section Unique.
+  Global Program Instance func_unique {A : Type} `{!Unique B} : Unique (A → B).
+
+  Global Program Instance func_unique_dep {A : Type} `{!(∀ a : A, Unique (B a))} : Unique (∀ a, B a).
+End Unique.

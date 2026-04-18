@@ -41,7 +41,7 @@ Module BinaryProduct.
   Notation "'Snd'" := (SndFunctor _ _) (at level 0, no associativity) : functor_scope.
   Notation "'Snd[' C ',' D ']'" := (SndFunctor C%category D%category) (at level 9, no associativity, only parsing) : functor_scope.
 
-  Section FunctorApplications.
+  Section FunctorUnfold.
     Context `{C : Category ObjC} `{D : Category ObjD}.
     
     Lemma Fst_fobj : fobj Fst[C,D] = fst.
@@ -59,7 +59,7 @@ Module BinaryProduct.
     Proof. reflexivity. Qed.
     Lemma Paring_fmap (F : C ⟶ D) (G : C ⟶ B) {x y : ObjC} : fmap ⟨F,G⟩ = (λ f, ⟨F # f, G # f⟩%morphism) :> (x ~> y → _).
     Proof. reflexivity. Qed.
-  End FunctorApplications.
+  End FunctorUnfold.
   Global Opaque ParingFunctor FstFunctor SndFunctor.
   Global Hint Rewrite @Paring_fobj @Paring_fmap @Fst_fobj @Fst_fmap @Snd_fobj @Snd_fmap : functor_unfold.
 

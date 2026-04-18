@@ -25,6 +25,10 @@ Module Zero.
       Category.comp := @comp;
       cat_id := Zero.id;
     |}.
+
+  Program Instance is_descrete : IsDiscrete t.
+
+  Program Instance is_groupoid : IsGroupoid t.
 End Zero.
 Notation "0" := Zero.t : category_scope.
 
@@ -34,12 +38,12 @@ Module One.
   Inductive Arrow : Object → Object → Type := id_A : Arrow A A.
 
   Ltac solver :=
-    common_simpl;
+    program_simpl; common_simpl;
     hrepeat progress do 1 match goal with
     | [x : Object |- _] => depdes x
     | [f : Arrow _ _ |- _] => depdes f
     end; ss.
-  Local Obligation Tactic := solver.
+  Local Obligation Tactic := repeat unshelve esplit; solver.
 
   Definition comp {x y z} (f : Arrow y z) (g : Arrow x y) : Arrow x z.
   Proof. solver. Defined.
@@ -53,6 +57,10 @@ Module One.
       Category.comp := @comp;
       cat_id := One.id;
     |}.
+
+  Program Instance is_descrete : IsDiscrete t.
+
+  Program Instance is_group : IsGroup t.
 End One.
 Notation "1" := One.t : category_scope.
 
@@ -158,3 +166,30 @@ Module Parallel.
     |}.
 End Parallel.
 Notation "⇊" := Parallel.t : category_scope.
+
+Module Discrete. Section Defs.
+  Context (Object : Type).
+
+  Inductive Arrow : Object → Object → Type :=
+    | id x : Arrow x x
+    .
+
+  Ltac solver :=
+    program_simpl; common_simpl;
+    hrepeat do 1 match goal with
+    | [f : Arrow _ _ |- _] => depdes f
+    end; ss.
+  Local Obligation Tactic := solver.
+
+  Definition comp {x y z} (f : Arrow y z) (g : Arrow x y) : Arrow x z.
+  Proof. solver. Defined.
+
+  Program Instance from_type : Category Object :=
+    {|
+      Category.Arrow := Arrow;
+      Category.comp := @comp;
+      cat_id := Defs.id;
+    |}.
+
+  Program Instance is_descrete : IsDiscrete from_type.
+End Defs. End Discrete.

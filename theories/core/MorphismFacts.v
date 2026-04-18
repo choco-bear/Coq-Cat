@@ -46,8 +46,14 @@ Section MorphismProperties.
   Next Obligation. cby comp_l r in H. Qed.
 
   #[export]
+  Program Instance has_retraction_then_is_regular (r : RetractionOf f) : IsRegularMorphism f := {| psuedo_inverse := r |}.
+
+  #[export]
   Program Instance has_section_epic (s : SectionOf f) : Epic f.
   Next Obligation. cby comp_r (f ∘ s); rewrite ?H ?sect_right_inv. Qed.
+
+  #[export]
+  Program Instance has_section_then_is_regular (s : SectionOf f) : IsRegularMorphism f := {| psuedo_inverse := s |}.
 
   #[export]
   Program Instance monic_comp `{!Monic f} `(g : z ~> x) `{!Monic g} : Monic (f ∘ g).

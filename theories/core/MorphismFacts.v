@@ -75,7 +75,7 @@ Section MorphismProperties.
   Next Obligation. rewrite !comp_assoc in H. hrepeat apply epic in H; ss. Qed.
 
   Program Definition epic_strip `(g : z ~> x) `{!Epic (f ∘ g)} : Epic f := _.
-  Next Obligation. construct; ss. comp_r g in H. rewrite -!comp_assoc in H. apply epic in H; ss. Qed.
+  Next Obligation. construct. comp_r g in H. rewrite -!comp_assoc in H. apply epic in H; ss. Qed.
 End MorphismProperties.
 
 Section SplitIdempotent.

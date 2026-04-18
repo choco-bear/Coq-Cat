@@ -79,14 +79,14 @@ Module BinaryProduct.
     Context `{C : Category ObjC} `{D : Category ObjD}.
 
     #[export]
-    Program Instance preserves_IsMonoid `{!IsMonoid C} `{!IsMonoid D} : IsMonoid (C × D).
-    Next Obligation. cby repeat construct. Qed.
-
-    #[export]
     Program Instance preserves_IsPreOrder `{!IsPreOrder C} `{!IsPreOrder D} : IsPreOrder (C × D).
     
     #[export]
     Program Instance preserves_IsDiscrete `{!IsDiscrete C} `{!IsDiscrete D} : IsDiscrete (C × D).
+
+    #[export]
+    Program Instance preserves_IsMonoid `{!IsMonoid C} `{!IsMonoid D} : IsMonoid (C × D).
+    Next Obligation. cby repeat construct. Qed.
 
     #[export]
     Instance preserves_IsGroupoid `(!IsGroupoid C) `(!IsGroupoid D) : IsGroupoid (C × D).

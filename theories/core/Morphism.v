@@ -170,8 +170,8 @@ Section MorphismProperty.
   }.
 
   Class IsRegularMorphism := {
-    psuedo_inverse : y ~> x;
-    is_regular     : f ∘ psuedo_inverse ∘ f = f;
+    pseudo_inverse : y ~> x;
+    is_regular     : f ∘ pseudo_inverse ∘ f = f;
   }.
 End MorphismProperty.
 Global Hint Rewrite @split_comp_id @retr_left_inv @sect_right_inv @is_regular : normalize.

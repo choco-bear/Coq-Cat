@@ -49,3 +49,8 @@ Tactic Notation "cancel_r" uconstr(p) "in" hyp(H) "as" ident(name) :=
 
 Tactic Notation "split_idempotent" uconstr(p) := rewrite -(@split_comp_orig _ _ _ p).
 Tactic Notation "split_idempotent" uconstr(p) "in" hyp(H) := rewrite -(@split_comp_orig _ _ _ p) in H.
+
+Ltac smart_constructor_hook_morphism ::=  match goal with
+                                          | |- SplitIdempotent ?f =>
+                                              eapply mk_SplitIdempotent
+                                          end.

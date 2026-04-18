@@ -43,10 +43,7 @@ End Functors.
 Section IsGroupoid.
   #[export]
   Instance BinaryProduct_preserves_IsGroupoid `[G : Category ObjG] `(!IsGroupoid G) `[H : Category ObjH] `(!IsGroupoid H) : IsGroupoid (G × H).
-  Proof.
-    construct. depdes x y f.
-    construct; common_simpl.
-  Qed.
+  Proof. construct; ss. depdes x y f. cby construct. Qed.
 End IsGroupoid.
 
 Section MorphismProperties.
@@ -78,7 +75,7 @@ Section MorphismProperties.
   Next Obligation. rewrite !comp_assoc in H. hrepeat apply epic in H; ss. Qed.
 
   Program Definition epic_strip `(g : z ~> x) `{!Epic (f ∘ g)} : Epic f := _.
-  Next Obligation. construct. comp_r g in H. rewrite -!comp_assoc in H. apply epic in H; ss. Qed.
+  Next Obligation. construct; ss. comp_r g in H. rewrite -!comp_assoc in H. apply epic in H; ss. Qed.
 End MorphismProperties.
 
 Section SplitIdempotent.

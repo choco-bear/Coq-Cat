@@ -70,7 +70,8 @@ Ltac simpl_unique :=
       ) else idtac
   end; hrepeat do 1 progress rewrite @unique_collapse in *.
 
-Ltac common_simpl_prep := ii; ss; subst; try apply _; try solve_proper; simpl_unique.
+Ltac common_simpl_prep_hook_category := idtac.
+Ltac common_simpl_prep := ii; ss; subst; try apply _; try solve_proper; simpl_unique; common_simpl_prep_hook_category.
 
 Ltac common_simpl :=
   common_simpl_prep;
@@ -96,7 +97,7 @@ Tactic Notation "cby" tactic(t) := t; common_done.
 
 Hint Extern 10 (_ * _) => split : coqcat.
 
-Global Obligation Tactic := program_simpl; common_simpl.
+Global Obligation Tactic := program_simpl; first [common_done|common_simpl].
 
 Global Program Instance unit_unique : Unique ().
 Global Program Instance true_unique : Unique True.
@@ -112,8 +113,8 @@ Proof. ss. Qed.
 
 Ltac duplicate_goal := match goal with [|- ?G ] => apply (duplicate_goal G) end.
 
-Ltac smart_constructor_hook := fail.
-Ltac construct := unshelve first [smart_constructor_hook|econstructor]; ii; ss.
+Ltac smart_constructor_hook_morphism := fail.
+Ltac construct := unshelve first [smart_constructor_hook_morphism|econstructor]; ii.
 
 Notation CReflexive := CRelationClasses.Reflexive.
 Notation CSymmetric := CRelationClasses.Symmetric.

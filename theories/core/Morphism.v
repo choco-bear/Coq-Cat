@@ -169,7 +169,7 @@ Section MorphismProperty.
     sect_right_inv : f ∘ section = id;
   }.
 
-  Class IsRegular := {
+  Class IsRegularMorphism := {
     psuedo_inverse : y ~> x;
     is_regular     : f ∘ psuedo_inverse ∘ f = f;
   }.

@@ -1,45 +1,74 @@
 Require Import Common.
 
+Create HintDb __Sets discriminated.
 Module Sets.
   Structure Object := from_type { _set : Type }.
 
-  Local Notation SetsArrow := (λ X Y : Object, _set X → _set Y).
+  Inductive Arrow X Y := from_ftn (ftn : _set X → _set Y).
+  #[export] Hint Constructors Arrow : coqcat __Sets.
+
+  Definition apply {X Y} (f : Arrow X Y) (x : _set X) : _set Y.
+  Proof. depdes f. apply ftn, x. Defined.
+
+  Definition comp {x y z} (f : Arrow y z) (g : Arrow x y) : Arrow x z.
+  Proof. depdes f g. apply from_ftn. i. apply ftn, ftn0, X. Defined.
+
+  #[export] Hint Unfold apply comp : __Sets.
+
+  Lemma Arrow_ext X Y (f g : _set X → _set Y)
+    : f = g
+    → from_ftn X Y f = from_ftn X Y g.
+  Proof. common_simpl. Qed.
+  #[export] Hint Resolve Arrow_ext func_ext : __Sets.
+
+  Ltac simpl := repeat first [ fail
+                | match goal with
+                  | H : Arrow _ _ |- _ => depdes H
+                  | _ => apply Arrow_ext
+                  | _ => apply func_ext
+                  end; ss
+                | ii ].
+
+  Ltac solver := cby (program_simpl; common_simpl; Sets.simpl).
   
   Program Instance t : Category Object :=
     {|
-      Arrow := SetsArrow;
-      comp := λ X Y Z f g, (f ∘ g)%stdpp;
-      cat_id := λ X x, x;
+      Category.Arrow := Arrow;
+      Category.comp := @comp;
+      cat_id := λ X, from_ftn X X (λ x, x);
     |}.
+  Solve Obligations with solver.
 
   Program Definition BinaryProduct : t × t ⟶ t :=
     {|
       fobj := λ XY, from_type (_set XY.1 * _set XY.2);
-      fmap := λ _ _ fg xy, (fg.1 xy.1, fg.2 xy.2);
+      fmap := λ _ _ fg, from_ftn _ _ (λ xy, (apply fg.1 xy.1, apply fg.2 xy.2));
     |}.
-  Next Obligation. apply func_ext=> [] [x y] //. Qed.
+  Solve Obligations with solver.
 End Sets.
 Existing Instance Sets.t.
+Arguments Sets.from_ftn {X Y} ftn%_function_scope.
 Coercion Sets._set : Sets.Object >-> Sortclass.
 Coercion Sets.from_type : Sortclass >-> Sets.Object.
+Coercion Sets.apply : Sets.Arrow >-> Funclass.
 
 Lemma Sets_id_unfold X x : id{Sets.t}[X]%morphism x = x.
-Proof. rewrite /cat_id //. Qed.
+Proof. Sets.solver. Qed.
 Lemma Sets_comp_unfold [X Y Z : Sets.Object] (f : Y ~> Z) (g : X ~> Y) x : (f ∘ g)%morphism x = f (g x).
-Proof. rewrite /comp //. Qed.
+Proof. Sets.solver. Qed.
 #[export] Hint Rewrite @Sets_id_unfold @Sets_comp_unfold : normalize.
 
 Program Definition Powerset : Sets.t ⟶ Sets.t :=
   {|
     fobj := λ X, X → Prop;
-    fmap := λ X Y f P y, ∃ x, P x ∧ y = f x;
+    fmap := λ X Y f, Sets.from_ftn (λ P y, ∃ x, P x ∧ y = f x);
   |}.
 Next Obligation.
-  apply func_ext. i. apply pred_ext. i.
+  Sets.simpl. apply prop_ext.
   cby split=> [[?] [/[swap] ->]|].
 Qed.
 Next Obligation.
-  apply func_ext. i. apply pred_ext. i.
+  Sets.simpl. apply prop_ext.
   cby split=> [[?] [/[swap] ->]|[?] [[?] /[swap] ->] [/[swap] ->]].
 Qed.
 

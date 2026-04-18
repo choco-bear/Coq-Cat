@@ -21,9 +21,9 @@ Module Mon.
   Program Definition Forgetful : t ⟶ Sets.t :=
     {|
       fobj := λ M, ⇑ (monoid M);
-      fmap := λ M N ϕ m, (⇑ (ϕ # m))%morphism;
+      fmap := λ M N ϕ, Sets.from_ftn (λ m, (⇑ (ϕ # m))%morphism);
     |}.
-  Solve Obligations with (program_simpl; apply func_ext; ii; repeat fmap_eq_simplify //).
+  Solve Obligations with (Sets.simpl; repeat fmap_eq_simplify //).
 End Mon.
 Existing Instance Mon.t.
 Existing Instance is_monoid.
@@ -49,9 +49,9 @@ Module Grp.
   Program Definition Forgetful : t ⟶ Sets.t :=
     {|
       fobj := λ G, ⇑ (group G);
-      fmap := λ G H ϕ g, (⇑ (ϕ # g))%morphism;
+      fmap := λ G H ϕ, Sets.from_ftn (λ g, (⇑ (ϕ # g))%morphism);
     |}.
-  Solve Obligations with (program_simpl; apply func_ext; functor_solver).
+  Solve Obligations with (Sets.simpl; functor_solver).
 
   Definition grp2mon (G : Object) : Mon.Object :=
     {|

@@ -74,7 +74,19 @@ Ltac common_simpl :=
     common_normalize; try by address_pi; try by address_inhabited; eauto with coqcat
   ).
 
-Tactic Notation "cby" tactic(t) := t; common_simpl; done.
+Ltac common_done :=
+  common_simpl_prep;
+  repeat match goal with
+  | A : ?X * ?Y |- _ =>
+      let B := fresh A in
+      destruct A as [A B]
+  end; tryif (
+    solve [ common_normalize in *; try by address_pi; try by address_inhabited; eauto with coqcat]
+  ) then idtac else (
+    common_normalize; try by address_pi; try by address_inhabited; eauto with coqcat
+  ); done.
+
+Tactic Notation "cby" tactic(t) := t; common_done.
 
 Hint Extern 10 (_ * _) => split : coqcat.
 

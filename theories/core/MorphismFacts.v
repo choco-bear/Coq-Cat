@@ -29,6 +29,17 @@ Section FunctorSimpl.
 End FunctorSimpl.
 Hint Rewrite @fmap_to_inv : functor_prep.
 
+Section Functors.
+  Context `{B : Category ObjB} `{C : Category ObjC} (F : B ⟶ C).
+
+  Program Instance faithful_fmap_monic_strip `(f : x ~{B}~> y) `{!Faithful F} `{!Monic (F # f)%morphism} : Monic f.
+  Next Obligation.
+    eapply faithful; first apply _.
+    eapply monic; first apply _.
+    rewrite -!fmap_comp H //.
+  Qed.
+End Functors.
+
 Section IsGroupoid.
   #[export]
   Instance BinaryProduct_preserves_IsGroupoid `[G : Category ObjG] `(!IsGroupoid G) `[H : Category ObjH] `(!IsGroupoid H) : IsGroupoid (G × H).

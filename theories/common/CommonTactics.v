@@ -97,7 +97,7 @@ Tactic Notation "cby" tactic(t) := t; common_done.
 
 Hint Extern 10 (_ * _) => split : coqcat.
 
-Global Obligation Tactic := program_simpl; first [common_done|common_simpl].
+Global Obligation Tactic := program_simpl; common_simpl.
 
 Global Program Instance unit_unique : Unique ().
 Global Program Instance true_unique : Unique True.

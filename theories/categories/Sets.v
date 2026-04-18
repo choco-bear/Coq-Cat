@@ -1,4 +1,4 @@
-Require Import Common.
+From CoqCat Require Import Common Product.
 
 Create HintDb __Sets discriminated.
 Module Sets.

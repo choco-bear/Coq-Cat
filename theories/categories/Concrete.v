@@ -1,5 +1,5 @@
 (* From mathcomp Require Import ssreflect all_algebra. *)
-Require Import Common Sets.
+From CoqCat Require Import Common Sets Product.
 
 Module Mon.
   Structure Object := {

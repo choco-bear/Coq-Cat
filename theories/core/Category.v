@@ -115,31 +115,6 @@ Notation "'(ᵒᵖ)@{' Obj '}'" := (@Opposite Obj%type) (at level 9, no associat
 Global Instance opposite_involutive [Obj : Type] : Involutive eq (ᵒᵖ)@{Obj}.
 Proof. by ii; apply cat_ext. Qed.
 
-Program Definition BinaryProduct `(C : Category ObjC) `(D : Category ObjD) : Category (ObjC * ObjD) :=
-  {|
-    Arrow := λ x y, (x.1 ~{C}~> y.1) * (x.2 ~{D}~> y.2);
-    comp := λ x y z f g, (f.1 ∘ g.1, f.2 ∘ g.2);
-    cat_id := λ x, (id[x.1], id[x.2]);
-  |}%type%morphism.
-
-Notation "C × D" := (BinaryProduct C%category D%category) (at level 41, right associativity): category_scope.
-
-Notation "⟨ f , g ⟩" := ((f,g) : (_,_) ~{_ × _}~> (_,_))
-  (at level 9, no associativity, format "⟨ f ,  g ⟩") : morphism_scope.
-
-Section BinaryProductNorm.
-  Lemma binaryproduct_id_norm `[C : Category ObjC] (c : ObjC) `[D : Category ObjD] (d : ObjD)
-    : id[(c,d)] =[C × D] ⟨id[c],id[d]⟩.
-  Proof. reflexivity. Qed.
-
-  Lemma binaryproduct_comp_norm
-    `{C : Category ObjC} {c1 c2 c3 : ObjC} (fc : c2 ~> c3) (gc : c1 ~> c2)
-    `{D : Category ObjD} {d1 d2 d3 : ObjD} (fd : d2 ~> d3) (gd : d1 ~> d2)
-    : ⟨fc,fd⟩ ∘[C × D] ⟨gc,gd⟩ =[C × D] ⟨fc ∘ gc, fd ∘ gd⟩.
-  Proof. reflexivity. Qed.
-End BinaryProductNorm.
-Global Hint Rewrite @binaryproduct_id_norm @binaryproduct_comp_norm : normalize.
-
 Class IsPreOrder `(C : Category Obj) := {
   #[export] is_preorder x y :: ProofIrrel (x ~> y)
 }.

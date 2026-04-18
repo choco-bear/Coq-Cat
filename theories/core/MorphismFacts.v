@@ -40,12 +40,6 @@ Section Functors.
   Qed.
 End Functors.
 
-Section IsGroupoid.
-  #[export]
-  Instance BinaryProduct_preserves_IsGroupoid `[G : Category ObjG] `(!IsGroupoid G) `[H : Category ObjH] `(!IsGroupoid H) : IsGroupoid (G × H).
-  Proof. construct; ss. depdes x y f. cby construct. Qed.
-End IsGroupoid.
-
 Section MorphismProperties.
   Context `{C : Category Obj} `(f : x ~> y).
 

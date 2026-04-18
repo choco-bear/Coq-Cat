@@ -66,8 +66,8 @@ Module Grp.
     |}.
   Next Obligation. cby construct. Qed.
   Next Obligation.
-    apply functor_ext; ss; try functor_solver.
-    apply func_ext=> [] [x y] //.
+    apply functor_ext; ss; functor_solver.
+    (* apply func_ext=> [] [x y] //. *)
   Qed.
   Next Obligation. by apply functor_ext. Qed.
 End Grp.

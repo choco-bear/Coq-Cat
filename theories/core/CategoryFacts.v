@@ -15,8 +15,8 @@ Section BinaryProduct.
   Context `{C : Category ObjC} `{D : Category ObjD}.
 
   #[export]
-  Instance BinaryProduct_preserves_IsMonoid `(!IsMonoid C) `(!IsMonoid D) : IsMonoid (C × D).
-  Proof. repeat construct; ss; common_simpl. Qed.
+  Program Instance BinaryProduct_preserves_IsMonoid `{!IsMonoid C} `{!IsMonoid D} : IsMonoid (C × D).
+  Next Obligation. cby repeat construct. Qed.
   
   #[export]
   Program Instance BinaryProduct_preserves_IsDiscrete `{!IsDiscrete C} `{!IsDiscrete D} : IsDiscrete (C × D).

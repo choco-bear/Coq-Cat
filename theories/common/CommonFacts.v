@@ -63,7 +63,7 @@ Section JMeq.
   Lemma jmeq_type_eq (A B : Type) (a : A) (b : B) : JMeq a b → A = B.
   Proof. i. depdes H. reflexivity. Qed.
 
-  Lemma jmeq_fun_ext_dep
+  Lemma jmeq_func_ext_dep
     A (P : A -> Type) (Q : A -> Type)
     (f : forall a, P a) (g : forall a, Q a)
     (JMEQ : forall a, JMeq (f a) (g a)) : JMeq f g.
@@ -74,7 +74,7 @@ Section JMeq.
     apply func_ext_dep. i. apply jm_to_eq, JMEQ.
   Qed.
 
-  Lemma jmeq_fun_ext A B C (f : A → B) (g : A → C)
+  Lemma jmeq_func_ext A B C (f : A → B) (g : A → C)
     (JMEQ : ∀ a, JMeq (f a) (g a)) : JMeq f g.
-  Proof. by eapply jmeq_fun_ext_dep. Qed.
+  Proof. by eapply jmeq_func_ext_dep. Qed.
 End JMeq.

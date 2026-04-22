@@ -1,4 +1,5 @@
-COQTHEORIES  := $(shell find . -not -path "./deprecated/*" -not -path "./_opam/*" -not -path "./.local/*" -iname '*.v')
+COQTHEORIES   := $(shell find . -not -path "./deprecated/*" -not -path "./_opam/*" -not -path "./.local/*" -iname '*.v')
+COQMODULE 	  := "CoqCat"	
 
 %.vo: %.v
 	$(MAKE) -f Makefile.coq $@
@@ -16,6 +17,7 @@ Makefile.coq: Makefile $(COQTHEORIES)
 	(echo "-arg -w -arg -deprecated-hint-without-locality"; \
 	 echo "-arg -w -arg -deprecated-instance-without-locality"; \
 	 echo "-arg -w -arg -deprecated-from-Coq"; \
+	 echo "-arg -w -arg -deprecated-missing-stdlib"; \
 	 echo "-arg -w -arg -notation-incompatible-prefix"; \
 	 echo "-arg -w -arg -notation-overriden"; \
 	 echo "-arg -w -arg -ambiguous-paths"; \
@@ -25,14 +27,10 @@ Makefile.coq: Makefile $(COQTHEORIES)
 	 echo "-arg -w -arg -parsing"; \
 	 echo "-arg -w -arg -intuition-auto-with-star"; \
 	 echo "-arg -w -arg -non-primitive-record"; \
-	 echo "-R imports Category"; \
-	 echo "-R Axioms Category.Axioms"; \
-	 echo "-R Lib Category.Lib"; \
-	 echo "-R Algebra Category.Algebra"; \
-	 echo "-R Theory Category.Theory"; \
-	 echo "-R Instance Category.Instance"; \
-	 echo "-R Construction Category.Construction"; \
-	 echo "-R Facts Category.Facts"; \
+	 echo "-R theories/categories $(COQMODULE)"; \
+	 echo "-R theories/common $(COQMODULE)"; \
+	 echo "-R theories/core $(COQMODULE)"; \
+	 echo "-R theories/lib $(COQMODULE)"; \
 	 echo $(COQTHEORIES)) > _CoqProject
 	$(COQBIN)coq_makefile -f _CoqProject -o Makefile.coq
 .PHONY: Makefile.coq

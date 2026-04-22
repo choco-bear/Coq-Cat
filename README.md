@@ -20,6 +20,8 @@ opam update
 4. Install the right version of the dependencies.
 ```
 opam install rocq-prover.9.0.0
+opam install coq-stdpp.1.12.0
+opam install rocq-mathcomp-algebra.2.5.0
 ```
 
 ## How to Compile
@@ -27,37 +29,12 @@ You can compile this with the command below:
 ```
 make -j
 ```
+To clean the build files, use:
+```
+make clean
+```
 
-## Project Structure
-
-This project is organized using Coq's logical path system, which is configured by the `Makefile` and the auto-generated `_CoqProject` file. The physical directories are mapped to logical Coq modules.
-
-* **`Lib/`** (Mapped to `Category.Lib`) \
-    This directory contains the core foundational library and utilities used throughout the project.
-
-* **`Axioms/`** (Mapped to `Category.Axioms`) \
-    This directory contains the axioms that underpin the formalization of category theory in this project.
-
-* **`Algebra/`** (Mapped to `Category.Algebra`) \
-    This directory contains algebraic structures and concepts that are relevant to category theory.
-
-* **`Theory/`** (Mapped to `Category.Theory`) \
-    This directory holds the formalization of category theory concepts.
-
-* **`Instance/`** (Mapped to `Category.Instance`) \
-    This directory holds the instances of `Category` typeclass.
-
-* **`Construction/`** (Mapped to `Category.Construction`) \
-    This directory contains various constructions in category theory. In other words, it includes ways to build new categories from existing ones.
-
-* **`Facts/`** (Mapped to `Category.Facts`) \
-    This directory contains various lemmas and definitions about categories and related structures, but is not part of the main theory development.
-
-* **`imports/`** (Mapped to `Category`) \
-    This directory serves as the main entry point for the project.
-
-## Design Decisions
-Some features and choices made in this library:
-* **Typeclasses**: The library heavily relies on Coq's typeclass mechanism to define and manage categorical structures. This allows for more flexible and reusable code. When a type class instance would be too general, it is presented as a definition that can later be added to instance resolution with `Existing Instance`.
-* **Type Universe**: All definitions are in `Type`, so that `Prop` is not used in the development. This increases the proof work necessary to establish certain properties, but it also allows for greater generality and applicability of the results.
-* **Axioms**: Axioms are separated into their own directory (`Axioms/`) to clearly distinguish between foundational assumptions and derived results. Each axiom is presented as the form of typeclass, and this makes it easy to manage different sets of axioms for different contexts.
+## Additional Notes
+- The `Makefile` is configured to use `coq_makefile` to generate the necessary build files. If you want to customize the build process, you can modify the `Makefile` accordingly.
+- The `theories/lib/sflib.v` file is a modified copy of the `src/sflib.v` file from the [sflib](https://github.com/snu-sf/sflib) repository. It is included here to avoid the notation conflict with the `mathcomp` library. If you want to use the latest version of `sflib`, you can replace this file with the one from the `sflib` repository, but be aware of potential conflicts.
+- The `theories/core` directory contains the core definitions and lemmas of category theory, while the `theories/categories` directory contains specific categories and their properties. You can explore these directories to understand the structure of the formalization.

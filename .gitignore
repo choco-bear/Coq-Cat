@@ -71,5 +71,5 @@ time-of-build-pretty.log
 # End of https://www.toptal.com/developers/gitignore/api/coq,visualstudiocode
 
 ### For my local files
-.local/
-.github/
+.local
+.github

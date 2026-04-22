@@ -39,6 +39,7 @@ Section NatTransComponent.
     : (τ ▪ μ)%nat_trans x = (τ x ∘ μ x)%morphism.
   Proof. reflexivity. Qed.
 End NatTransComponent.
+#[export] Hint Rewrite @IdNatTransComponent @NatTransVerCompComponent : normalize.
 
 Lemma nat_trans_ext `{C : Category ObjC} `{D : Category ObjD} {F G : C ⟶ D} (τ μ : F ⟹ G)
   : (∀ x, τ x =[D] μ x) → τ = μ.
